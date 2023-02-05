@@ -2,11 +2,13 @@ import * as React from 'react';
 import { clsx } from 'clsx';
 import * as styles from './app.css';
 
+const resumeData = {
+  fullName: 'Andika Priyotama',
+  title: 'Frontend Developer',
+};
+
 export function App() {
-  const resume = {
-    fullName: 'Andika Priyotama',
-    title: 'Frontend Developer',
-  };
+  const [resume] = React.useState(resumeData);
   const [isOpen, setOpen] = React.useState<boolean>(false);
   return (
     <>
@@ -34,7 +36,7 @@ export function App() {
 
       <div>
         {isOpen ? (
-          <div className={styles.container}>
+          <div className={styles.mainContainer}>
             <main className={styles.editorContainer}>
               <div className={styles.editor}>
                 {[
@@ -44,6 +46,7 @@ export function App() {
                   { content: '' },
                   { content: '- ' + resume.fullName },
                   { content: '- ' + resume.title },
+                  { content: '- ...' },
                   { content: '' },
                   { type: 'br', content: '---' },
                   { content: '' },
@@ -87,8 +90,11 @@ export function App() {
                 })}
               </div>
             </main>
+
             <aside className={styles.previewContainer}>
-              <div className={styles.paper}>preview</div>
+              <div className={styles.paperContainer}>
+                <div className={styles.paper}>preview</div>
+              </div>
             </aside>
           </div>
         ) : (

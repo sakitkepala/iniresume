@@ -52,26 +52,27 @@ export const welcome = style({
   alignItems: 'center',
 });
 
-export const container = style({
+export const mainContainer = style({
   overflow: 'hidden',
   height: '100%',
+  marginInline: '2rem',
   display: 'flex',
+  justifyContent: 'center',
+  gap: '2rem',
 });
 
 export const editorContainer = style({
-  flexGrow: 1,
   paddingTop: '4rem',
   paddingBottom: '5rem',
 });
 
 export const previewContainer = style({
   flexShrink: 0,
-  paddingInline: '2rem',
 });
 
 export const editor = style({
   marginInline: 'auto',
-  maxWidth: 600,
+  width: 600,
   fontSize: 13,
   fontFamily: "'Fira Code', monospace",
   cursor: 'text',
@@ -115,6 +116,10 @@ export const textDaterange = style({
 
 export const textLinebreak = style({
   color: '#79cc50',
+});
+
+export const paperContainer = style({
+  marginInline: 'auto',
 });
 
 export const paper = style({
