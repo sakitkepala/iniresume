@@ -1,9 +1,11 @@
 const { composePlugins, withNx } = require('@nrwl/webpack');
 const { withReact } = require('@nrwl/react');
 
-// Nx plugins for webpack.
+const { VanillaExtractPlugin } = require('@vanilla-extract/webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 module.exports = composePlugins(withNx(), withReact(), (config) => {
-  // Update the webpack config as needed here.
-  // e.g. `config.plugins.push(new MyPlugin())`
+  config.plugins.push(new VanillaExtractPlugin());
+  config.plugins.push(new MiniCssExtractPlugin());
   return config;
 });
