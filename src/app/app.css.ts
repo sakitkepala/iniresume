@@ -35,6 +35,7 @@ export const actionButton = style({
   color: '#000000',
   fontSize: 13,
   fontFamily: "'Fira Code', monospace",
+  textDecoration: 'none',
   cursor: 'pointer',
 
   ':disabled': {
@@ -66,7 +67,7 @@ export const editorContainer = style({
   paddingBottom: '5rem',
 });
 
-export const previewContainer = style({
+export const previewPanel = style({
   flexShrink: 0,
 });
 
@@ -118,13 +119,13 @@ export const textLinebreak = style({
   color: '#79cc50',
 });
 
-export const paperContainer = style({
+export const previewWrapper = style({
+  marginTop: '4rem',
   marginInline: 'auto',
 });
 
 export const paper = style({
-  marginTop: '4rem',
-  padding: '2rem',
+  overflow: 'hidden',
   border: '1px solid #bdbdbd',
   borderRadius: 3,
   width: 595, // lebar A4
