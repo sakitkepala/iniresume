@@ -6,7 +6,6 @@ globalStyle('*, *::before, *::after', {
   boxSizing: 'inherit',
   padding: 0,
   margin: 0,
-  userSelect: 'none',
 });
 
 globalStyle('html, body, #root', {

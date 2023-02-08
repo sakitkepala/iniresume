@@ -41,6 +41,7 @@ export const line = style({
 });
 
 export const lineNumber = style({
+  userSelect: 'none',
   flexShrink: 0,
   paddingRight: '1rem',
   width: '3rem',
@@ -65,6 +66,7 @@ export const previewPanel = style({
 export const previewWrapper = style({
   marginTop: '4rem',
   marginInline: 'auto',
+  paddingInline: '1rem',
 });
 
 export const editorScrollableRoot = style({

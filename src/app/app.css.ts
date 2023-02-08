@@ -1,6 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
 export const actionButton = style({
+  userSelect: 'none',
   minWidth: '6rem',
   padding: '0.375rem 0.875rem',
   border: '2px solid #000000',

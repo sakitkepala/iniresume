@@ -11,7 +11,6 @@ export type HeaderBarProps = {
 
 function HeaderBar({ user, downloadUrl }: HeaderBarProps) {
   const hasTitle = user?.fullName && user.title;
-  const downloadFilename = getDownloadFilename(user?.fullName, user?.title);
   return (
     <header className={styles.header}>
       <div className={styles.breadcrumb}>
@@ -28,29 +27,16 @@ function HeaderBar({ user, downloadUrl }: HeaderBarProps) {
 
       <div className={styles.headerAction}>
         {hasTitle && (
-          <a
+          <button
             className={appStyles.actionButton}
-            href={downloadUrl || undefined}
-            download={downloadFilename}
+            onClick={() => window.open(downloadUrl)}
           >
             Unduh
-          </a>
+          </button>
         )}
       </div>
     </header>
   );
-}
-
-function getDownloadFilename(fullname?: string, title?: string) {
-  if (!fullname || !title) {
-    return 'iniresume-download.pdf';
-  }
-  const snakeCaseFullname = fullname.replace(' ', '_');
-  const snakeCaseTitle = title.replace(' ', '_');
-  // TODO: dikasih last edit beneran. Sementara masih tanggal render.
-  const lastEditedYear = new Date().getFullYear();
-  const fullFilename = `${snakeCaseFullname}-${snakeCaseTitle}_(${lastEditedYear})`;
-  return encodeURIComponent(fullFilename) + '.pdf';
 }
 
 export { HeaderBar };

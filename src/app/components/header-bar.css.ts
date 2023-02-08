@@ -9,6 +9,7 @@ export const header = style({
 });
 
 export const breadcrumb = style({
+  userSelect: 'none',
   display: 'flex',
   alignItems: 'baseline',
   gap: '1rem',

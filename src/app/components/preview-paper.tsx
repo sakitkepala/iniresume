@@ -7,6 +7,8 @@ export type PreviewPaperProps = {
 
 // Implementasi viewer custom pakai react-pdf dari sini:
 // https://github.com/diegomura/react-pdf-site/blob/master/src/components/Repl/PDFViewer.js
+// ...sama di sini, tapi ini lebih rumit, cek aja:
+// https://github.com/jeetiss/react-pdf-repl/blob/main/components/viewer.js
 function PreviewPaper({ file = null }: PreviewPaperProps) {
   return (
     <div className={styles.paper}>

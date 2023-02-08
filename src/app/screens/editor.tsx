@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { usePDF } from '@react-pdf/renderer';
+import { pdfjs } from 'react-pdf';
 
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { HeaderBar } from '../components/header-bar';
@@ -9,6 +10,10 @@ import { PreviewPaper } from '../components/preview-paper';
 import { clsx } from 'clsx';
 
 import * as styles from './editor.css';
+
+import resumeData from '../data';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 function EditorScrollable({ children = null }: React.PropsWithChildren) {
   return (
@@ -68,44 +73,6 @@ export function ScreenEditor() {
     </>
   );
 }
-
-export const resumeData = {
-  fullName: 'Andika Priyotama',
-  title: 'Frontend Developer',
-  gender: 'male',
-  birthdate: '1991-08-27',
-  city: 'Kota Semarang',
-  province: 'Jawa Tengah',
-  email: 'andikapriyotamad@gmail.com',
-  phone: '85700003017',
-  website: 'https://andika.dev',
-  accounts: [
-    {
-      account: 'github',
-      name: 'sakitkepala',
-      url: 'https://github.com/sakitkepala',
-    },
-    {
-      account: 'gitlab',
-      name: 'andikapriyotamad',
-      url: 'https://gitlab.com/andikapriyotamad',
-    },
-    {
-      account: 'linkedin',
-      name: 'andikapriyotama',
-      url: 'https://linkedin.com/in/andikapriyotama',
-    },
-  ],
-  education: [
-    {
-      school: 'Universitas Dian Nuswantoro',
-      major: 'D3 Teknik Informatika (Multimedia)',
-      from: 2009,
-      to: 2017,
-      description: '',
-    },
-  ],
-};
 
 const codeLines = [
   { type: 'h1', content: '# Informasi' },
