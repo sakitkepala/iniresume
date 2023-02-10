@@ -1,17 +1,66 @@
 import * as React from 'react';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
+
+import {
+  EditableLinesManagerProvider,
+  useEditableLinesManager,
+} from './line-editors';
+import { ListItemLineEditor } from './line-editors';
+import { PlainTextLineEditor } from './line-editors';
+
 import { clsx } from 'clsx';
 import { parseISO, format } from 'date-fns';
 import id from 'date-fns/locale/id';
 
 import * as styles from './editor.css';
 
-import resumeData, { type ResumeData } from '../data/resume';
+import { type ResumeData } from '../data/resume';
 
-function _getMonthRangeText(from: string, to: string) {
-  const _formatMonth = (dateString: string) =>
-    format(parseISO(dateString), 'MMMM yyyy', { locale: id });
-  return `${_formatMonth(from)} - ${_formatMonth(to)}`;
+export type EditorProps = {
+  data: ResumeData;
+};
+
+function Editor({ data }: EditorProps) {
+  const codeLinesUI = React.useMemo(() => _buildCodeLinesUI(data), [data]);
+  return (
+    <div className={styles.editorContainer}>
+      <EditorScrollable>
+        <EditableLinesManagerProvider>
+          <CodeLinesContainer>{codeLinesUI}</CodeLinesContainer>
+        </EditableLinesManagerProvider>
+      </EditorScrollable>
+    </div>
+  );
+}
+
+function CodeLinesContainer({ children }: React.PropsWithChildren) {
+  const { hasActiveLine, resetActiveLine } = useEditableLinesManager();
+  return (
+    <div className={styles.codeLinesContainer}>
+      {hasActiveLine && (
+        <div
+          className={styles.codeLinesOutsideAreaClickTrigger}
+          onClick={resetActiveLine}
+        />
+      )}
+      <div className={styles.codeLinesArea} onClick={resetActiveLine}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function EditorScrollable({ children = null }: React.PropsWithChildren) {
+  return (
+    <ScrollArea.Root className={styles.editorScrollableRoot}>
+      <ScrollArea.Viewport className={styles.editorScrollableViewport}>
+        {children}
+      </ScrollArea.Viewport>
+      <ScrollArea.Scrollbar orientation="vertical">
+        <ScrollArea.Thumb />
+      </ScrollArea.Scrollbar>
+    </ScrollArea.Root>
+  );
 }
 
 export type CodeLineProps = { line?: number };
@@ -74,50 +123,6 @@ function HeadingLine({
   );
 }
 
-function CodeLines({ children }: React.PropsWithChildren<CodeLineProps>) {
-  return <div className={styles.editor}>{children}</div>;
-}
-
-function CustomFullnameItemComponent() {
-  const [isOpen, setOpen] = React.useState(false);
-  const $input = React.useRef<HTMLInputElement>(null);
-
-  React.useEffect(() => {
-    isOpen && $input.current?.focus();
-  }, [isOpen]);
-
-  return isOpen ? (
-    <span style={{ display: 'inline-block' }}>
-      <input ref={$input} type="text" placeholder="coba aja sih..." />{' '}
-      <button onClick={() => setOpen(false)}>simpan</button>
-    </span>
-  ) : (
-    <span style={{ display: 'inline-block' }} onClick={() => setOpen(true)}>
-      ...isi nama lengkap (todo: resume.fullName)
-    </span>
-  );
-}
-
-function CustomBirtdateItemComponent() {
-  const [isOpen, setOpen] = React.useState(false);
-  const $input = React.useRef<HTMLInputElement>(null);
-
-  React.useEffect(() => {
-    isOpen && $input.current?.focus();
-  }, [isOpen]);
-
-  return isOpen ? (
-    <span style={{ display: 'inline-block' }}>
-      <input ref={$input} type="text" placeholder="coba aja sih..." />{' '}
-      <button onClick={() => setOpen(false)}>simpan</button>
-    </span>
-  ) : (
-    <span style={{ display: 'inline-block' }} onClick={() => setOpen(true)}>
-      ...isi tanggal lahir (todo: resume.birthdate)
-    </span>
-  );
-}
-
 function _buildCodeLinesUI(resume: ResumeData) {
   const codeLines: { content: React.ReactNode }[] = [];
   let nextLineNumber = 1;
@@ -157,13 +162,9 @@ function _buildCodeLinesUI(resume: ResumeData) {
   const _buildUnorderedList = (items: React.ReactNode[]) => {
     items.forEach((item) => {
       _appendOneLine(
-        <CodeLineWrapper key={nextLineNumber} line={nextLineNumber}>
-          <div className={styles.lineContent}>
-            <span>-</span>
-            <span>&nbsp;</span>
-            {item}
-          </div>
-        </CodeLineWrapper>
+        <ListItemLineEditor key={nextLineNumber} line={nextLineNumber}>
+          {item}
+        </ListItemLineEditor>
       );
     });
     _appendEmptyLine();
@@ -202,16 +203,47 @@ function _buildCodeLinesUI(resume: ResumeData) {
   _appendTextLine('Umum:');
 
   _buildUnorderedList([
-    <CustomFullnameItemComponent />,
-    resume.title,
-    resume.gender,
-    <CustomBirtdateItemComponent />,
-    resume.city,
-    resume.province,
+    <PlainTextLineEditor
+      key={resume.fullName}
+      fieldName="fullName"
+      label={'...isi nama lengkap'}
+    />,
+    <PlainTextLineEditor
+      key={resume.title}
+      fieldName="title"
+      label={'...isi title'}
+    />,
+    <PlainTextLineEditor
+      key={resume.gender}
+      fieldName="gender"
+      label={'...isi gender'}
+    />,
+    <PlainTextLineEditor
+      key={resume.birthdate}
+      fieldName="birthdate"
+      label={'...isi tanggal lahir'}
+    />,
+    <PlainTextLineEditor
+      key={resume.city}
+      fieldName="city"
+      label={'...isi kota domisili'}
+    />,
+    <PlainTextLineEditor
+      key={resume.province}
+      fieldName="province"
+      label={'...isi provinsi domisili'}
+    />,
   ]);
 
   _appendTextLine('Kontak:');
-  _buildUnorderedList([resume.email, `+62${resume.phone?.number}`]);
+  _buildUnorderedList([
+    <PlainTextLineEditor
+      key={resume.email}
+      fieldName="email"
+      label={'...isi alamat email'}
+    />,
+    `+62${resume.phone?.number}`,
+  ]);
 
   _appendTextLine('Profil:');
   _buildUnorderedList(
@@ -265,30 +297,10 @@ function _buildCodeLinesUI(resume: ResumeData) {
   });
 }
 
-export type EditorProps = {
-  data: ResumeData;
-};
-
-function Editor({ data }: EditorProps) {
-  const codeLinesUI = React.useMemo(() => _buildCodeLinesUI(data), [data]);
-  return (
-    <EditorScrollable>
-      <CodeLines>{codeLinesUI}</CodeLines>
-    </EditorScrollable>
-  );
-}
-
-function EditorScrollable({ children = null }: React.PropsWithChildren) {
-  return (
-    <ScrollArea.Root className={styles.editorScrollableRoot}>
-      <ScrollArea.Viewport className={styles.editorScrollableViewport}>
-        {children}
-      </ScrollArea.Viewport>
-      <ScrollArea.Scrollbar orientation="vertical">
-        <ScrollArea.Thumb />
-      </ScrollArea.Scrollbar>
-    </ScrollArea.Root>
-  );
+function _getMonthRangeText(from: string, to: string) {
+  const _formatMonth = (dateString: string) =>
+    format(parseISO(dateString), 'MMMM yyyy', { locale: id });
+  return `${_formatMonth(from)} - ${_formatMonth(to)}`;
 }
 
 export { Editor };
