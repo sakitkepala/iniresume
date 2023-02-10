@@ -1,6 +1,83 @@
-export type ResumeData = typeof data;
+export type ResumeData = {
+  fullName?: string;
+  title?: string;
+  gender?: string;
+  birthdate?: string;
+  city?: string;
+  province?: string;
 
-export const data = {
+  email?: string;
+  phone?: {
+    number: string;
+    wa?: boolean;
+  };
+  website?: {
+    url: string;
+    text?: string;
+  };
+
+  accounts: {
+    account: string;
+    username: string;
+    url: string;
+    text?: string;
+  }[];
+
+  experiences: {
+    employer: string;
+    title: string;
+    from: string;
+    to: string;
+    description: string;
+    projects?: {
+      name: string;
+      from?: string;
+      to?: string;
+      description?: string;
+      url?: string;
+    }[];
+  }[];
+
+  education: {
+    school: string;
+    major: string;
+    from?: string | number;
+    to?: string | number;
+    description?: string;
+  }[];
+
+  skills: string[];
+};
+
+export function getInitialData(): ResumeData {
+  // TODO: balikin uncomment ini:
+  // return {
+  //   fullName: '',
+  //   title: '',
+  //   gender: '',
+  //   birthdate: '',
+  //   city: '',
+  //   province: '',
+
+  //   email: '',
+  //   phone: {
+  //     number: '',
+  //     wa: false,
+  //   },
+  //   website: {
+  //     url: '',
+  //     text: '',
+  //   },
+
+  //   accounts: [],
+  //   experiences: [],
+  //   education: [],
+  //   skills: [],
+  // };
+  return exampleData;
+}
+
+export const exampleData: ResumeData = {
   fullName: 'Andika Priyotama Dharminto',
   title: 'Frontend Developer',
   gender: 'male',
@@ -23,19 +100,19 @@ export const data = {
       account: 'github',
       username: 'sakitkepala',
       url: 'https://github.com/sakitkepala',
-      titleText: '',
+      text: '',
     },
     {
       account: 'gitlab',
       username: 'andikapriyotamad',
       url: 'https://gitlab.com/andikapriyotamad',
-      titleText: '',
+      text: '',
     },
     {
       account: 'linkedin',
       username: 'andikapriyotama',
       url: 'https://linkedin.com/in/andikapriyotama',
-      titleText: '',
+      text: '',
     },
   ],
 
@@ -157,4 +234,4 @@ export const data = {
   ],
 };
 
-export default data;
+export default exampleData;

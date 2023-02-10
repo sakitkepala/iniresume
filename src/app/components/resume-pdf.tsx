@@ -15,7 +15,7 @@ import id from 'date-fns/locale/id';
 import dmSansReg from '../../assets/DMSans-Regular.ttf';
 import dmSansBold from '../../assets/DMSans-Bold.ttf';
 
-import { type ResumeData } from '../data';
+import { type ResumeData } from '../data/resume';
 
 Font.register({
   family: 'DM Sans',
@@ -146,14 +146,17 @@ function ResumePDF({ data }: ResumePDFProps) {
           <Text style={pdfStyles.title}>{data.title}</Text>
 
           <ContactInfoBar>
-            <Link src={data.website.url}>{data.website.text}</Link>
-            {data.phone.wa ? (
-              <Link src={`https://wa.me/62${data.phone.number}`}>
-                {'+62' + data.phone.number}
-              </Link>
-            ) : (
-              <Text>{'+62' + data.phone.number}</Text>
+            {typeof data.website !== 'undefined' && (
+              <Link src={data.website.url}>{data.website.text}</Link>
             )}
+            {data.phone &&
+              (data.phone.wa ? (
+                <Link src={`https://wa.me/62${data.phone.number}`}>
+                  {'+62' + data.phone.number}
+                </Link>
+              ) : (
+                <Text>{'+62' + data.phone.number}</Text>
+              ))}
             <Link src={`mailto:${data.email}`}>{data.email}</Link>
           </ContactInfoBar>
         </View>
@@ -177,29 +180,30 @@ function ResumePDF({ data }: ResumePDFProps) {
                     </Text>
                     <Text>{edu.description}</Text>
 
-                    {edu.projects?.length > 0 && (
-                      <View>
-                        {edu.projects.map((project) => (
-                          <View
-                            key={project.name}
-                            style={pdfStyles.projectContainer}
-                          >
-                            <Text style={pdfStyles.projectName}>
-                              {project.name}
-                            </Text>
-                            <Text>{project.description}</Text>
-                            {Boolean(project.url) && (
-                              <Link
-                                style={pdfStyles.projectLink}
-                                src={project.url}
-                              >
-                                Link projek &#187;
-                              </Link>
-                            )}
-                          </View>
-                        ))}
-                      </View>
-                    )}
+                    {typeof edu.projects !== 'undefined' &&
+                      edu.projects.length > 0 && (
+                        <View>
+                          {edu.projects.map((project) => (
+                            <View
+                              key={project.name}
+                              style={pdfStyles.projectContainer}
+                            >
+                              <Text style={pdfStyles.projectName}>
+                                {project.name}
+                              </Text>
+                              <Text>{project.description}</Text>
+                              {typeof project.url !== 'undefined' && (
+                                <Link
+                                  style={pdfStyles.projectLink}
+                                  src={project.url}
+                                >
+                                  Link projek &#187;
+                                </Link>
+                              )}
+                            </View>
+                          ))}
+                        </View>
+                      )}
                   </View>
                 ))}
               </View>
@@ -218,7 +222,7 @@ function ResumePDF({ data }: ResumePDFProps) {
               <View style={pdfStyles.list}>
                 <Text style={pdfStyles.sectionHeading}>Pendidikan</Text>
 
-                {data.education.map((edu) => (
+                {data.education?.map((edu) => (
                   <View key={edu.school}>
                     <Text style={pdfStyles.textSchoolHeading}>
                       {edu.school}
@@ -264,7 +268,9 @@ function TagList({ items }: { items?: string[] }) {
   return (
     <View style={pdfStyles.tagList}>
       {items.map((item) => (
-        <Text style={pdfStyles.tagItem}>{item}</Text>
+        <Text key={item} style={pdfStyles.tagItem}>
+          {item}
+        </Text>
       ))}
     </View>
   );

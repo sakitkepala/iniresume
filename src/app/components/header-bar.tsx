@@ -3,8 +3,8 @@ import * as styles from './header-bar.css';
 
 export type HeaderBarProps = {
   user?: {
-    fullName: string;
-    title: string;
+    fullName?: string;
+    title?: string;
   };
   downloadUrl?: string;
 };
@@ -26,7 +26,7 @@ function HeaderBar({ user, downloadUrl }: HeaderBarProps) {
       </div>
 
       <div className={styles.headerAction}>
-        {hasTitle && (
+        {Boolean(downloadUrl) && (
           <button
             className={appStyles.actionButton}
             onClick={() => window.open(downloadUrl)}
