@@ -15,3 +15,7 @@ export const genderSelector = style({
     color: 'inherit',
   },
 });
+
+export const optionSeparator = style({
+  color: '#79cc50',
+});

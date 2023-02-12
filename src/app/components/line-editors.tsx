@@ -131,6 +131,13 @@ function ListItemLineEditor({
     [registerEditable, line]
   );
 
+  const [mountSessionKey, setMountSessionKey] = React.useState(() =>
+    new Date().getTime()
+  );
+  React.useEffect(() => {
+    !isOpen && setMountSessionKey(new Date().getTime());
+  }, [isOpen]);
+
   return (
     <div
       className={clsx(editorStyles.line, activeStyle)}
@@ -148,7 +155,7 @@ function ListItemLineEditor({
         <span>-</span>
         <span>&nbsp;</span>
         <ListItemEditorDisclosureContext.Provider value={disclosureContext}>
-          {children}
+          <React.Fragment key={mountSessionKey}>{children}</React.Fragment>
         </ListItemEditorDisclosureContext.Provider>
       </div>
     </div>
