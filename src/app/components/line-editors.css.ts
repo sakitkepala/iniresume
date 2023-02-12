@@ -9,6 +9,7 @@ export const plainTextInput = style({
   margin: 0,
   padding: 0,
   border: 'none',
+  backgroundColor: 'inherit',
   fontSize: 'inherit',
   fontFamily: 'inherit',
   fontWeight: 'inherit',
@@ -38,6 +39,7 @@ export const editorPlaceholderLabel = style({
 export const editorValueLabel = style({
   cursor: 'pointer',
   ':hover': {
+    color: '#79cc50',
     textDecoration: 'underline',
   },
 });

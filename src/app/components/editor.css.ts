@@ -32,6 +32,14 @@ export const line = style({
   },
 });
 
+export const lineActive = style({
+  borderRadius: 2,
+  backgroundColor: '#d7ffc3',
+  ':hover': {
+    backgroundColor: '#d7ffc3',
+  },
+});
+
 export const lineNumber = style({
   userSelect: 'none',
   flexShrink: 0,

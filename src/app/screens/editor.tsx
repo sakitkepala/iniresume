@@ -7,7 +7,10 @@ import {
 
 import { HeaderBar } from '../components/header-bar';
 import { Editor } from '../components/editor';
-import { PreviewPaper } from '../components/preview-paper';
+import {
+  PreviewPaper,
+  type PreviewPaperProps,
+} from '../components/preview-paper';
 
 import * as styles from './editor.css';
 
@@ -24,10 +27,7 @@ export function ScreenEditor() {
         </main>
 
         <aside className={styles.previewPanel}>
-          <PreviewPanel
-            fileUrl={fileUrl}
-            onFileUrlChange={(url) => setFileUrl(url)}
-          />
+          <PreviewPanel onFileUrlChange={setFileUrl} />
         </aside>
       </div>
     </ResumeEditorProvider>
@@ -37,8 +37,7 @@ export function ScreenEditor() {
 function PreviewPanel({
   onFileUrlChange,
 }: {
-  fileUrl?: string | null;
-  onFileUrlChange?: (url: string) => void;
+  onFileUrlChange?: PreviewPaperProps['onFileUrlChange'];
 }) {
   const { resume } = useResumeEditor();
   const [isPreviewOpen, setPreviewOpen] = React.useState<boolean>(false);

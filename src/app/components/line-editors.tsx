@@ -115,6 +115,7 @@ function ListItemLineEditor({
   const { registerEditable, activateLine, shouldActivateLine, focusNext } =
     useEditableLinesManager();
   const isOpen = shouldActivateLine?.(Number(line)) || false;
+  const activeStyle = isOpen ? editorStyles.lineActive : undefined;
 
   const disclosureContext = React.useMemo(
     () => ({
@@ -132,7 +133,7 @@ function ListItemLineEditor({
 
   return (
     <div
-      className={editorStyles.line}
+      className={clsx(editorStyles.line, activeStyle)}
       onClick={(ev) => {
         ev.stopPropagation();
         activateLine?.(Number(line));
@@ -227,6 +228,7 @@ export {
   EditableLinesManagerProvider,
   useEditableLinesManager,
   useOnClickOutside,
+  useListItemEditorDisclosure,
   ListItemLineEditor,
   PlainTextLineEditor,
 };

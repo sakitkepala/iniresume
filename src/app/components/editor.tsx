@@ -9,6 +9,7 @@ import {
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { ListItemLineEditor } from './line-editors';
 import { PlainTextLineEditor } from './line-editors';
+import { GenderEditor } from './gender-editor';
 
 import { clsx } from 'clsx';
 import { parseISO, format } from 'date-fns';
@@ -207,32 +208,28 @@ function _buildCodeLinesUI(resume?: ResumeData) {
 
   _buildUnorderedList([
     <PlainTextLineEditor
-      key={resume.fullName}
+      key={resume.fullName || 'field-fullName'}
       fieldName="fullName"
       label={'...isi nama lengkap'}
     />,
     <PlainTextLineEditor
-      key={resume.title}
+      key={resume.title || 'field-title'}
       fieldName="title"
       label={'...isi title'}
     />,
+    <GenderEditor key={resume.gender || 'field-gender'} />,
     <PlainTextLineEditor
-      key={resume.gender}
-      fieldName="gender"
-      label={'...isi gender'}
-    />,
-    <PlainTextLineEditor
-      key={resume.birthdate}
+      key={resume.birthdate || 'field-birthdate'}
       fieldName="birthdate"
       label={'...isi tanggal lahir'}
     />,
     <PlainTextLineEditor
-      key={resume.city}
+      key={resume.city || 'field-city'}
       fieldName="city"
       label={'...isi kota domisili'}
     />,
     <PlainTextLineEditor
-      key={resume.province}
+      key={resume.province || 'field-province'}
       fieldName="province"
       label={'...isi provinsi domisili'}
     />,
