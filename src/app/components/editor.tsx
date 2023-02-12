@@ -10,6 +10,7 @@ import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { ListItemLineEditor } from './line-editors';
 import { PlainTextLineEditor } from './line-editors';
 import { GenderEditor } from './gender-editor';
+import { DateOfBirthEditor } from './date-of-birth-editor';
 
 import { clsx } from 'clsx';
 import { parseISO, format } from 'date-fns';
@@ -218,11 +219,7 @@ function _buildCodeLinesUI(resume?: ResumeData) {
       label={'...isi title'}
     />,
     <GenderEditor key={resume.gender || 'field-gender'} />,
-    <PlainTextLineEditor
-      key={resume.birthdate || 'field-birthdate'}
-      fieldName="birthdate"
-      label={'...isi tanggal lahir'}
-    />,
+    <DateOfBirthEditor key={resume.birthdate || 'field-birthdate'} />,
     <PlainTextLineEditor
       key={resume.city || 'field-city'}
       fieldName="city"
