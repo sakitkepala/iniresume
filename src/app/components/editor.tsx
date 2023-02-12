@@ -1,10 +1,12 @@
 import * as React from 'react';
-import * as ScrollArea from '@radix-ui/react-scroll-area';
-
+import { useResumeEditor } from '../contexts/resume-editor';
 import {
   EditableLinesManagerProvider,
   useEditableLinesManager,
+  useOnClickOutside,
 } from './line-editors';
+
+import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { ListItemLineEditor } from './line-editors';
 import { PlainTextLineEditor } from './line-editors';
 
@@ -16,34 +18,31 @@ import * as styles from './editor.css';
 
 import { type ResumeData } from '../data/resume';
 
-export type EditorProps = {
-  data: ResumeData;
-};
-
-function Editor({ data }: EditorProps) {
-  const codeLinesUI = React.useMemo(() => _buildCodeLinesUI(data), [data]);
+function Editor() {
+  const { resume } = useResumeEditor();
+  const codeLinesUI = React.useMemo(() => _buildCodeLinesUI(resume), [resume]);
   return (
-    <div className={styles.editorContainer}>
-      <EditorScrollable>
-        <EditableLinesManagerProvider>
-          <CodeLinesContainer>{codeLinesUI}</CodeLinesContainer>
-        </EditableLinesManagerProvider>
-      </EditorScrollable>
-    </div>
+    <EditorScrollable>
+      <EditableLinesManagerProvider>
+        <CodeLinesContainer>{codeLinesUI}</CodeLinesContainer>
+      </EditableLinesManagerProvider>
+    </EditorScrollable>
   );
 }
 
 function CodeLinesContainer({ children }: React.PropsWithChildren) {
-  const { hasActiveLine, resetActiveLine } = useEditableLinesManager();
+  const { resetActiveLine } = useEditableLinesManager();
+  const $container = React.useRef<HTMLDivElement>(null);
+  useOnClickOutside($container, () => {
+    resetActiveLine?.();
+  });
   return (
     <div className={styles.codeLinesContainer}>
-      {hasActiveLine && (
-        <div
-          className={styles.codeLinesOutsideAreaClickTrigger}
-          onClick={resetActiveLine}
-        />
-      )}
-      <div className={styles.codeLinesArea} onClick={resetActiveLine}>
+      <div
+        ref={$container}
+        className={styles.codeLinesArea}
+        onClick={resetActiveLine}
+      >
         {children}
       </div>
     </div>
@@ -123,12 +122,16 @@ function HeadingLine({
   );
 }
 
-function _buildCodeLinesUI(resume: ResumeData) {
-  const codeLines: { content: React.ReactNode }[] = [];
+function _buildCodeLinesUI(resume?: ResumeData) {
+  const codeLines: React.ReactNode[] = [];
   let nextLineNumber = 1;
 
+  if (!resume) {
+    return codeLines;
+  }
+
   const _appendOneLine = (element: React.ReactNode) => {
-    codeLines.push({ content: element });
+    codeLines.push(element);
     nextLineNumber++;
   };
 
@@ -291,10 +294,7 @@ function _buildCodeLinesUI(resume: ResumeData) {
   _appendHeadingLine('Skill');
   _appendTextLine('...');
 
-  // wtf is this dude wkwk
-  return codeLines.map((line) => {
-    return line.content;
-  });
+  return codeLines;
 }
 
 function _getMonthRangeText(from: string, to: string) {

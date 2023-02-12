@@ -1,5 +1,9 @@
 import * as React from 'react';
 import { pdfjs } from 'react-pdf';
+import {
+  ResumeEditorProvider,
+  useResumeEditor,
+} from '../contexts/resume-editor';
 
 import { HeaderBar } from '../components/header-bar';
 import { Editor } from '../components/editor';
@@ -7,88 +11,69 @@ import { PreviewPaper } from '../components/preview-paper';
 
 import * as styles from './editor.css';
 
-import { type ResumeData, getInitialData } from '../data/resume';
-
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 export function ScreenEditor() {
-  const { resume } = useResumeEditor();
-  const [downloadURL /* setDownloadURL */] = React.useState<string>();
-  const [isPreviewOpen, setPreviewOpen] = React.useState<boolean>(false);
-  const hasNameAndTitle = resume.fullName && resume.title;
+  const [fileUrl, setFileUrl] = React.useState<null | string>(null);
   return (
-    <>
-      <HeaderBar
-        user={
-          hasNameAndTitle
-            ? undefined
-            : { fullName: resume.fullName, title: resume.title }
-        }
-        downloadUrl={downloadURL}
-      />
+    <ResumeEditorProvider>
+      <HeaderBar downloadUrl={fileUrl || undefined} />
       <div className={styles.mainContainer}>
         <main>
-          <Editor data={resume} />
+          <Editor />
         </main>
 
         <aside className={styles.previewPanel}>
-          <div className={styles.previewWrapper}>
-            {hasNameAndTitle && isPreviewOpen ? (
-              <PreviewPaper data={resume} />
-            ) : (
-              <div>
-                <label htmlFor="language">
-                  <input type="checkbox" id="language" name="language" /> dalam
-                  bahasa Inggris
-                </label>
-                <div>
-                  <button
-                    disabled={!hasNameAndTitle}
-                    onClick={() => {
-                      if (!hasNameAndTitle) {
-                        alert('Info resume masih kosong uy');
-                        return;
-                      }
-                      setPreviewOpen(true);
-                    }}
-                  >
-                    lihat preview
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
+          <PreviewPanel
+            fileUrl={fileUrl}
+            onFileUrlChange={(url) => setFileUrl(url)}
+          />
         </aside>
       </div>
-    </>
+    </ResumeEditorProvider>
   );
 }
 
-type ResumeEditorActionType = {
-  type: 'UPDATE_FIELD';
-  field: string;
-  payload: string;
-};
-
-function useResumeEditor() {
-  const [resume, dispatch] = React.useReducer(
-    (state: ResumeData, action: ResumeEditorActionType) => {
-      if (action.type === 'UPDATE_FIELD') {
-        return { ...state, [action.field]: action.payload };
-      }
-      return state;
-    },
-    getInitialData()
+function PreviewPanel({
+  onFileUrlChange,
+}: {
+  fileUrl?: string | null;
+  onFileUrlChange?: (url: string) => void;
+}) {
+  const { resume } = useResumeEditor();
+  const [isPreviewOpen, setPreviewOpen] = React.useState<boolean>(false);
+  const hasNameAndTitle = resume?.fullName && resume?.title;
+  return (
+    <div className={styles.previewWrapper}>
+      {hasNameAndTitle && isPreviewOpen ? (
+        <PreviewPaper
+          key={JSON.stringify(resume)}
+          onFileUrlChange={onFileUrlChange}
+        />
+      ) : (
+        <div>
+          <label htmlFor="language">
+            <input type="checkbox" id="language" name="language" /> dalam bahasa
+            Inggris
+          </label>
+          <div>
+            <button
+              disabled={!hasNameAndTitle}
+              onClick={() => {
+                if (!hasNameAndTitle) {
+                  alert('Info resume masih kosong uy');
+                  return;
+                }
+                setPreviewOpen(true);
+              }}
+            >
+              generate PDF & lihat preview
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
-
-  const updateField = (field: string, value: string) => {
-    dispatch({ type: 'UPDATE_FIELD', field, payload: value });
-  };
-
-  return {
-    resume,
-    updateField,
-  };
 }
 
 export default ScreenEditor;

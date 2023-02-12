@@ -256,7 +256,7 @@ function ContactInfoBar({ children = null }: React.PropsWithChildren) {
   const separatedChildren: typeof childrenlist = [];
   childrenlist.forEach((element, index) => {
     if (index > 0) {
-      separatedChildren.push(<Text>&#47;</Text>);
+      separatedChildren.push(<Text key={index}>&#47;</Text>);
     }
     separatedChildren.push(element);
   });

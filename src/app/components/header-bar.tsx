@@ -1,16 +1,11 @@
+import { useResumeEditor } from '../contexts/resume-editor';
+
 import * as appStyles from '../app.css';
 import * as styles from './header-bar.css';
 
-export type HeaderBarProps = {
-  user?: {
-    fullName?: string;
-    title?: string;
-  };
-  downloadUrl?: string;
-};
-
-function HeaderBar({ user, downloadUrl }: HeaderBarProps) {
-  const hasTitle = user?.fullName && user.title;
+function HeaderBar({ downloadUrl }: { downloadUrl?: string }) {
+  const { resume } = useResumeEditor();
+  const hasTitle = resume?.fullName && resume.title;
   return (
     <header className={styles.header}>
       <div className={styles.breadcrumb}>
@@ -19,7 +14,7 @@ function HeaderBar({ user, downloadUrl }: HeaderBarProps) {
           <>
             <div>&#47;</div>
             <div>
-              {user.fullName}, {user.title}
+              {resume.fullName}, {resume.title}
             </div>
           </>
         )}

@@ -1,10 +1,5 @@
 import { style } from '@vanilla-extract/css';
 
-export const editorContainer = style({
-  position: 'relative',
-  zIndex: 1,
-});
-
 export const editorScrollableRoot = style({
   overflow: 'hidden',
   width: '100%',
@@ -22,13 +17,7 @@ export const codeLinesContainer = style({
   width: 600,
 });
 
-export const codeLinesOutsideAreaClickTrigger = style({
-  position: 'fixed',
-  inset: 0,
-});
-
 export const codeLinesArea = style({
-  position: 'relative',
   fontSize: 13,
   fontFamily: "'Fira Code', monospace",
   cursor: 'text',

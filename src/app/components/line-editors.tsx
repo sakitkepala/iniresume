@@ -1,8 +1,10 @@
 import * as React from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { ResumeData, useResumeEditor } from '../contexts/resume-editor';
+import { clsx } from 'clsx';
+
 import * as editorStyles from './editor.css';
 import * as styles from './line-editors.css';
-
-import { useHotkeys } from 'react-hotkeys-hook';
 
 const EditableLinesManager = React.createContext<{
   registerEditable?: (line: number) => void;
@@ -65,6 +67,35 @@ function useEditableLinesManager() {
   return React.useContext(EditableLinesManager);
 }
 
+// Adaptasi dari:
+// - https://usehooks.com/useOnClickOutside/
+// - https://github.com/Andarist/use-onclickoutside/blob/main/src/index.ts
+function useOnClickOutside(
+  ref: React.MutableRefObject<HTMLElement | null>,
+  handler: (event: MouseEvent | TouchEvent) => void
+) {
+  React.useEffect(() => {
+    const listener = (event: MouseEvent | TouchEvent) => {
+      if (
+        !ref.current ||
+        (event.target instanceof Node && ref.current.contains(event.target))
+      ) {
+        return;
+      }
+
+      handler(event);
+    };
+
+    document.addEventListener('mousedown', listener);
+    document.addEventListener('touchstart', listener);
+
+    return () => {
+      document.removeEventListener('mousedown', listener);
+      document.removeEventListener('touchstart', listener);
+    };
+  }, [ref, handler]);
+}
+
 const ListItemEditorDisclosureContext = React.createContext<{
   isOpen: boolean;
   open?: () => void;
@@ -110,14 +141,14 @@ function ListItemLineEditor({
       <div className={editorStyles.lineNumber}>
         {typeof line === 'undefined' ? '#' : line}
       </div>
-      <div className={editorStyles.lineContent}>
+      <div
+        className={clsx(editorStyles.lineContent, styles.listItemEditorLine)}
+      >
         <span>-</span>
         <span>&nbsp;</span>
-        <span>
-          <ListItemEditorDisclosureContext.Provider value={disclosureContext}>
-            {children}
-          </ListItemEditorDisclosureContext.Provider>
-        </span>
+        <ListItemEditorDisclosureContext.Provider value={disclosureContext}>
+          {children}
+        </ListItemEditorDisclosureContext.Provider>
       </div>
     </div>
   );
@@ -125,25 +156,44 @@ function ListItemLineEditor({
 
 export type PlainTextLineEditorProps = {
   label: string;
-  fieldName: string;
+  fieldName: keyof ResumeData;
 };
 
 function PlainTextLineEditor({ label, fieldName }: PlainTextLineEditorProps) {
+  const { resume, updateTextField } = useResumeEditor();
+  const { resetActiveLine } = useEditableLinesManager();
   const { isOpen, open, close } = useListItemEditorDisclosure();
   const $input = React.useRef<HTMLInputElement>(null);
 
-  useHotkeys<HTMLDivElement>('enter, tab', () => close?.(), {
+  const data = resume?.[fieldName];
+  const value = typeof data === 'string' ? data : '';
+
+  const handleSave = () => {
+    if (updateTextField && $input.current) {
+      updateTextField(fieldName, $input.current.value || '');
+    }
+  };
+
+  useHotkeys(
+    'enter, tab',
+    () => {
+      if (close) {
+        handleSave();
+        close();
+      }
+    },
+    {
+      enabled: isOpen,
+      enableOnFormTags: true,
+      preventDefault: true,
+    }
+  );
+
+  useHotkeys('esc', () => resetActiveLine?.(), {
     enabled: isOpen,
     enableOnFormTags: true,
     preventDefault: true,
   });
-
-  // TODO: ambil data & update function dari context data resume
-  const fakeData: { [field: string]: string } = {
-    fullName: 'Hai',
-    title: '',
-  };
-  const value = fakeData[fieldName];
 
   React.useEffect(() => {
     isOpen && $input.current?.focus();
@@ -155,14 +205,19 @@ function PlainTextLineEditor({ label, fieldName }: PlainTextLineEditorProps) {
         ref={$input}
         type="text"
         className={styles.plainTextInput}
-        placeholder="coba aja sih..."
+        placeholder={label}
         defaultValue={value}
+        // onBlur={handleSave}
       />
     );
   }
 
+  const labelStyle = value
+    ? styles.editorValueLabel
+    : styles.editorPlaceholderLabel;
+
   return (
-    <span className={styles.editorLabel} onClick={open}>
+    <span className={labelStyle} onClick={open}>
       {value || label}
     </span>
   );
@@ -171,6 +226,7 @@ function PlainTextLineEditor({ label, fieldName }: PlainTextLineEditorProps) {
 export {
   EditableLinesManagerProvider,
   useEditableLinesManager,
+  useOnClickOutside,
   ListItemLineEditor,
   PlainTextLineEditor,
 };
