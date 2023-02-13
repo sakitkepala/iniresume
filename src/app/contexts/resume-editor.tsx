@@ -1,34 +1,64 @@
 import * as React from 'react';
 
-import { type ResumeData, getInitialData } from '../data/resume';
+import { getInitialData } from '../data/resume';
+import { type ResumeData, type PhoneNumber } from '../data/resume';
 
-type ResumeEditorActionType = {
-  type: 'UPDATE_FIELD';
-  field: string;
-  payload: string;
-};
+type ResumeFieldPayload = string | PhoneNumber;
+
+type ResumeEditorActionType =
+  | {
+      type: 'UPDATE_GENERIC_FIELD';
+      field: keyof ResumeData;
+      payload: ResumeFieldPayload;
+    }
+  | {
+      type: 'UPDATE_STRING_FIELD';
+      field: keyof ResumeData;
+      payload: string;
+    };
 
 function useEditor() {
   const [resume, dispatch] = React.useReducer(
     (state: ResumeData, action: ResumeEditorActionType) => {
-      if (action.type === 'UPDATE_FIELD') {
-        return { ...state, [action.field]: action.payload };
+      switch (action.type) {
+        case 'UPDATE_STRING_FIELD': {
+          return { ...state, [action.field]: action.payload };
+        }
+
+        case 'UPDATE_GENERIC_FIELD': {
+          const currentData = state[action.field];
+          const dataObject = typeof currentData === 'string' ? {} : currentData;
+          return {
+            ...state,
+            [action.field]: {
+              ...dataObject,
+              ...(typeof action.payload !== 'string' ? action.payload : {}),
+            },
+          };
+        }
+        default: {
+          return state;
+        }
       }
-      return state;
     },
     getInitialData()
   );
 
-  const updateTextField = (field: string, value: string) => {
-    dispatch({ type: 'UPDATE_FIELD', field, payload: value });
+  const updateTextField = (field: keyof ResumeData, value: string) => {
+    dispatch({ type: 'UPDATE_STRING_FIELD', field, payload: value });
   };
 
-  return { resume, updateTextField };
+  const updateField = (field: keyof ResumeData, value: ResumeFieldPayload) => {
+    dispatch({ type: 'UPDATE_GENERIC_FIELD', field, payload: value });
+  };
+
+  return { resume, updateField, updateTextField };
 }
 
 const ResumeEditorContext = React.createContext<{
   resume?: ResumeData;
-  updateTextField?: (field: string, value: string) => void;
+  updateField?: (field: keyof ResumeData, value: ResumeFieldPayload) => void;
+  updateTextField?: (field: keyof ResumeData, value: string) => void;
 }>({});
 
 function useResumeEditor() {

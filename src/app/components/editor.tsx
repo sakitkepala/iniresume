@@ -11,6 +11,7 @@ import { ListItemLineEditor } from './line-editors';
 import { PlainTextLineEditor } from './line-editors';
 import { GenderEditor } from './gender-editor';
 import { DateOfBirthEditor } from './date-of-birth-editor';
+import { PhoneNumberEditor } from './phone-number-editor';
 
 import { clsx } from 'clsx';
 import { parseISO, format } from 'date-fns';
@@ -235,11 +236,11 @@ function _buildCodeLinesUI(resume?: ResumeData) {
   _appendTextLine('Kontak:');
   _buildUnorderedList([
     <PlainTextLineEditor
-      key={resume.email}
+      key={resume.email || 'field-email'}
       fieldName="email"
       label={'...isi alamat email'}
     />,
-    `+62${resume.phone?.number}`,
+    <PhoneNumberEditor key={resume.phone?.number || 'field-phone-number'} />,
   ]);
 
   _appendTextLine('Profil:');

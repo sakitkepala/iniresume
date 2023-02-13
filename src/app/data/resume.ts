@@ -1,3 +1,8 @@
+export type PhoneNumber = {
+  number: string;
+  wa: boolean;
+};
+
 export type ResumeData = {
   fullName?: string;
   title?: string;
@@ -7,10 +12,7 @@ export type ResumeData = {
   province?: string;
 
   email?: string;
-  phone?: {
-    number: string;
-    wa?: boolean;
-  };
+  phone?: PhoneNumber;
   website?: {
     url: string;
     text?: string;

@@ -1,15 +1,15 @@
 import { style } from '@vanilla-extract/css';
 
-export const dateFieldsWrapper = style({
+export const phoneEditorWrapper = style({
+  flexGrow: 1,
   display: 'flex',
   gap: 4,
 });
 
 export const inputField = style({
-  flexShrink: 1,
+  width: 96,
   padding: 0,
   margin: 0,
-  width: 16,
   border: 'none',
   outline: 'none',
   backgroundColor: 'inherit',
@@ -25,10 +25,23 @@ export const inputField = style({
     fontFamily: 'inherit',
     fontWeight: 'inherit',
   },
+});
 
-  selectors: {
-    [`&#year`]: {
-      width: 32,
-    },
+export const staticEditorUIText = style({
+  color: '#79cc50',
+});
+
+export const staticDisplayUIText = style({
+  color: '#79cc50',
+  fontStyle: 'italic',
+});
+
+export const waOptionLabel = style({
+  alignSelf: 'flex-end',
+  color: '#79cc50',
+  fontSize: 11,
+  ':hover': {
+    textDecoration: 'underline',
+    cursor: 'pointer',
   },
 });
