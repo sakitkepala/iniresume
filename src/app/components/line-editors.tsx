@@ -7,13 +7,13 @@ import * as editorStyles from './editor.css';
 import * as styles from './line-editors.css';
 
 const EditableLinesManager = React.createContext<{
-  registerEditable?: (line: number) => void;
-  activateLine?: (line: number) => void;
-  shouldActivateLine?: (line: number) => boolean;
+  registerEditable: (line: number) => void;
+  activateLine: (line: number) => void;
+  shouldActivateLine: (line: number) => boolean;
   hasActiveLine: boolean;
-  focusNext?: () => void;
-  resetActiveLine?: () => void;
-}>({ hasActiveLine: false });
+  focusNext: () => void;
+  resetActiveLine: () => void;
+} | null>(null);
 
 function EditableLinesManagerProvider({ children }: React.PropsWithChildren) {
   const $registeredLineDOMs = React.useRef<Set<number>>(new Set());
@@ -64,46 +64,25 @@ function EditableLinesManagerProvider({ children }: React.PropsWithChildren) {
 }
 
 function useEditableLinesManager() {
-  return React.useContext(EditableLinesManager);
-}
-
-// Adaptasi dari:
-// - https://usehooks.com/useOnClickOutside/
-// - https://github.com/Andarist/use-onclickoutside/blob/main/src/index.ts
-function useOnClickOutside(
-  ref: React.MutableRefObject<HTMLElement | null>,
-  handler: (event: MouseEvent | TouchEvent) => void
-) {
-  React.useEffect(() => {
-    const listener = (event: MouseEvent | TouchEvent) => {
-      if (
-        !ref.current ||
-        (event.target instanceof Node && ref.current.contains(event.target))
-      ) {
-        return;
-      }
-
-      handler(event);
-    };
-
-    document.addEventListener('mousedown', listener);
-    document.addEventListener('touchstart', listener);
-
-    return () => {
-      document.removeEventListener('mousedown', listener);
-      document.removeEventListener('touchstart', listener);
-    };
-  }, [ref, handler]);
+  const value = React.useContext(EditableLinesManager);
+  if (!value) {
+    throw new Error('Nggak child pak');
+  }
+  return value;
 }
 
 const ListItemEditorDisclosureContext = React.createContext<{
   isOpen: boolean;
-  open?: () => void;
-  close?: () => void;
-}>({ isOpen: false, open: undefined });
+  open: () => void;
+  close: () => void;
+} | null>(null);
 
 const useListItemEditorDisclosure = () => {
-  return React.useContext(ListItemEditorDisclosureContext);
+  const value = React.useContext(ListItemEditorDisclosureContext);
+  if (!value) {
+    throw new Error('Nggak child pak');
+  }
+  return value;
 };
 
 export type ListItemLineWrapperProps = { line?: number };
@@ -234,7 +213,6 @@ function PlainTextLineEditor({ label, fieldName }: PlainTextLineEditorProps) {
 export {
   EditableLinesManagerProvider,
   useEditableLinesManager,
-  useOnClickOutside,
   useListItemEditorDisclosure,
   ListItemLineEditor,
   PlainTextLineEditor,

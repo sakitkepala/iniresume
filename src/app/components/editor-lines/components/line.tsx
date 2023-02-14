@@ -2,11 +2,6 @@ import * as styles from './line.css';
 
 export type LineComponentProps = { number?: number | string };
 
-export type LineUI = {
-  id: string;
-  element: JSX.Element;
-};
-
 function LineWrapper({
   line,
   children,

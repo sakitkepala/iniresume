@@ -21,7 +21,7 @@ function PhoneNumberEditor() {
     value?.number || ''
   );
 
-  useHotkeys('esc', () => resetActiveLine?.(), {
+  useHotkeys('esc', resetActiveLine, {
     enabled: isOpen,
     enableOnFormTags: true,
     preventDefault: true,

@@ -2,10 +2,17 @@ import { style } from '@vanilla-extract/css';
 
 export const line = style({
   paddingBlock: 2,
+  borderRadius: 2,
   display: 'flex',
   ':hover': {
-    borderRadius: 2,
     backgroundColor: '#e8ffdd',
+  },
+});
+
+export const lineActive = style({
+  backgroundColor: '#d7ffc3',
+  ':hover': {
+    backgroundColor: '#d7ffc3',
   },
 });
 
@@ -22,4 +29,9 @@ export const lineNumber = style({
 export const lineContent = style({
   flexGrow: 1,
   userSelect: 'text',
+});
+
+export const sectionHeading = style({
+  color: '#0820B2',
+  fontWeight: 700,
 });

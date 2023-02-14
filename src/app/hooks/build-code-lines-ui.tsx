@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ListItemLineEditor } from '../components/line-editors';
 import { PlainTextLineEditor } from '../components/line-editors';
 import { GenderEditor } from '../components/gender-editor';
-import { DateOfBirthEditor } from '../components/date-of-birth-editor';
+// import { DateOfBirthEditor } from '../components/date-of-birth-editor';
 import { PhoneNumberEditor } from '../components/phone-number-editor';
 
 import { clsx } from 'clsx';
@@ -169,7 +169,7 @@ function _buildCodeLinesUI(resume?: ResumeData) {
       label={'...isi title'}
     />,
     <GenderEditor key={resume.gender || 'field-gender'} />,
-    <DateOfBirthEditor key={resume.birthdate || 'field-birthdate'} />,
+    // <DateOfBirthEditor key={resume.birthdate || 'field-birthdate'} />,
     <PlainTextLineEditor
       key={resume.city || 'field-city'}
       fieldName="city"

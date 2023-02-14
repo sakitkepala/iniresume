@@ -1,15 +1,15 @@
 import * as React from 'react';
+import { useOnClickOutside } from 'src/app/hooks/click-outside';
 import { useResumeEditor } from '../../contexts/resume-editor';
 import {
   type TemporaryInsertLine,
   TemporaryInsertLineProvider,
-} from './temporary-insert-line-context';
+} from './contexts/temporary-insert-line';
 import {
   EditableLinesManagerProvider,
   useEditableLinesManager,
-  useOnClickOutside,
-} from '../line-editors';
-import { useRenderEditorLines } from './render-editor-lines-hook';
+} from './contexts/editable-lines-manager';
+import { useRenderEditorLines } from './hooks/render-editor-lines';
 
 import * as styles from '../editor.css';
 
@@ -29,22 +29,20 @@ function EditorLines() {
   );
 
   return (
-    <EditorLinesContainer>
-      <EditableLinesManagerProvider>
+    <EditableLinesManagerProvider>
+      <EditorLinesContainer>
         <TemporaryInsertLineProvider value={insertLineContext}>
           {editorLinesUI}
         </TemporaryInsertLineProvider>
-      </EditableLinesManagerProvider>
-    </EditorLinesContainer>
+      </EditorLinesContainer>
+    </EditableLinesManagerProvider>
   );
 }
 
 function EditorLinesContainer({ children }: React.PropsWithChildren) {
   const { resetActiveLine } = useEditableLinesManager();
   const $container = React.useRef<HTMLDivElement>(null);
-  useOnClickOutside($container, () => {
-    resetActiveLine?.();
-  });
+  useOnClickOutside($container, resetActiveLine);
   return (
     <div className={styles.codeLinesContainer}>
       <div

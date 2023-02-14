@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { type LineUI } from './line';
+import { type LineUI } from '../types';
 
 export type TemporaryInsertLine = {
   index: number;
@@ -10,9 +10,6 @@ export type TemporaryInsertLineContextValue = {
   tmpInsertLine: TemporaryInsertLine | null;
   insertLine: (insert: TemporaryInsertLine) => void;
   discardLine: () => void;
-  // React.Dispatch<
-  //   React.SetStateAction<TemporaryInsertLine | null>
-  // >;
 };
 
 const TemporaryInsertLineContext =

@@ -35,7 +35,7 @@ function GenderEditor() {
   useHotkeys(
     'esc',
     () => {
-      resetActiveLine?.();
+      resetActiveLine();
       setCustomFieldOpen(false);
     },
     {

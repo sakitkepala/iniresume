@@ -84,7 +84,7 @@ function DateOfBirthEditor() {
     }
   }, [isOpen, sequence]);
 
-  useHotkeys('esc', () => resetActiveLine?.(), {
+  useHotkeys('esc', resetActiveLine, {
     enabled: isOpen,
     enableOnFormTags: true,
   });
@@ -126,7 +126,7 @@ function DateOfBirthEditor() {
       });
       const value = values.some((part) => !part) ? '' : values.join('-');
       updateTextField?.('birthdate', value);
-      focusNext?.();
+      focusNext();
     },
     {
       enabled: isOpen,
@@ -141,7 +141,7 @@ function DateOfBirthEditor() {
         className={styles.dateFieldsWrapper}
         onClick={(ev) => {
           ev.preventDefault();
-          close?.();
+          close();
         }}
       >
         <input

@@ -1,11 +1,19 @@
 import * as React from 'react';
-import { v4 } from 'uuid';
-import { useTemporaryInsertLine } from './temporary-insert-line-context';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { useTemporaryInsertLine } from '../contexts/temporary-insert-line';
 
-import { LineWrapper, type LineUI, type LineComponentProps } from './line';
+import { LineWrapper } from '../components/line';
+import { LineSectionHeading } from '../components/line-section-heading';
+import { LineListItemText } from '../fields/li-text';
 
-import { type TemporaryInsertLine } from './temporary-insert-line-context';
 import { type ResumeData } from 'src/app/data/resume';
+import { type TemporaryInsertLine } from '../contexts/temporary-insert-line';
+import { type LineComponentProps } from '../components/line';
+import { type LineUI } from '../types';
+
+import { v4 } from 'uuid';
+
+import * as fieldStyles from '../fields/common-styles.css';
 
 function useRenderEditorLines(
   data: ResumeData,
@@ -26,38 +34,53 @@ function _buildEditorLinesUI(
     _createLineEmpty(),
     _createLineParagraph('Umum:'),
     _createLineEmpty(),
-    _createLineListItemText(data.fullName || ''),
-    _createLineListItemText(data.title || ''),
-    _createLineListItemText(data.gender || ''),
-    _createLineListItemText(data.birthdate || ''),
-    _createLineListItemText(data.city || ''),
-    _createLineListItemText(data.province || ''),
+    _createLineListItemText('fullName', data.fullName || '', 'nama lengkap'),
+    _createLineListItemText('title', data.title || '', 'titel profesi'),
+    _createLineListItemText('gender', data.gender || '', 'gender'),
+    _createLineListItemText('birthdate', data.birthdate || '', 'tanggal lahir'),
+    _createLineListItemText('city', data.city || '', 'kota domisili'),
+    _createLineListItemText('province', data.province || '', 'provinsi'),
     _createLineEmpty(),
 
     _createLineParagraph('Kontak:'),
     _createLineEmpty(),
-    _createLineListItemText(data.email || ''),
-    _createLineListItemText('+62' + data.phone?.number || ''),
+    _createLineListItemText('email', data.email || '', 'email'),
+    _createLineListItemText(
+      'phone',
+      '+62' + data.phone?.number || '',
+      'nomor telepon'
+    ),
     _createLineEmpty(),
 
     _createLineParagraph('Profil:'),
     _createLineEmpty(),
-    _createLineListItemText(data.website?.url || ''),
+    _createLineListItemText(
+      'website',
+      data.website?.url || '',
+      '... website pribadi'
+    ),
     ..._getLinesProfileList(data.accounts),
     _createLineListItemAddProfile(),
     _createLineEmpty(),
+
     _createLineBreak(),
     _createLineEmpty(),
 
     _createLineSectionHeading('Pengalaman'),
     _createLineEmpty(),
     ..._getLinesSectionListExperiences(data.experiences),
+    _createLineListItemAddExperience(),
+    _createLineEmpty(),
+
     _createLineBreak(),
     _createLineEmpty(),
 
     _createLineSectionHeading('Pendidikan'),
     _createLineEmpty(),
     ..._getLinesSectionListEducation(data.education),
+    _createLineListItemAddEducation(),
+    _createLineEmpty(),
+
     _createLineBreak(),
     _createLineEmpty(),
 
@@ -131,21 +154,44 @@ function _createLineDateRange(text: string): LineUI {
   };
 }
 
-function _createLineListItemText(text: string): LineUI {
+function _createLineListItemText(
+  field: keyof ResumeData,
+  text: string,
+  label: string
+): LineUI {
   return {
     id: v4(),
-    element: <LineLiText>{text}</LineLiText>,
+    element: (
+      <LineListItemText field={field} label={label}>
+        {text}
+      </LineListItemText>
+    ),
   };
 }
 
 function _getLinesProfileList(accountsData: ResumeData['accounts']): LineUI[] {
-  return accountsData.map((account) => _createLineListItemText(account.url));
+  // TODO: editable list item akun
+  return accountsData.map((account) => _createLineParagraph(account.url));
 }
 
 function _createLineListItemAddProfile(): LineUI {
   return {
     id: v4(),
     element: <LineAddProfile />,
+  };
+}
+
+function _createLineListItemAddExperience(): LineUI {
+  return {
+    id: v4(),
+    element: <LineAddExperience />,
+  };
+}
+
+function _createLineListItemAddEducation(): LineUI {
+  return {
+    id: v4(),
+    element: <LineAddEducation />,
   };
 }
 
@@ -238,19 +284,6 @@ function _createLineListItemAddSkill(): LineUI {
  *
  */
 
-function LineSectionHeading({
-  children,
-  number,
-}: React.PropsWithChildren<LineComponentProps>) {
-  return (
-    <LineWrapper line={number}>
-      <span>#</span>
-      <span>&nbsp;</span>
-      <span>{children}</span>
-    </LineWrapper>
-  );
-}
-
 function LineHeading({
   children,
   number,
@@ -265,9 +298,11 @@ function LineHeading({
   };
   return (
     <LineWrapper line={number}>
-      <span>{marks[level.toString()]}</span>
-      <span>&nbsp;</span>
-      <span>{children}</span>
+      <span className={fieldStyles.textHeading}>
+        <span>{marks[level.toString()]}</span>
+        <span>&nbsp;</span>
+        <span>{children}</span>
+      </span>
     </LineWrapper>
   );
 }
@@ -278,7 +313,7 @@ function LineDateRange({
 }: React.PropsWithChildren<LineComponentProps>) {
   return (
     <LineWrapper line={number}>
-      <span>{children} (beda di warna font)</span>
+      <span className={fieldStyles.textDaterange}>{children}</span>
     </LineWrapper>
   );
 }
@@ -294,7 +329,7 @@ function LineEmpty({ number }: LineComponentProps) {
 function LineBreak({ number }: LineComponentProps) {
   return (
     <LineWrapper line={number}>
-      <span>---</span>
+      <span className={fieldStyles.textLinebreak}>---</span>
     </LineWrapper>
   );
 }
@@ -305,19 +340,6 @@ function LineParagraph({
 }: React.PropsWithChildren<LineComponentProps>) {
   return (
     <LineWrapper line={number}>
-      <span>{children}</span>
-    </LineWrapper>
-  );
-}
-
-function LineLiText({
-  children,
-  number,
-}: React.PropsWithChildren<LineComponentProps>) {
-  return (
-    <LineWrapper line={number}>
-      <span>-</span>
-      <span>&nbsp;</span>
       <span>{children}</span>
     </LineWrapper>
   );
@@ -350,11 +372,9 @@ function AddSkillUnder({ index }: { index?: number }) {
     line: {
       id: v4(),
       element: (
-        <LineLiText>
-          <span onClick={() => discardLine()}>
-            ... // TODO: editor field skill
-          </span>
-        </LineLiText>
+        <LineParagraph>
+          <InsertField onClose={discardLine} />
+        </LineParagraph>
       ),
     },
   };
@@ -368,6 +388,32 @@ function AddSkillUnder({ index }: { index?: number }) {
   );
 }
 
+function InsertField({ onClose }: { onClose: () => void }) {
+  const $input = React.useRef<HTMLInputElement>(null);
+
+  useHotkeys('esc, enter, tab', onClose, {
+    enableOnFormTags: true,
+    preventDefault: true,
+  });
+
+  React.useEffect(() => {
+    $input.current?.focus();
+  }, []);
+
+  return (
+    <span className={fieldStyles.listItemWrapper}>
+      <span>-</span>
+      <span>&nbsp;</span>
+      <input
+        ref={$input}
+        className={fieldStyles.inputText}
+        type="text"
+        placeholder={`${'//'} TODO: editor field skill`}
+      />
+    </span>
+  );
+}
+
 function LineAddProfile({ number }: LineComponentProps) {
   return (
     <LineWrapper line={number}>
@@ -376,6 +422,30 @@ function LineAddProfile({ number }: LineComponentProps) {
       <span>
         <em>
           <u>Tambah profil</u>
+        </em>
+      </span>
+    </LineWrapper>
+  );
+}
+
+function LineAddExperience({ number }: LineComponentProps) {
+  return (
+    <LineWrapper line={number}>
+      <span>
+        <em>
+          <u>Tambah pengalaman</u>
+        </em>
+      </span>
+    </LineWrapper>
+  );
+}
+
+function LineAddEducation({ number }: LineComponentProps) {
+  return (
+    <LineWrapper line={number}>
+      <span>
+        <em>
+          <u>Tambah pendidikan</u>
         </em>
       </span>
     </LineWrapper>
