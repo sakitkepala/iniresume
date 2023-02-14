@@ -1,54 +1,62 @@
-export type PhoneNumber = {
-  number: string;
-  wa: boolean;
-};
-
 export type ResumeData = {
-  fullName?: string;
-  title?: string;
-  gender?: string;
-  birthdate?: string;
-  city?: string;
-  province?: string;
+  fullName: string;
+  title: string;
+  gender: string;
+  birthdate: string;
+  city: string;
+  province: string;
 
-  email?: string;
-  phone?: PhoneNumber;
+  email: string;
+  phone: PhoneNumber;
   website?: {
     url: string;
     text?: string;
   };
 
-  accounts: {
-    account: string;
-    username: string;
-    url: string;
-    text?: string;
-  }[];
-
-  experiences: {
-    employer: string;
-    title: string;
-    from: string;
-    to: string;
-    description: string;
-    projects?: {
-      name: string;
-      from?: string;
-      to?: string;
-      description?: string;
-      url?: string;
-    }[];
-  }[];
-
-  education: {
-    school: string;
-    major: string;
-    from?: string | number;
-    to?: string | number;
-    description?: string;
-  }[];
-
+  accounts: Account[];
+  experiences: Experience[];
+  education: Education[];
   skills: string[];
+};
+
+export type PhoneNumber = {
+  number: string;
+  wa: boolean;
+};
+
+export type Account = {
+  account: string;
+  username: string;
+  url: string;
+  text?: string;
+};
+
+export type Experience = {
+  employer: string;
+  title: string;
+  from: string;
+  to: string;
+  ongoing: boolean;
+  description: string;
+  projects?: Project[];
+};
+
+export type Project = {
+  name: string;
+  from?: string;
+  to?: string;
+  description?: string;
+  url?: string;
+};
+
+export type Education = {
+  school: string;
+  major: string;
+  from: string | number;
+  to?: string | number;
+  ongoing: boolean;
+  userange: boolean;
+  description?: string;
 };
 
 export function getInitialData(): ResumeData {
@@ -124,6 +132,8 @@ export const exampleData: ResumeData = {
       major: 'D3 Teknik Informatika (Multimedia)',
       from: 2009,
       to: 2017,
+      ongoing: false,
+      userange: false,
       description:
         '*)Tertunda menyelesaikan studi untuk cuti kuliah sementara waktu untuk bekerja.',
     },
@@ -132,6 +142,8 @@ export const exampleData: ResumeData = {
       major: 'IPA',
       from: 2006,
       to: 2009,
+      ongoing: false,
+      userange: false,
       description: '',
     },
   ],
@@ -142,6 +154,7 @@ export const exampleData: ResumeData = {
       title: 'Frontend Developer',
       from: '2021-10-01',
       to: '2022-10-31',
+      ongoing: false,
       description:
         'Bersama rekan tim My Archery membangun produk event-organizing olahraga Panahan.',
       projects: [
@@ -163,6 +176,7 @@ export const exampleData: ResumeData = {
       title: 'Frontend Developer',
       from: '2021-06-01',
       to: '2021-08-31',
+      ongoing: false,
       description:
         'Mengembangkan produk aplikasi sekolah yang bermodel on-premises.',
       projects: [
@@ -181,6 +195,7 @@ export const exampleData: ResumeData = {
       title: 'Odoo Software Developer',
       from: '2019-07-01',
       to: '2020-11-01',
+      ongoing: false,
       description:
         'Bersama rekan tim mengembangkan kustomisasi sistem ERP' +
         ' sesuai requirement klien. Menggunakan stack teknologi pada framework Odoo:' +

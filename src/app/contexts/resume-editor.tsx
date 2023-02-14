@@ -55,14 +55,20 @@ function useEditor() {
   return { resume, updateField, updateTextField };
 }
 
-const ResumeEditorContext = React.createContext<{
-  resume?: ResumeData;
-  updateField?: (field: keyof ResumeData, value: ResumeFieldPayload) => void;
-  updateTextField?: (field: keyof ResumeData, value: string) => void;
-}>({});
+const ResumeEditorContext = React.createContext<null | {
+  resume: ResumeData;
+  updateField: (field: keyof ResumeData, value: ResumeFieldPayload) => void;
+  updateTextField: (field: keyof ResumeData, value: string) => void;
+}>(null);
 
 function useResumeEditor() {
-  return React.useContext(ResumeEditorContext);
+  const value = React.useContext(ResumeEditorContext);
+  if (!value) {
+    throw new Error(
+      'Hook `useResumeEditor` harus dipakai di child `ResumeEditorProvider`.'
+    );
+  }
+  return value;
 }
 
 function ResumeEditorProvider({ children }: React.PropsWithChildren) {

@@ -3,9 +3,31 @@ import { useResumeEditor } from '../contexts/resume-editor';
 import * as appStyles from '../app.css';
 import * as styles from './header-bar.css';
 
-function HeaderBar({ downloadUrl }: { downloadUrl?: string }) {
+function HeaderBar({
+  rich = false,
+  downloadUrl,
+}: {
+  rich?: boolean;
+  downloadUrl?: string;
+}) {
+  return rich ? <RichHeader downloadUrl={downloadUrl} /> : <StaticHeader />;
+}
+
+function StaticHeader() {
+  return (
+    <header className={styles.header}>
+      <div className={styles.breadcrumb}>
+        <div className={styles.logoType}>iniresume.</div>
+      </div>
+
+      <div className={styles.headerAction}></div>
+    </header>
+  );
+}
+
+function RichHeader({ downloadUrl }: { downloadUrl?: string }) {
   const { resume } = useResumeEditor();
-  const hasTitle = resume?.fullName && resume.title;
+  const hasTitle = resume.fullName && resume.title;
   return (
     <header className={styles.header}>
       <div className={styles.breadcrumb}>
@@ -19,7 +41,6 @@ function HeaderBar({ downloadUrl }: { downloadUrl?: string }) {
           </>
         )}
       </div>
-
       <div className={styles.headerAction}>
         {Boolean(downloadUrl) && (
           <button

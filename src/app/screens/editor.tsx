@@ -20,12 +20,11 @@ export function ScreenEditor() {
   const [fileUrl, setFileUrl] = React.useState<null | string>(null);
   return (
     <ResumeEditorProvider>
-      <HeaderBar downloadUrl={fileUrl || undefined} />
+      <HeaderBar rich downloadUrl={fileUrl || undefined} />
       <div className={styles.mainContainer}>
         <main>
           <Editor />
         </main>
-
         <aside className={styles.previewPanel}>
           <PreviewPanel onFileUrlChange={setFileUrl} />
         </aside>
