@@ -35,3 +35,12 @@ export const sectionHeading = style({
   color: '#0820B2',
   fontWeight: 700,
 });
+
+export const textLinebreak = style({
+  color: '#79cc50',
+});
+
+export const textHeading = style({
+  color: '#117A80',
+  fontWeight: 700,
+});

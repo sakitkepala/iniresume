@@ -1,10 +1,15 @@
 import * as React from 'react';
-import { useHotkeys } from 'react-hotkeys-hook';
-import { useTemporaryInsertLine } from '../contexts/temporary-insert-line';
 
-import { LineWrapper } from '../components/line';
+import {
+  LineWrapper,
+  LineEmpty,
+  LineBreak,
+  LineHeading,
+  LineParagraph,
+} from '../components/line';
 import { LineSectionHeading } from '../components/line-section-heading';
 import { LineListItemText } from '../fields/li-text';
+import { LineListItemSkill, LineAddSkill } from '../fields/li-skill';
 
 import { type ResumeData } from 'src/app/data/resume';
 import { type TemporaryInsertLine } from '../contexts/temporary-insert-line';
@@ -254,7 +259,7 @@ function _getLinesSectionListEducation(
 function _getLinesSkillList(skillsData: ResumeData['skills']): LineUI[] {
   return skillsData.map((skill) => ({
     id: v4(),
-    element: <LineLiSkill>{skill}</LineLiSkill>,
+    element: <LineListItemSkill>{skill}</LineListItemSkill>,
   }));
 }
 
@@ -284,29 +289,6 @@ function _createLineListItemAddSkill(): LineUI {
  *
  */
 
-function LineHeading({
-  children,
-  number,
-  level,
-}: React.PropsWithChildren<LineComponentProps & { level: string | number }>) {
-  const marks: {
-    [level: string]: string;
-  } = {
-    1: '#',
-    2: '##',
-    3: '###',
-  };
-  return (
-    <LineWrapper line={number}>
-      <span className={fieldStyles.textHeading}>
-        <span>{marks[level.toString()]}</span>
-        <span>&nbsp;</span>
-        <span>{children}</span>
-      </span>
-    </LineWrapper>
-  );
-}
-
 function LineDateRange({
   children,
   number,
@@ -318,111 +300,17 @@ function LineDateRange({
   );
 }
 
-function LineEmpty({ number }: LineComponentProps) {
-  return (
-    <LineWrapper line={number}>
-      <span></span>
-    </LineWrapper>
-  );
-}
-
-function LineBreak({ number }: LineComponentProps) {
-  return (
-    <LineWrapper line={number}>
-      <span className={fieldStyles.textLinebreak}>---</span>
-    </LineWrapper>
-  );
-}
-
-function LineParagraph({
-  children,
-  number,
-}: React.PropsWithChildren<LineComponentProps>) {
-  return (
-    <LineWrapper line={number}>
-      <span>{children}</span>
-    </LineWrapper>
-  );
-}
-
-function LineLiSkill({
-  children,
-  number,
-}: React.PropsWithChildren<LineComponentProps>) {
-  return (
-    <LineWrapper line={number}>
-      <span>-</span>
-      <span>&nbsp;</span>
-      <span>{children}</span>
-      <span>&nbsp;</span>
-      <AddSkillUnder index={number ? Number(number) : undefined} />
-    </LineWrapper>
-  );
-}
-
-function AddSkillUnder({ index }: { index?: number }) {
-  const { tmpInsertLine, insertLine, discardLine } = useTemporaryInsertLine();
-
-  if (typeof index === 'undefined' || tmpInsertLine) {
-    return null;
-  }
-
-  const line: TemporaryInsertLine = {
-    index,
-    line: {
-      id: v4(),
-      element: (
-        <LineParagraph>
-          <InsertField onClose={discardLine} />
-        </LineParagraph>
-      ),
-    },
-  };
-
-  return (
-    <span onClick={() => insertLine(line)}>
-      <em>
-        <u>Tambah di bawahnya</u>
-      </em>
-    </span>
-  );
-}
-
-function InsertField({ onClose }: { onClose: () => void }) {
-  const $input = React.useRef<HTMLInputElement>(null);
-
-  useHotkeys('esc, enter, tab', onClose, {
-    enableOnFormTags: true,
-    preventDefault: true,
-  });
-
-  React.useEffect(() => {
-    $input.current?.focus();
-  }, []);
-
-  return (
-    <span className={fieldStyles.listItemWrapper}>
-      <span>-</span>
-      <span>&nbsp;</span>
-      <input
-        ref={$input}
-        className={fieldStyles.inputText}
-        type="text"
-        placeholder={`${'//'} TODO: editor field skill`}
-      />
-    </span>
-  );
-}
-
 function LineAddProfile({ number }: LineComponentProps) {
   return (
     <LineWrapper line={number}>
-      <span>&nbsp;</span>
-      <span>&nbsp;</span>
-      <span>
-        <em>
-          <u>Tambah profil</u>
-        </em>
+      <span className={fieldStyles.listItemWrapper}>
+        <span>&nbsp;</span>
+        <span>&nbsp;</span>
+        <span>
+          <em>
+            <u>Tambah profil</u>
+          </em>
+        </span>
       </span>
     </LineWrapper>
   );
@@ -446,20 +334,6 @@ function LineAddEducation({ number }: LineComponentProps) {
       <span>
         <em>
           <u>Tambah pendidikan</u>
-        </em>
-      </span>
-    </LineWrapper>
-  );
-}
-
-function LineAddSkill({ number }: LineComponentProps) {
-  return (
-    <LineWrapper line={number}>
-      <span>&nbsp;</span>
-      <span>&nbsp;</span>
-      <span>
-        <em>
-          <u>Tambah skill</u>
         </em>
       </span>
     </LineWrapper>

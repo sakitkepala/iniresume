@@ -85,8 +85,8 @@ function ListItemTextField({
   }
 
   const labelStyle = value
-    ? commonStyles.editorValueLabel
-    : commonStyles.editorPlaceholderLabel;
+    ? commonStyles.fieldValueLabel
+    : commonStyles.fieldEmptyLabel;
 
   return listItemLine(<span className={labelStyle}>{value || label}</span>);
 }

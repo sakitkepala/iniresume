@@ -4,7 +4,7 @@ export const listItemWrapper = style({
   display: 'flex',
 });
 
-export const editorPlaceholderLabel = style({
+export const fieldEmptyLabel = style({
   color: '#79cc50',
   fontStyle: 'italic',
   cursor: 'pointer',
@@ -13,11 +13,25 @@ export const editorPlaceholderLabel = style({
   },
 });
 
-export const editorValueLabel = style({
+export const fieldValueLabel = style({
   cursor: 'pointer',
   ':hover': {
     color: '#79cc50',
     textDecoration: 'underline',
+  },
+});
+
+export const triggerText = style({
+  display: 'inline-block',
+  margin: 0,
+  padding: 0,
+  border: 'none',
+  backgroundColor: 'transparent',
+  color: '#79cc50',
+  fontSize: 11,
+  ':hover': {
+    textDecoration: 'underline',
+    cursor: 'pointer',
   },
 });
 
@@ -44,15 +58,18 @@ export const inputText = style({
   },
 });
 
-export const textHeading = style({
-  color: '#117A80',
-  fontWeight: 700,
-});
-
 export const textDaterange = style({
   color: '#9445B0',
 });
 
-export const textLinebreak = style({
-  color: '#79cc50',
+export const listItemSkillWrapper = style({});
+
+export const skillInsertBelowWrapper = style({
+  display: 'none',
+  marginInline: '3rem',
+  selectors: {
+    [`${listItemSkillWrapper}:hover &`]: {
+      display: 'inline-block',
+    },
+  },
 });
