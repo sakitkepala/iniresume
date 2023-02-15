@@ -19,7 +19,8 @@ function EditableLinesManagerProvider({ children }: React.PropsWithChildren) {
   const value = React.useMemo(
     () => ({
       registerEditable(line: number) {
-        $registeredLineDOMs.current.add(line);
+        const $lines = $registeredLineDOMs.current;
+        !$lines.has(line) && $lines.add(line);
       },
 
       hasActiveLine: Boolean(activeLine),
@@ -37,14 +38,14 @@ function EditableLinesManagerProvider({ children }: React.PropsWithChildren) {
         if (!activeLine) {
           return;
         }
-        const doms = [...$registeredLineDOMs.current.entries()];
-        const currentIndex = doms.findIndex((dom) => dom[0] === activeLine);
+        const $doms = [...$registeredLineDOMs.current.entries()];
+        const currentIndex = $doms.findIndex((dom) => dom[0] === activeLine);
         const nextIndex = currentIndex + 1;
-        if (nextIndex === doms.length) {
+        if (nextIndex === $doms.length) {
           setActiveLine(null);
           return;
         }
-        setActiveLine(doms[nextIndex]?.[0]);
+        setActiveLine($doms[nextIndex]?.[0]);
       },
 
       resetActiveLine() {

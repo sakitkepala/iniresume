@@ -37,13 +37,27 @@ const caretBlinking = keyframes({
   '100%': { opacity: 0 },
 });
 
-export const fakeCaret = style({
+export const fakeCaretEmpty = style({
   position: 'relative',
   '::after': {
     content: "' '",
     position: 'absolute',
     insetBlock: 0,
     left: 0,
+    width: 1,
+    overflow: 'hidden',
+    backgroundColor: '#000000',
+    animation: `${caretBlinking} 1.5s infinite linear`,
+  },
+});
+
+export const fakeCaret = style({
+  position: 'relative',
+  '::after': {
+    content: "' '",
+    position: 'absolute',
+    insetBlock: 0,
+    right: 0,
     width: 1,
     overflow: 'hidden',
     backgroundColor: '#000000',

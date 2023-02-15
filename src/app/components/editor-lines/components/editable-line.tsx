@@ -73,15 +73,17 @@ function EditableLineWrapper({
           styles.line,
           disclosure.isOpen ? styles.lineActive : undefined
         )}
-        onClick={(ev) => {
-          ev.stopPropagation();
-          activateLine(Number(line));
-        }}
       >
         <div className={styles.lineNumber}>
           {typeof line === 'undefined' ? null : line}
         </div>
-        <div className={styles.lineContent}>
+        <div
+          className={styles.lineContent}
+          onClick={(ev) => {
+            ev.stopPropagation();
+            activateLine(Number(line));
+          }}
+        >
           <React.Fragment key={disclosureId}>{children}</React.Fragment>
         </div>
       </div>

@@ -51,7 +51,7 @@ function GenderField({
   children,
 }: React.PropsWithChildren<LineComponentProps>) {
   const { updateTextField } = useResumeEditor();
-  const { isOpen, open, close } = useEditableLineDisclosure();
+  const { isOpen, close } = useEditableLineDisclosure();
   const [isCustomFieldOpen, setCustomFieldOpen] = React.useState(false);
 
   const value = typeof children === 'string' ? children : '';
@@ -75,7 +75,11 @@ function GenderField({
                     optionIsSelected(option)
                       ? styles.optionSelected
                       : undefined,
-                    index === 0 ? styles.fakeCaret : undefined
+                    index === 0
+                      ? value
+                        ? styles.fakeCaret
+                        : styles.fakeCaretEmpty
+                      : undefined
                   )}
                   onClick={(ev) => {
                     ev.stopPropagation();
@@ -104,7 +108,6 @@ function GenderField({
         className={
           value ? fieldStyles.fieldValueLabel : fieldStyles.fieldEmptyLabel
         }
-        onClick={open}
       >
         {VALUE_LABEL[value] || value || 'Gender'}
       </span>

@@ -10,6 +10,7 @@ import {
 import { LineSectionHeading } from '../components/line-section-heading';
 import { LineListItemText } from '../fields/li-text';
 import { LineListItemGender } from '../fields/li-gender';
+import { LineListItemDateOfBirth } from '../fields/li-date-of-birth';
 import { LineListItemSkill, LineAddSkill } from '../fields/li-skill';
 
 import { type ResumeData } from 'src/app/data/resume';
@@ -43,11 +44,7 @@ function _buildEditorLinesUI(
     _createLineListItemText('fullName', data.fullName || '', 'Nama lengkap'),
     _createLineListItemText('title', data.title || '', 'Titel profesi'),
     _createLineListItemGender(data.gender || ''),
-    _createLineListItemText(
-      'birthdate',
-      data.birthdate || '',
-      'Tanggal lahir (dipakai hitung usia)'
-    ),
+    _createLineListItemBirth(data.birthdate || ''),
     _createLineListItemText('city', data.city || '', 'Kota domisili'),
     _createLineListItemText(
       'province',
@@ -187,6 +184,15 @@ function _createLineListItemGender(genderData: ResumeData['gender']): LineUI {
   return {
     id: v4(),
     element: <LineListItemGender>{genderData}</LineListItemGender>,
+  };
+}
+
+function _createLineListItemBirth(
+  birthdateData: ResumeData['birthdate']
+): LineUI {
+  return {
+    id: v4(),
+    element: <LineListItemDateOfBirth>{birthdateData}</LineListItemDateOfBirth>,
   };
 }
 
