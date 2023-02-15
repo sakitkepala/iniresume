@@ -9,6 +9,7 @@ import {
 } from '../components/line';
 import { LineSectionHeading } from '../components/line-section-heading';
 import { LineListItemText } from '../fields/li-text';
+import { LineListItemGender } from '../fields/li-gender';
 import { LineListItemSkill, LineAddSkill } from '../fields/li-skill';
 
 import { type ResumeData } from 'src/app/data/resume';
@@ -39,21 +40,29 @@ function _buildEditorLinesUI(
     _createLineEmpty(),
     _createLineParagraph('Umum:'),
     _createLineEmpty(),
-    _createLineListItemText('fullName', data.fullName || '', 'nama lengkap'),
-    _createLineListItemText('title', data.title || '', 'titel profesi'),
-    _createLineListItemText('gender', data.gender || '', 'gender'),
-    _createLineListItemText('birthdate', data.birthdate || '', 'tanggal lahir'),
-    _createLineListItemText('city', data.city || '', 'kota domisili'),
-    _createLineListItemText('province', data.province || '', 'provinsi'),
+    _createLineListItemText('fullName', data.fullName || '', 'Nama lengkap'),
+    _createLineListItemText('title', data.title || '', 'Titel profesi'),
+    _createLineListItemGender(data.gender || ''),
+    _createLineListItemText(
+      'birthdate',
+      data.birthdate || '',
+      'Tanggal lahir (dipakai hitung usia)'
+    ),
+    _createLineListItemText('city', data.city || '', 'Kota domisili'),
+    _createLineListItemText(
+      'province',
+      data.province || '',
+      'Provinsi domisili'
+    ),
     _createLineEmpty(),
 
     _createLineParagraph('Kontak:'),
     _createLineEmpty(),
-    _createLineListItemText('email', data.email || '', 'email'),
+    _createLineListItemText('email', data.email || '', 'Alamat email'),
     _createLineListItemText(
       'phone',
       '+62' + data.phone?.number || '',
-      'nomor telepon'
+      'Nomor telepon'
     ),
     _createLineEmpty(),
 
@@ -62,7 +71,7 @@ function _buildEditorLinesUI(
     _createLineListItemText(
       'website',
       data.website?.url || '',
-      '... website pribadi'
+      'Website personal'
     ),
     ..._getLinesProfileList(data.accounts),
     _createLineListItemAddProfile(),
@@ -171,6 +180,13 @@ function _createLineListItemText(
         {text}
       </LineListItemText>
     ),
+  };
+}
+
+function _createLineListItemGender(genderData: ResumeData['gender']): LineUI {
+  return {
+    id: v4(),
+    element: <LineListItemGender>{genderData}</LineListItemGender>,
   };
 }
 

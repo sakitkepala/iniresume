@@ -6,6 +6,7 @@ import {
   EditableLineWrapper,
   useEditableLineDisclosure,
 } from '../components/editable-line';
+import { ListItemLine } from './list-item-line';
 
 import { type ResumeData } from 'src/app/data/resume';
 import { type LineComponentProps } from '../components/line';
@@ -64,31 +65,31 @@ function ListItemTextField({
     isOpen && $input.current?.focus();
   }, [isOpen]);
 
-  const listItemLine = (element: JSX.Element) => (
-    <span className={commonStyles.listItemWrapper}>
-      <span>-</span>
-      <span>&nbsp;</span>
-      {element}
-    </span>
-  );
-
   if (isOpen) {
-    return listItemLine(
-      <input
-        ref={$input}
-        type="text"
-        className={commonStyles.inputText}
-        placeholder={label}
-        defaultValue={value}
-      />
+    return (
+      <ListItemLine muted>
+        <input
+          ref={$input}
+          type="text"
+          className={commonStyles.inputText}
+          placeholder={label}
+          defaultValue={value}
+        />
+      </ListItemLine>
     );
   }
 
-  const labelStyle = value
-    ? commonStyles.fieldValueLabel
-    : commonStyles.fieldEmptyLabel;
-
-  return listItemLine(<span className={labelStyle}>{value || label}</span>);
+  return (
+    <ListItemLine muted={!value}>
+      <span
+        className={
+          value ? commonStyles.fieldValueLabel : commonStyles.fieldEmptyLabel
+        }
+      >
+        {value || label}
+      </span>
+    </ListItemLine>
+  );
 }
 
 export { LineListItemText };

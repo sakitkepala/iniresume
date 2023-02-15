@@ -1,5 +1,9 @@
 import { style } from '@vanilla-extract/css';
 
+export const staticDisplay = style({
+  color: '#79cc50',
+});
+
 export const listItemWrapper = style({
   display: 'flex',
 });

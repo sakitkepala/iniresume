@@ -60,34 +60,45 @@ export type Education = {
 };
 
 export function getInitialData(): ResumeData {
-  // TODO: balikin uncomment ini:
-  // return {
-  //   fullName: '',
-  //   title: '',
-  //   gender: '',
-  //   birthdate: '',
-  //   city: '',
-  //   province: '',
+  return {
+    fullName: '',
+    title: '',
+    gender: '',
+    birthdate: '',
+    city: '',
+    province: '',
 
-  //   email: '',
-  //   phone: {
-  //     number: '',
-  //     wa: false,
-  //   },
-  //   website: {
-  //     url: '',
-  //     text: '',
-  //   },
+    email: '',
+    phone: {
+      number: '',
+      wa: false,
+    },
+    website: {
+      url: '',
+      text: '',
+    },
 
-  //   accounts: [],
-  //   experiences: [],
-  //   education: [],
-  //   skills: [],
-  // };
-  return exampleData;
+    accounts: [
+      {
+        account: 'github',
+        url: 'https://github.com/',
+        username: '',
+        text: '',
+      },
+      {
+        account: 'linkedin',
+        url: 'https://linkedin.com/in/',
+        username: '',
+        text: '',
+      },
+    ],
+    experiences: [],
+    education: [],
+    skills: [],
+  };
 }
 
-export const exampleData: ResumeData = {
+export const exampleDataAndika: ResumeData = {
   fullName: 'Andika Priyotama Dharminto',
   title: 'Frontend Developer',
   gender: 'male',
@@ -251,4 +262,4 @@ export const exampleData: ResumeData = {
   ],
 };
 
-export default exampleData;
+export default exampleDataAndika;
