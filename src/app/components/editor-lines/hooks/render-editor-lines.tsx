@@ -11,6 +11,7 @@ import { LineSectionHeading } from '../components/line-section-heading';
 import { LineListItemText } from '../fields/li-text';
 import { LineListItemGender } from '../fields/li-gender';
 import { LineListItemDateOfBirth } from '../fields/li-date-of-birth';
+import { LineListItemPhone } from '../fields/li-phone';
 import { LineListItemSkill, LineAddSkill } from '../fields/li-skill';
 
 import { type ResumeData } from 'src/app/data/resume';
@@ -56,11 +57,7 @@ function _buildEditorLinesUI(
     _createLineParagraph('Kontak:'),
     _createLineEmpty(),
     _createLineListItemText('email', data.email || '', 'Alamat email'),
-    _createLineListItemText(
-      'phone',
-      '+62' + data.phone?.number || '',
-      'Nomor telepon'
-    ),
+    _createLineListItemPhone(data.phone),
     _createLineEmpty(),
 
     _createLineParagraph('Profil:'),
@@ -196,6 +193,15 @@ function _createLineListItemBirth(
   };
 }
 
+function _createLineListItemPhone(phone: ResumeData['phone']): LineUI {
+  return {
+    id: v4(),
+    element: (
+      <LineListItemPhone hasWA={phone.wa}>{phone.number}</LineListItemPhone>
+    ),
+  };
+}
+
 function _getLinesProfileList(accountsData: ResumeData['accounts']): LineUI[] {
   // TODO: editable list item akun
   return accountsData.map((account) => _createLineParagraph(account.url));
@@ -225,32 +231,30 @@ function _createLineListItemAddEducation(): LineUI {
 function _getLinesSectionListExperiences(
   experiences: ResumeData['experiences']
 ): LineUI[] {
-  const mergedLines: LineUI[] = [];
+  const lines: LineUI[] = [];
 
   experiences.forEach((experience) => {
-    mergedLines.push(_createLineHeading(experience.title, 2));
-    mergedLines.push(_createLineEmpty());
-    mergedLines.push(_createLineHeading(experience.employer, 3));
-    mergedLines.push(_createLineEmpty());
-    mergedLines.push(
-      _createLineDateRange(`${experience.from} - ${experience.to}`)
-    );
-    mergedLines.push(_createLineEmpty());
+    lines.push(_createLineHeading(experience.title, 2));
+    lines.push(_createLineEmpty());
+    lines.push(_createLineHeading(experience.employer, 3));
+    lines.push(_createLineEmpty());
+    lines.push(_createLineDateRange(`${experience.from} - ${experience.to}`));
+    lines.push(_createLineEmpty());
     if (experience.description) {
-      mergedLines.push(_createLineParagraph(experience.description));
-      mergedLines.push(_createLineEmpty());
+      lines.push(_createLineParagraph(experience.description));
+      lines.push(_createLineEmpty());
     }
 
     experience.projects?.forEach((project) => {
-      mergedLines.push(_createLineParagraph(project.name));
+      lines.push(_createLineParagraph(project.name));
       project.description &&
-        mergedLines.push(_createLineParagraph(project.description));
-      project.url && mergedLines.push(_createLineParagraph(project.url));
-      mergedLines.push(_createLineEmpty());
+        lines.push(_createLineParagraph(project.description));
+      project.url && lines.push(_createLineParagraph(project.url));
+      lines.push(_createLineEmpty());
     });
   });
 
-  return mergedLines;
+  return lines;
 }
 
 function _getLinesSectionListEducation(

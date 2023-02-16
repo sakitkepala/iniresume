@@ -47,9 +47,7 @@ function LineListItemGender({
   );
 }
 
-function GenderField({
-  children,
-}: React.PropsWithChildren<LineComponentProps>) {
+function GenderField({ children }: React.PropsWithChildren) {
   const { updateTextField } = useResumeEditor();
   const { isOpen, close } = useEditableLineDisclosure();
   const [isCustomFieldOpen, setCustomFieldOpen] = React.useState(false);

@@ -26,6 +26,7 @@ export const fieldValueLabel = style({
 });
 
 export const triggerText = style({
+  userSelect: 'none',
   display: 'inline-block',
   margin: 0,
   padding: 0,
