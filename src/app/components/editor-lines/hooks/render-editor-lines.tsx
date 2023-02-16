@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import {
   LineWrapper,
   LineEmpty,
@@ -25,17 +24,17 @@ import * as fieldStyles from '../fields/common-styles.css';
 
 function useRenderEditorLines(
   data: ResumeData,
-  tmpInsertLine: TemporaryInsertLine | null
+  insertedLines: TemporaryInsertLine[] | null
 ) {
   return React.useMemo(
-    () => _buildEditorLinesUI(data, tmpInsertLine),
-    [data, tmpInsertLine]
+    () => _buildEditorLinesUI(data, insertedLines),
+    [data, insertedLines]
   );
 }
 
 function _buildEditorLinesUI(
   data: ResumeData,
-  tmpInsertLine: TemporaryInsertLine | null
+  tmpInsertLines: TemporaryInsertLine[] | null
 ) {
   const linesBase: LineUI[] = [
     _createLineSectionHeading('Informasi'),
@@ -99,8 +98,8 @@ function _buildEditorLinesUI(
     _createLineEmpty(),
   ];
 
-  const lines: LineUI[] = tmpInsertLine?.index
-    ? _insertLines(linesBase, tmpInsertLine)
+  const lines: LineUI[] = tmpInsertLines?.length
+    ? _insertLines(linesBase, tmpInsertLines)
     : linesBase;
 
   return lines.map((line, index) => {
@@ -113,11 +112,18 @@ function _buildEditorLinesUI(
   });
 }
 
-function _insertLines(linesBase: LineUI[], tmpInsertLine: TemporaryInsertLine) {
-  const { index, line } = tmpInsertLine;
-  const linesWithInsert = [...linesBase];
-  linesWithInsert.splice(index, 0, line);
-  return linesWithInsert;
+function _insertLines(
+  linesBase: LineUI[],
+  tmpInsertLines: TemporaryInsertLine[]
+) {
+  const insertAtIndex = tmpInsertLines[0].index;
+  const beginningPart = linesBase.slice(0, insertAtIndex);
+  const endPart = linesBase.slice(insertAtIndex);
+  return [
+    ...beginningPart,
+    ...tmpInsertLines.map((insert) => insert.line),
+    ...endPart,
+  ];
 }
 
 function _createLineEmpty(): LineUI {

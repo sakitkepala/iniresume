@@ -94,7 +94,8 @@ function EditSkillField({
       </span>
       {Boolean(value) && !hasActiveLine && value !== lastSkillItem && (
         <InsertSkill
-          insertAtIndex={number ? Number(number) : undefined}
+          // Kebetulan nomor line sama target indeks nilainya sama wkwk
+          insertLineAtIndex={number ? Number(number) : undefined}
           insertAfterSkill={value}
         />
       )}
@@ -171,16 +172,16 @@ function AddSkillField() {
 }
 
 function InsertSkill({
-  insertAtIndex,
+  insertLineAtIndex,
   insertAfterSkill,
 }: {
-  insertAtIndex?: number;
+  insertLineAtIndex?: number;
   insertAfterSkill: string;
 }) {
-  const { tmpInsertLine, insertLine } = useTemporaryInsertLine();
+  const { insertedLines, insertLines } = useTemporaryInsertLine();
   const { activateLine } = useEditableLinesManager();
 
-  if (typeof insertAtIndex === 'undefined' || tmpInsertLine) {
+  if (typeof insertLineAtIndex === 'undefined' || insertedLines) {
     return null;
   }
 
@@ -189,7 +190,7 @@ function InsertSkill({
       <TriggerText
         onClick={() => {
           const line: TemporaryInsertLine = {
-            index: insertAtIndex,
+            index: insertLineAtIndex,
             line: {
               id: v4(),
               element: (
@@ -197,8 +198,8 @@ function InsertSkill({
               ),
             },
           };
-          insertLine(line);
-          activateLine(insertAtIndex + 1);
+          insertLines([line]);
+          activateLine(insertLineAtIndex + 1);
         }}
       >
         Tambah di bawahnya
@@ -220,7 +221,7 @@ function LineListItemInsertSkill({
 
 function InsertSkillField({ insertAfterSkill }: { insertAfterSkill: string }) {
   const { insertSkill } = useResumeEditor();
-  const { discardLine } = useTemporaryInsertLine();
+  const { discardLines } = useTemporaryInsertLine();
   const { resetActiveLine } = useEditableLinesManager();
   const { isOpen } = useEditableLineDisclosure();
   const $input = React.useRef<HTMLInputElement>(null);
@@ -228,7 +229,7 @@ function InsertSkillField({ insertAfterSkill }: { insertAfterSkill: string }) {
   useHotkeys(
     'esc',
     () => {
-      discardLine();
+      discardLines();
       resetActiveLine();
     },
     {
@@ -244,7 +245,7 @@ function InsertSkillField({ insertAfterSkill }: { insertAfterSkill: string }) {
       if (inputValue) {
         insertSkill(insertAfterSkill, inputValue);
       }
-      discardLine();
+      discardLines();
       resetActiveLine();
     },
     {

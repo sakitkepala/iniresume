@@ -7,9 +7,9 @@ export type TemporaryInsertLine = {
 };
 
 export type TemporaryInsertLineContextValue = {
-  tmpInsertLine: TemporaryInsertLine | null;
-  insertLine: (insert: TemporaryInsertLine) => void;
-  discardLine: () => void;
+  insertedLines: TemporaryInsertLine[] | null;
+  insertLines: (insert: TemporaryInsertLine[]) => void;
+  discardLines: () => void;
 };
 
 const TemporaryInsertLineContext =

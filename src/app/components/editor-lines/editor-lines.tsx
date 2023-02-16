@@ -3,6 +3,7 @@ import { useOnClickOutside } from 'src/app/hooks/click-outside';
 import { useResumeEditor } from '../../contexts/resume-editor';
 import {
   type TemporaryInsertLine,
+  type TemporaryInsertLineContextValue,
   TemporaryInsertLineProvider,
 } from './contexts/temporary-insert-line';
 import {
@@ -15,17 +16,18 @@ import * as styles from '../editor.css';
 
 function EditorLines() {
   const { resume } = useResumeEditor();
-  const [tmpInsertLine, setTmpInsertLine] =
-    React.useState<TemporaryInsertLine | null>(null);
-  const editorLinesUI = useRenderEditorLines(resume, tmpInsertLine);
+  const [insertedLines, setTmpInsertLine] = React.useState<
+    TemporaryInsertLine[] | null
+  >(null);
+  const editorLinesUI = useRenderEditorLines(resume, insertedLines);
 
-  const insertLineContext = React.useMemo(
+  const insertLineContext = React.useMemo<TemporaryInsertLineContextValue>(
     () => ({
-      tmpInsertLine,
-      insertLine: (insert: TemporaryInsertLine) => setTmpInsertLine(insert),
-      discardLine: () => setTmpInsertLine(null),
+      insertedLines: insertedLines,
+      insertLines: (insert: TemporaryInsertLine[]) => setTmpInsertLine(insert),
+      discardLines: () => setTmpInsertLine(null),
     }),
-    [tmpInsertLine]
+    [insertedLines]
   );
 
   return (
