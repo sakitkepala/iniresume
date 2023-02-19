@@ -2,20 +2,17 @@ import * as React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useResumeEditor } from 'src/app/contexts/resume-editor';
 
-import {
-  EditableLineWrapper,
-  useEditableLineDisclosure,
-} from '../components/editable-line';
+import { useEditableLinesManager } from '../contexts/editable-lines-manager';
+import { useRegisterEditable, useLineDisclosure } from '../components/line';
 import { ListItemLine } from './list-item-line';
 
 import { type ResumeData } from 'src/app/data/resume';
-import { type LineComponentProps } from '../components/line';
+import { type LineComponentProps } from '../components/line-legacy';
 
 import * as commonStyles from './common-styles.css';
 
 function LineListItemText({
   children,
-  number,
   field,
   label,
 }: LineComponentProps & {
@@ -23,36 +20,19 @@ function LineListItemText({
   label: string;
   field: keyof ResumeData;
 }) {
-  return (
-    <EditableLineWrapper line={number}>
-      <ListItemTextField field={field} label={label}>
-        {children}
-      </ListItemTextField>
-    </EditableLineWrapper>
-  );
-}
-
-export type LiTextFieldProps = {
-  label: string;
-  field: keyof ResumeData;
-};
-
-function ListItemTextField({
-  label,
-  field,
-  children,
-}: React.PropsWithChildren<LiTextFieldProps>) {
+  useRegisterEditable();
   const { updateTextField } = useResumeEditor();
-  const { isOpen, close } = useEditableLineDisclosure();
-  const $input = React.useRef<HTMLInputElement>(null);
-
+  const { focusNext } = useEditableLinesManager();
+  const { isOpen } = useLineDisclosure();
   const value = typeof children === 'string' ? children : '';
+  const [inputValue, setInputValue] = React.useState<string>(value);
+  const $input = React.useRef<HTMLInputElement>(null);
 
   useHotkeys(
     'enter, tab',
     () => {
-      close();
-      updateTextField(field, $input.current?.value || '');
+      focusNext();
+      updateTextField(field, inputValue.trim());
     },
     {
       enabled: isOpen,
@@ -73,20 +53,23 @@ function ListItemTextField({
           type="text"
           className={commonStyles.inputText}
           placeholder={label}
-          defaultValue={value}
+          value={inputValue}
+          onChange={(ev) => setInputValue(ev.target.value)}
         />
       </ListItemLine>
     );
   }
 
   return (
-    <ListItemLine muted={!value}>
+    <ListItemLine muted={!inputValue}>
       <span
         className={
-          value ? commonStyles.fieldValueLabel : commonStyles.fieldEmptyLabel
+          inputValue
+            ? commonStyles.fieldValueLabel
+            : commonStyles.fieldEmptyLabel
         }
       >
-        {value || label}
+        {inputValue || label}
       </span>
     </ListItemLine>
   );

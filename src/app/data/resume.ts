@@ -1,3 +1,5 @@
+import { v4 } from 'uuid';
+
 export type ResumeData = {
   fullName: string;
   title: string;
@@ -25,6 +27,7 @@ export type PhoneNumber = {
 };
 
 export type Account = {
+  id: string;
   account: string;
   username: string;
   url: string;
@@ -32,6 +35,7 @@ export type Account = {
 };
 
 export type Experience = {
+  id: string;
   employer: string;
   title: string;
   from: string;
@@ -42,6 +46,7 @@ export type Experience = {
 };
 
 export type Project = {
+  id: string;
   name: string;
   from?: string;
   to?: string;
@@ -50,6 +55,7 @@ export type Project = {
 };
 
 export type Education = {
+  id: string;
   school: string;
   major: string;
   from: string | number;
@@ -60,6 +66,7 @@ export type Education = {
 };
 
 export function getInitialData(): ResumeData {
+  // return exampleDataAndika;
   return {
     fullName: '',
     title: '',
@@ -80,12 +87,14 @@ export function getInitialData(): ResumeData {
 
     accounts: [
       {
+        id: v4(),
         account: 'github',
         url: 'https://github.com/',
         username: '',
         text: '',
       },
       {
+        id: v4(),
         account: 'linkedin',
         url: 'https://linkedin.com/in/',
         username: '',
@@ -118,18 +127,21 @@ export const exampleDataAndika: ResumeData = {
 
   accounts: [
     {
+      id: v4(),
       account: 'github',
       username: 'sakitkepala',
       url: 'https://github.com/sakitkepala',
       text: '',
     },
     {
+      id: v4(),
       account: 'gitlab',
       username: 'andikapriyotamad',
       url: 'https://gitlab.com/andikapriyotamad',
       text: '',
     },
     {
+      id: v4(),
       account: 'linkedin',
       username: 'andikapriyotama',
       url: 'https://linkedin.com/in/andikapriyotama',
@@ -139,6 +151,7 @@ export const exampleDataAndika: ResumeData = {
 
   education: [
     {
+      id: v4(),
       school: 'Universitas Dian Nuswantoro',
       major: 'D3 Teknik Informatika (Multimedia)',
       from: 2009,
@@ -149,6 +162,7 @@ export const exampleDataAndika: ResumeData = {
         '*)Tertunda menyelesaikan studi untuk cuti kuliah sementara waktu untuk bekerja.',
     },
     {
+      id: v4(),
       school: 'SMA Negeri 3 Semarang',
       major: 'IPA',
       from: 2006,
@@ -161,6 +175,7 @@ export const exampleDataAndika: ResumeData = {
 
   experiences: [
     {
+      id: v4(),
       employer: 'PT Reka Cipta Digital',
       title: 'Frontend Developer',
       from: '2021-10-01',
@@ -170,6 +185,7 @@ export const exampleDataAndika: ResumeData = {
         'Bersama rekan tim My Archery membangun produk event-organizing olahraga Panahan.',
       projects: [
         {
+          id: v4(),
           name: 'My Archery (myarchery.id)',
           from: '',
           to: '',
@@ -183,6 +199,7 @@ export const exampleDataAndika: ResumeData = {
       ],
     },
     {
+      id: v4(),
       employer: 'PT Bumi Tekno Indonesia',
       title: 'Frontend Developer',
       from: '2021-06-01',
@@ -192,6 +209,7 @@ export const exampleDataAndika: ResumeData = {
         'Mengembangkan produk aplikasi sekolah yang bermodel on-premises.',
       projects: [
         {
+          id: v4(),
           name: 'UI Fitur Administrasi SPP, aplikasi "Smart School"',
           description:
             'Berperan dalam pengembangan user-interface beberapa fitur manajemen administrasi SPP sekolah' +
@@ -202,6 +220,7 @@ export const exampleDataAndika: ResumeData = {
       ],
     },
     {
+      id: v4(),
       employer: 'PT Eka Reka Palakerti Indonesia',
       title: 'Odoo Software Developer',
       from: '2019-07-01',
@@ -213,6 +232,7 @@ export const exampleDataAndika: ResumeData = {
         ' Python, PostgreSQL, JavaScript (backbone.js+jQuery+Bootstrap) & RPC API.',
       projects: [
         {
+          id: v4(),
           name: 'Addon Reporting Kawasan Berikat Bea Cukai, PT Boyang Industrial',
           description:
             'Manajemen dokumen-dokumen pelaporan inventory bagi perusahaan kawasan berikat' +
@@ -222,6 +242,7 @@ export const exampleDataAndika: ResumeData = {
           url: '',
         },
         {
+          id: v4(),
           name: 'Addon Custom untuk Manufacturing & Akuntansi, PT Pandowo Utomo Food',
           description:
             'Terlibat dalam penyesuaian sistem untuk beberapa proses manufacturing,' +

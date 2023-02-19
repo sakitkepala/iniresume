@@ -34,6 +34,9 @@ export const triggerText = style({
   backgroundColor: 'transparent',
   color: '#79cc50',
   fontSize: 11,
+  fontFamily: 'inherit',
+  fontWeight: 'inherit',
+  letterSpacing: -0.75,
   ':hover': {
     textDecoration: 'underline',
     cursor: 'pointer',

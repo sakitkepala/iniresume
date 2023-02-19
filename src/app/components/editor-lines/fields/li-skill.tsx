@@ -3,13 +3,12 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useResumeEditor } from 'src/app/contexts/resume-editor';
 import { useEditableLinesManager } from '../contexts/editable-lines-manager';
 import { useTemporaryInsertLine } from '../contexts/temporary-insert-line';
-import { useEditableLineDisclosure } from '../components/editable-line';
 
-import { EditableLineWrapper } from '../components/editable-line';
+import { EditorLine, useLineDisclosure } from '../components/line';
 import { TriggerText } from '../fields/trigger-text';
 
 import { type TemporaryInsertLine } from '../contexts/temporary-insert-line';
-import { type LineComponentProps } from '../components/line';
+import { type LineComponentProps } from '../components/line-legacy';
 
 import { v4 } from 'uuid';
 import { clsx } from 'clsx';
@@ -23,9 +22,9 @@ function LineListItemSkill({
   number,
 }: React.PropsWithChildren<LineComponentProps>) {
   return (
-    <EditableLineWrapper line={number}>
+    <EditorLine line={Number(number)}>
       <EditSkillField number={number}>{children}</EditSkillField>
-    </EditableLineWrapper>
+    </EditorLine>
   );
 }
 
@@ -35,7 +34,7 @@ function EditSkillField({
 }: React.PropsWithChildren<LineComponentProps>) {
   const { editSkill, resume } = useResumeEditor();
   const { hasActiveLine } = useEditableLinesManager();
-  const { isOpen, close } = useEditableLineDisclosure();
+  const { isOpen, close } = useLineDisclosure();
   const $input = React.useRef<HTMLInputElement>(null);
 
   const value = typeof children === 'string' ? children : '';
@@ -105,15 +104,15 @@ function EditSkillField({
 
 function LineAddSkill({ number }: LineComponentProps) {
   return (
-    <EditableLineWrapper line={number}>
+    <EditorLine line={Number(number)}>
       <AddSkillField />
-    </EditableLineWrapper>
+    </EditorLine>
   );
 }
 
 function AddSkillField() {
   const { addSkill, resume } = useResumeEditor();
-  const { isOpen, open, close } = useEditableLineDisclosure();
+  const { isOpen, open, close } = useLineDisclosure();
   const $input = React.useRef<HTMLInputElement>(null);
   const hasAnySkills = resume.skills.length > 0;
 
@@ -199,7 +198,7 @@ function InsertSkill({
             },
           };
           insertLines([line]);
-          activateLine(insertLineAtIndex + 1);
+          activateLine(insertLineAtIndex + '1');
         }}
       >
         Tambah di bawahnya
@@ -213,9 +212,9 @@ function LineListItemInsertSkill({
   insertAfterSkill,
 }: LineComponentProps & { insertAfterSkill: string }) {
   return (
-    <EditableLineWrapper line={number}>
+    <EditorLine line={Number(number)}>
       <InsertSkillField insertAfterSkill={insertAfterSkill} />
-    </EditableLineWrapper>
+    </EditorLine>
   );
 }
 
@@ -223,7 +222,7 @@ function InsertSkillField({ insertAfterSkill }: { insertAfterSkill: string }) {
   const { insertSkill } = useResumeEditor();
   const { discardLines } = useTemporaryInsertLine();
   const { resetActiveLine } = useEditableLinesManager();
-  const { isOpen } = useEditableLineDisclosure();
+  const { isOpen } = useLineDisclosure();
   const $input = React.useRef<HTMLInputElement>(null);
 
   useHotkeys(

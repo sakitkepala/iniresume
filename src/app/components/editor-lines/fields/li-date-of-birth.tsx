@@ -2,33 +2,16 @@ import * as React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useResumeEditor } from 'src/app/contexts/resume-editor';
 
-import {
-  EditableLineWrapper,
-  useEditableLineDisclosure,
-} from '../components/editable-line';
+import { useRegisterEditable, useLineDisclosure } from '../components/line';
 import { ListItemLine } from './list-item-line';
-
-import { type LineComponentProps } from '../components/line';
 
 import * as fieldStyles from './common-styles.css';
 import * as styles from './li-date-of-birth.css';
 
-function LineListItemDateOfBirth({
-  number,
-  children,
-}: React.PropsWithChildren<LineComponentProps>) {
-  return (
-    <EditableLineWrapper line={number}>
-      <DateOfBirthField>{children}</DateOfBirthField>
-    </EditableLineWrapper>
-  );
-}
-
-function DateOfBirthField({
-  children,
-}: React.PropsWithChildren<LineComponentProps>) {
+function LineListItemDateOfBirth({ children }: React.PropsWithChildren) {
+  useRegisterEditable();
   const { updateTextField } = useResumeEditor();
-  const { isOpen, close: closeEditor } = useEditableLineDisclosure();
+  const { isOpen, close: closeEditor } = useLineDisclosure();
   const initialData = typeof children === 'string' ? children : '';
 
   if (isOpen) {

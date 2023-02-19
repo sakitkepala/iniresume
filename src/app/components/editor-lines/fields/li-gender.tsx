@@ -2,14 +2,9 @@ import * as React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useResumeEditor } from 'src/app/contexts/resume-editor';
 
-import {
-  EditableLineWrapper,
-  useEditableLineDisclosure,
-} from '../components/editable-line';
+import { useRegisterEditable, useLineDisclosure } from '../components/line';
 import { TriggerText } from './trigger-text';
 import { ListItemLine } from './list-item-line';
-
-import { type LineComponentProps } from '../components/line';
 
 import { clsx } from 'clsx';
 
@@ -36,20 +31,10 @@ function _getGenderOptions(value: string) {
   return maleFirst;
 }
 
-function LineListItemGender({
-  number,
-  children,
-}: React.PropsWithChildren<LineComponentProps>) {
-  return (
-    <EditableLineWrapper line={number}>
-      <GenderField>{children}</GenderField>
-    </EditableLineWrapper>
-  );
-}
-
-function GenderField({ children }: React.PropsWithChildren) {
+function LineListItemGender({ children }: React.PropsWithChildren) {
+  useRegisterEditable();
   const { updateTextField } = useResumeEditor();
-  const { isOpen, close } = useEditableLineDisclosure();
+  const { isOpen, close } = useLineDisclosure();
   const [isCustomFieldOpen, setCustomFieldOpen] = React.useState(false);
 
   const value = typeof children === 'string' ? children : '';
@@ -89,7 +74,7 @@ function GenderField({ children }: React.PropsWithChildren) {
                 <span className={fieldStyles.staticDisplay}>&#47;</span>
               </React.Fragment>
             ))}
-          <CustomGenderTextInput
+          <CustomGenderInput
             key={value || 'field-custom-gender'}
             defaultValue={[MALE, FEMALE].includes(value) ? '' : value}
             onOpen={() => setCustomFieldOpen(true)}
@@ -113,7 +98,7 @@ function GenderField({ children }: React.PropsWithChildren) {
   );
 }
 
-function CustomGenderTextInput({
+function CustomGenderInput({
   defaultValue,
   onOpen,
   onSave,

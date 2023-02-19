@@ -1,21 +1,24 @@
 import * as React from 'react';
 import {
-  LineWrapper,
-  LineEmpty,
-  LineBreak,
-  LineHeading,
-  LineParagraph,
-} from '../components/line';
+  createLineObject,
+  createLineEmpty,
+  createLineBreak,
+  createLineParagraph,
+} from '../factory';
+
+import { LineWrapper, LineHeading } from '../components/line-legacy';
 import { LineSectionHeading } from '../components/line-section-heading';
 import { LineListItemText } from '../fields/li-text';
 import { LineListItemGender } from '../fields/li-gender';
 import { LineListItemDateOfBirth } from '../fields/li-date-of-birth';
 import { LineListItemPhone } from '../fields/li-phone';
+import { LineAddExperience } from '../fields/experiences';
+import { LineHeadingField } from '../fields/heading';
 import { LineListItemSkill, LineAddSkill } from '../fields/li-skill';
 
 import { type ResumeData } from 'src/app/data/resume';
 import { type TemporaryInsertLine } from '../contexts/temporary-insert-line';
-import { type LineComponentProps } from '../components/line';
+import { type LineComponentProps } from '../components/line-legacy';
 import { type LineUI } from '../types';
 
 import { v4 } from 'uuid';
@@ -38,9 +41,9 @@ function _buildEditorLinesUI(
 ) {
   const linesBase: LineUI[] = [
     _createLineSectionHeading('Informasi'),
-    _createLineEmpty(),
-    _createLineParagraph('Umum:'),
-    _createLineEmpty(),
+    createLineEmpty(),
+    createLineParagraph('Umum:'),
+    createLineEmpty(),
     _createLineListItemText('fullName', data.fullName || '', 'Nama lengkap'),
     _createLineListItemText('title', data.title || '', 'Titel profesi'),
     _createLineListItemGender(data.gender || ''),
@@ -51,16 +54,16 @@ function _buildEditorLinesUI(
       data.province || '',
       'Provinsi domisili'
     ),
-    _createLineEmpty(),
+    createLineEmpty(),
 
-    _createLineParagraph('Kontak:'),
-    _createLineEmpty(),
+    createLineParagraph('Kontak:'),
+    createLineEmpty(),
     _createLineListItemText('email', data.email || '', 'Alamat email'),
     _createLineListItemPhone(data.phone),
-    _createLineEmpty(),
+    createLineEmpty(),
 
-    _createLineParagraph('Profil:'),
-    _createLineEmpty(),
+    createLineParagraph('Profil:'),
+    createLineEmpty(),
     _createLineListItemText(
       'website',
       data.website?.url || '',
@@ -68,48 +71,52 @@ function _buildEditorLinesUI(
     ),
     ..._getLinesProfileList(data.accounts),
     _createLineListItemAddProfile(),
-    _createLineEmpty(),
+    createLineEmpty(),
 
-    _createLineBreak(),
-    _createLineEmpty(),
+    createLineBreak(),
+    createLineEmpty(),
 
     _createLineSectionHeading('Pengalaman'),
-    _createLineEmpty(),
+    createLineEmpty(),
     ..._getLinesSectionListExperiences(data.experiences),
     _createLineListItemAddExperience(),
-    _createLineEmpty(),
+    createLineEmpty(),
 
-    _createLineBreak(),
-    _createLineEmpty(),
+    createLineBreak(),
+    createLineEmpty(),
 
     _createLineSectionHeading('Pendidikan'),
-    _createLineEmpty(),
+    createLineEmpty(),
     ..._getLinesSectionListEducation(data.education),
     _createLineListItemAddEducation(),
-    _createLineEmpty(),
+    createLineEmpty(),
 
-    _createLineBreak(),
-    _createLineEmpty(),
+    createLineBreak(),
+    createLineEmpty(),
 
     _createLineSectionHeading('Skill'),
-    _createLineEmpty(),
+    createLineEmpty(),
     ..._getLinesSkillList(data.skills),
     _createLineListItemAddSkill(),
-    _createLineEmpty(),
+    createLineEmpty(),
   ];
 
   const lines: LineUI[] = tmpInsertLines?.length
     ? _insertLines(linesBase, tmpInsertLines)
     : linesBase;
 
-  return lines.map((line, index) => {
-    const element = line.element;
-    const lineNumber = index + 1;
-    return React.cloneElement(element, {
-      key: line.id,
-      number: lineNumber,
+  // Assign line number ke masing-masing elemen Line
+  return lines
+    .filter((line) => Boolean(line))
+    .map((line, index) => {
+      const element = line.element;
+      const lineNumber = index + 1;
+      return React.cloneElement(element, {
+        key: line.id,
+        lineId: line.id,
+        number: lineNumber,
+      });
     });
-  });
 }
 
 function _insertLines(
@@ -124,27 +131,6 @@ function _insertLines(
     ...tmpInsertLines.map((insert) => insert.line),
     ...endPart,
   ];
-}
-
-function _createLineEmpty(): LineUI {
-  return {
-    id: v4(),
-    element: <LineEmpty />,
-  };
-}
-
-function _createLineBreak(): LineUI {
-  return {
-    id: v4(),
-    element: <LineBreak />,
-  };
-}
-
-function _createLineParagraph(text: string): LineUI {
-  return {
-    id: v4(),
-    element: <LineParagraph>{text}</LineParagraph>,
-  };
 }
 
 function _createLineSectionHeading(text: string): LineUI {
@@ -210,7 +196,7 @@ function _createLineListItemPhone(phone: ResumeData['phone']): LineUI {
 
 function _getLinesProfileList(accountsData: ResumeData['accounts']): LineUI[] {
   // TODO: editable list item akun
-  return accountsData.map((account) => _createLineParagraph(account.url));
+  return accountsData.map((account) => createLineParagraph(account.url));
 }
 
 function _createLineListItemAddProfile(): LineUI {
@@ -227,6 +213,18 @@ function _createLineListItemAddExperience(): LineUI {
   };
 }
 
+function _createLineExperienceEmployer() {
+  return createLineObject(
+    <LineHeadingField level={2}>Perusahaan</LineHeadingField>
+  );
+}
+
+function _createLineExperienceJobTitle() {
+  return createLineObject(
+    <LineHeadingField level={3}>Titel Pekerjaan</LineHeadingField>
+  );
+}
+
 function _createLineListItemAddEducation(): LineUI {
   return {
     id: v4(),
@@ -241,24 +239,31 @@ function _getLinesSectionListExperiences(
 
   experiences.forEach((experience) => {
     lines.push(_createLineHeading(experience.title, 2));
-    lines.push(_createLineEmpty());
+    lines.push(createLineEmpty());
     lines.push(_createLineHeading(experience.employer, 3));
-    lines.push(_createLineEmpty());
+    lines.push(createLineEmpty());
     lines.push(_createLineDateRange(`${experience.from} - ${experience.to}`));
-    lines.push(_createLineEmpty());
+    lines.push(createLineEmpty());
     if (experience.description) {
-      lines.push(_createLineParagraph(experience.description));
-      lines.push(_createLineEmpty());
+      lines.push(createLineParagraph(experience.description));
+      lines.push(createLineEmpty());
     }
 
     experience.projects?.forEach((project) => {
-      lines.push(_createLineParagraph(project.name));
+      lines.push(createLineParagraph(project.name));
       project.description &&
-        lines.push(_createLineParagraph(project.description));
-      project.url && lines.push(_createLineParagraph(project.url));
-      lines.push(_createLineEmpty());
+        lines.push(createLineParagraph(project.description));
+      project.url && lines.push(createLineParagraph(project.url));
+      lines.push(createLineEmpty());
     });
   });
+
+  lines.push(_createLineExperienceEmployer());
+  lines.push(createLineEmpty());
+  lines.push(_createLineExperienceJobTitle());
+  lines.push(createLineEmpty());
+  lines.push(createLineParagraph('deskripsi (TBD)'));
+  lines.push(createLineEmpty());
 
   return lines;
 }
@@ -270,18 +275,18 @@ function _getLinesSectionListEducation(
 
   education.forEach((item) => {
     mergedLines.push(_createLineHeading(item.school, 2));
-    mergedLines.push(_createLineEmpty());
+    mergedLines.push(createLineEmpty());
     mergedLines.push(_createLineHeading(item.major, 3));
-    mergedLines.push(_createLineEmpty());
+    mergedLines.push(createLineEmpty());
     mergedLines.push(
       _createLineDateRange(
         item.userange ? `${item.from}-${item.to}` : item.from.toString()
       )
     );
-    mergedLines.push(_createLineEmpty());
+    mergedLines.push(createLineEmpty());
     if (item.description) {
-      mergedLines.push(_createLineParagraph(item.description));
-      mergedLines.push(_createLineEmpty());
+      mergedLines.push(createLineParagraph(item.description));
+      mergedLines.push(createLineEmpty());
     }
   });
 
@@ -343,18 +348,6 @@ function LineAddProfile({ number }: LineComponentProps) {
             <u>Tambah profil</u>
           </em>
         </span>
-      </span>
-    </LineWrapper>
-  );
-}
-
-function LineAddExperience({ number }: LineComponentProps) {
-  return (
-    <LineWrapper line={number}>
-      <span>
-        <em>
-          <u>Tambah pengalaman</u>
-        </em>
       </span>
     </LineWrapper>
   );

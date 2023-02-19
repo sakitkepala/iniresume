@@ -1,51 +1,62 @@
 import * as React from 'react';
+import { makeContext } from 'src/app/contexts/makeContext';
+
+export type LineId = string;
 
 export type EditableLinesManagerContextValue = {
-  registerEditable: (line: number) => void;
-  activateLine: (line: number) => void;
-  shouldActivateLine: (line: number) => boolean;
+  registerEditable: (id: LineId) => void;
+  activateLine: (id?: LineId) => void;
+  shouldActivateLine: (id: LineId) => boolean;
   hasActiveLine: boolean;
   focusNext: () => void;
   resetActiveLine: () => void;
 };
 
-const EditableLinesManager =
-  React.createContext<EditableLinesManagerContextValue | null>(null);
+const [EditableLinesManagerContext, useEditableLinesManager] =
+  makeContext<EditableLinesManagerContextValue>(
+    'Hook `useEditableLinesManager` harus dipakai pada child `EditableLinesManager`.'
+  );
 
-function EditableLinesManagerProvider({ children }: React.PropsWithChildren) {
-  const [activeLine, setActiveLine] = React.useState<number | null>(null);
-  const $registeredLineDOMs = React.useRef<Set<number>>(new Set());
+function EditableLinesManager({ children }: React.PropsWithChildren) {
+  const [activeLine, setActiveLine] = React.useState<LineId | null>(null);
+  const registeredLineIds = React.useRef<Set<LineId>>(new Set());
 
-  const value = React.useMemo(
+  const value = React.useMemo<EditableLinesManagerContextValue>(
     () => ({
-      registerEditable(line: number) {
-        const $lines = $registeredLineDOMs.current;
-        !$lines.has(line) && $lines.add(line);
+      registerEditable(id) {
+        const $lines = registeredLineIds.current;
+        !$lines.has(id) && $lines.add(id);
       },
 
       hasActiveLine: Boolean(activeLine),
 
-      activateLine(line: number) {
-        const isRegistered = $registeredLineDOMs.current.has(line);
-        setActiveLine(isRegistered ? line : null);
+      activateLine(id) {
+        if (!id) {
+          setActiveLine(null);
+          return;
+        }
+        const isRegistered = registeredLineIds.current.has(id);
+        setActiveLine(isRegistered ? id : null);
       },
 
-      shouldActivateLine(line: number) {
-        return activeLine === line;
+      shouldActivateLine(id) {
+        return activeLine === id;
       },
 
       focusNext() {
         if (!activeLine) {
           return;
         }
-        const $doms = [...$registeredLineDOMs.current.entries()];
-        const currentIndex = $doms.findIndex((dom) => dom[0] === activeLine);
+        const lineIds = [...registeredLineIds.current.values()];
+        const currentIndex = lineIds.findIndex(
+          (lineId) => lineId === activeLine
+        );
         const nextIndex = currentIndex + 1;
-        if (nextIndex === $doms.length) {
+        if (nextIndex === lineIds.length) {
           setActiveLine(null);
           return;
         }
-        setActiveLine($doms[nextIndex]?.[0]);
+        setActiveLine(lineIds[nextIndex] || null);
       },
 
       resetActiveLine() {
@@ -54,21 +65,12 @@ function EditableLinesManagerProvider({ children }: React.PropsWithChildren) {
     }),
     [activeLine]
   );
+
   return (
-    <EditableLinesManager.Provider value={value}>
+    <EditableLinesManagerContext.Provider value={value}>
       {children}
-    </EditableLinesManager.Provider>
+    </EditableLinesManagerContext.Provider>
   );
 }
 
-function useEditableLinesManager() {
-  const value = React.useContext(EditableLinesManager);
-  if (!value) {
-    throw new Error(
-      'Hook `useEditableLinesManager` harus dipakai pada child `EditableLinesManagerProvider`.'
-    );
-  }
-  return value;
-}
-
-export { EditableLinesManagerProvider, useEditableLinesManager };
+export { EditableLinesManager, useEditableLinesManager };

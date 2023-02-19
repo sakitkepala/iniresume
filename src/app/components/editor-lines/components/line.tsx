@@ -1,62 +1,122 @@
 import * as React from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { useEditableLinesManager } from '../contexts/editable-lines-manager';
+
+import { v4 } from 'uuid';
+import { clsx } from 'clsx';
+import { makeContext } from 'src/app/contexts/makeContext';
+
 import * as styles from './line.css';
 
-export type LineComponentProps = { number?: number | string };
+const generateDisclosureId = () => v4();
 
-function LineWrapper({
+type LineDisclosureContextValue = {
+  register: () => void;
+  lineNumber?: number;
+  isOpen: boolean;
+  open: () => void;
+  close: () => void;
+};
+
+const [LineDisclosureContext, useLineDisclosure] =
+  makeContext<LineDisclosureContextValue>(
+    '`useLineDisclosure` harus dipakai pada child provider `LineDisclosureContext`.'
+  );
+
+const [LineIdContext, useLineId] = makeContext<string>(
+  '`useLineId` harus dipakai pada child provider `LineIdContext`.'
+);
+
+function useRegisterEditable() {
+  const { register } = useLineDisclosure();
+  React.useEffect(() => {
+    register();
+  }, [register]);
+}
+
+function EditorLine({
   line,
+  id = '',
   children,
-}: React.PropsWithChildren<{ line?: number | string }>) {
+}: React.PropsWithChildren<{ line?: number; id?: string }>) {
+  const {
+    registerEditable,
+    activateLine,
+    shouldActivateLine,
+    resetActiveLine,
+  } = useEditableLinesManager();
+  const [disclosureId, setDisclosureId] = React.useState(generateDisclosureId);
+
+  const disclosure = React.useMemo<LineDisclosureContextValue>(
+    () => ({
+      register: () => {
+        if (typeof id === 'undefined') {
+          return;
+        }
+        registerEditable(id);
+      },
+      lineNumber: line,
+      isOpen: id ? shouldActivateLine(id) : false,
+      open: () => id && activateLine(id),
+      close: resetActiveLine,
+    }),
+    [
+      id,
+      line,
+      registerEditable,
+      shouldActivateLine,
+      activateLine,
+      resetActiveLine,
+    ]
+  );
+
+  // Tiap close generate key baru untuk remount
+  // supaya nge-reset semua state children-nya
+  React.useEffect(() => {
+    !disclosure.isOpen && setDisclosureId(generateDisclosureId());
+  }, [disclosure.isOpen]);
+
+  useHotkeys('esc', resetActiveLine, {
+    enabled: disclosure.isOpen,
+    enableOnFormTags: true,
+  });
+
   return (
-    <div className={styles.line}>
+    <div
+      className={clsx(
+        styles.line,
+        disclosure.isOpen ? styles.lineActive : undefined
+      )}
+    >
       <div className={styles.lineNumber}>
         {typeof line === 'undefined' ? null : line}
       </div>
-      <div className={styles.lineContent}>{children}</div>
+
+      <div
+        className={styles.lineContent}
+        onClick={(ev) => {
+          ev.stopPropagation();
+          activateLine(id);
+        }}
+      >
+        <LineIdContext.Provider value={id}>
+          <LineDisclosureContext.Provider value={disclosure} key={disclosureId}>
+            {children}
+          </LineDisclosureContext.Provider>
+        </LineIdContext.Provider>
+      </div>
     </div>
   );
 }
 
-function LineEmpty({ number }: LineComponentProps) {
-  return <LineWrapper line={number} />;
+function LineBreak() {
+  return <span className={styles.textLinebreak}>---</span>;
 }
 
-function LineBreak({ number }: LineComponentProps) {
-  return (
-    <LineWrapper line={number}>
-      <span className={styles.textLinebreak}>---</span>
-    </LineWrapper>
-  );
-}
-
-function LineHeading({
-  children,
-  number,
-  level,
-}: React.PropsWithChildren<LineComponentProps & { level: string | number }>) {
-  const marks: {
-    [level: string]: string;
-  } = {
-    1: '#',
-    2: '##',
-    3: '###',
-  };
-  return (
-    <LineWrapper line={number}>
-      <span className={styles.textHeading}>
-        <span>{marks[level.toString()]}</span>
-        <span>&nbsp;</span>
-        <span>{children}</span>
-      </span>
-    </LineWrapper>
-  );
-}
-
-function LineParagraph({
-  children,
-  number,
-}: React.PropsWithChildren<LineComponentProps>) {
-  return <LineWrapper line={number}>{children}</LineWrapper>;
-}
-
-export { LineWrapper, LineEmpty, LineBreak, LineHeading, LineParagraph };
+export {
+  EditorLine,
+  useLineDisclosure,
+  useRegisterEditable,
+  useLineId,
+  LineBreak,
+};

@@ -204,4 +204,5 @@ function useEditor() {
   );
 }
 
-export { ResumeEditorProvider, useResumeEditor, ResumeData };
+export * from '../data/resume';
+export { ResumeEditorProvider, useResumeEditor };

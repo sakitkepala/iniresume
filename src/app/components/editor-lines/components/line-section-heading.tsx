@@ -1,18 +1,12 @@
-import { LineWrapper, LineComponentProps } from './line';
 import * as styles from './line.css';
 
-function LineSectionHeading({
-  children,
-  number,
-}: React.PropsWithChildren<LineComponentProps>) {
+function LineSectionHeading({ children }: React.PropsWithChildren) {
   return (
-    <LineWrapper line={number}>
-      <span className={styles.sectionHeading}>
-        <span>#</span>
-        <span>&nbsp;</span>
-        <span>{children}</span>
-      </span>
-    </LineWrapper>
+    <span className={styles.sectionHeading}>
+      <span>#</span>
+      <span>&nbsp;</span>
+      <span>{children}</span>
+    </span>
   );
 }
 

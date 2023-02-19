@@ -2,13 +2,8 @@ import * as React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useResumeEditor } from 'src/app/contexts/resume-editor';
 
-import {
-  EditableLineWrapper,
-  useEditableLineDisclosure,
-} from '../components/editable-line';
+import { useRegisterEditable, useLineDisclosure } from '../components/line';
 import { ListItemLine } from './list-item-line';
-
-import { type LineComponentProps } from '../components/line';
 
 import { clsx } from 'clsx';
 
@@ -16,22 +11,11 @@ import * as fieldStyles from './common-styles.css';
 import * as styles from './li-phone.css';
 
 function LineListItemPhone({
-  number,
-  children,
-  hasWA,
-}: React.PropsWithChildren<LineComponentProps & { hasWA: boolean }>) {
-  return (
-    <EditableLineWrapper line={number}>
-      <PhoneField hasWA={hasWA}>{children}</PhoneField>
-    </EditableLineWrapper>
-  );
-}
-
-function PhoneField({
   children,
   hasWA,
 }: React.PropsWithChildren<{ hasWA: boolean }>) {
-  const { isOpen } = useEditableLineDisclosure();
+  useRegisterEditable();
+  const { isOpen } = useLineDisclosure();
   const value = typeof children === 'string' ? children : '';
 
   if (isOpen) {
@@ -76,7 +60,7 @@ function PhoneEditor({
   hasWA: boolean;
 }) {
   const { updateField } = useResumeEditor();
-  const { close } = useEditableLineDisclosure();
+  const { close } = useLineDisclosure();
   const [inputValue, setInputValue] = React.useState<string>(initialValue);
   const [shouldShowInlineMessage, showInlineMessage] = React.useState(false);
   const $input = React.useRef<HTMLInputElement>(null);
