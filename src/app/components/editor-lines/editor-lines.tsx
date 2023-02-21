@@ -13,7 +13,6 @@ import { LineListItemText } from './fields/li-text';
 import { LineListItemGender } from './fields/li-gender';
 import { LineListItemDateOfBirth } from './fields/li-date-of-birth';
 import { LineListItemPhone } from './fields/li-phone';
-import { LineHeadingField } from './fields/heading';
 import {
   ExperienceEditorManager,
   LineAddExperience,
@@ -24,6 +23,9 @@ import {
 import {
   EducationEditorManager,
   LineAddEducation,
+  LineEducationSchool,
+  LineEducationMajor,
+  LineEducationDescription,
 } from './fields/line-educations';
 // import { LineListItemSkill } from './fields/li-skill';
 
@@ -44,7 +46,8 @@ function EditorLines() {
 function LinesList() {
   const {
     contents,
-    createId,
+    experienceCreateId,
+    educationCreateId,
     openExperience,
     closeExperience,
     openEducation,
@@ -62,11 +65,12 @@ function LinesList() {
         onClick={resetActiveLine}
       >
         <ExperienceEditorManager
-          createId={createId}
+          createId={experienceCreateId}
           openExperience={openExperience}
           closeExperience={closeExperience}
         >
           <EducationEditorManager
+            createId={educationCreateId}
             openEducation={openEducation}
             closeEducation={closeEducation}
           >
@@ -88,14 +92,16 @@ function useEditorContents() {
   const [educationIsOpen, setEducationOpen] = React.useState(false);
 
   return React.useMemo(() => {
-    const createId = experienceIsOpen || educationIsOpen ? v4() : null;
+    const experienceCreateId = experienceIsOpen ? v4() : null;
+    const educationCreateId = educationIsOpen ? v4() : null;
     return {
       contents: _buildContents(resume, {
-        createId,
+        createId: experienceCreateId || educationCreateId,
         experienceIsOpen,
         educationIsOpen,
       }),
-      createId,
+      experienceCreateId,
+      educationCreateId,
       openExperience: () => setExperienceOpen(true),
       closeExperience: () => setExperienceOpen(false),
       openEducation: () => setEducationOpen(true),
@@ -326,26 +332,37 @@ function _buildContents(
       (contents, education) => [
         ...contents,
         {
-          id: education.id + '-school',
+          id: education.id + '-education-school',
           content: (
-            <LineHeadingField level={2}>{education.school}</LineHeadingField>
+            <LineEducationSchool
+              label="Universitas atau Sekolah"
+              educationId={education.id}
+            >
+              {education.school}
+            </LineEducationSchool>
           ),
         },
-        { id: education.id + '-school-trail' },
+        { id: education.id + '-education-school-trail' },
 
         {
-          id: education.id + '-major',
+          id: education.id + '-education-major',
           content: (
-            <LineHeadingField level={3}>{education.major}</LineHeadingField>
+            <LineEducationMajor label="Jurusan" educationId={education.id}>
+              {education.major}
+            </LineEducationMajor>
           ),
         },
-        { id: education.id + '-major-trail' },
+        { id: education.id + '-education-major-trail' },
 
         {
-          id: education.id + '-description',
-          content: education.description || 'Isi deskripsi',
+          id: education.id + '-education-description',
+          content: (
+            <LineEducationDescription educationId={education.id}>
+              {education.description}
+            </LineEducationDescription>
+          ),
         },
-        { id: education.id + '-description-trail' },
+        { id: education.id + '-education-description-trail' },
       ],
       []
     ),
@@ -353,26 +370,33 @@ function _buildContents(
     ...(educationIsOpen
       ? [
           {
-            id: 'education-add-school',
+            id: createId + '-education-school',
             content: (
-              <LineExperienceTitle
+              <LineEducationSchool
+                defaultOpen
                 label="Universitas atau Sekolah"
-                experienceId={''}
+                educationId={createId || ''}
               />
             ),
           },
-          { id: 'education-add-school-trail' },
+          { id: createId + '-education-school-trail' },
 
           {
-            id: 'education-add-major',
+            id: createId + '-education-major',
             content: (
-              <LineExperienceEmployer label="Jurusan" experienceId={''} />
+              <LineEducationMajor
+                label="Jurusan"
+                educationId={createId || ''}
+              />
             ),
           },
-          { id: 'education-add-major-trail' },
+          { id: createId + '-education-major-trail' },
 
-          { id: 'education-add-description', content: 'Deskripsi' },
-          { id: 'education-add-description-trail' },
+          {
+            id: createId + '-education-description',
+            content: <LineEducationDescription educationId={createId || ''} />,
+          },
+          { id: createId + '-education-description-trail' },
         ]
       : []),
 

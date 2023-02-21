@@ -2,37 +2,37 @@ import * as React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useResumeEditor } from 'src/app/contexts/resume-editor';
 import { useEditableLinesManager } from '../../contexts/editable-lines-manager';
-import { useExperienceEditor } from './context';
+import { useEducationEditor } from './context';
 import { useLineDisclosure } from '../../components/line';
 
 import { clsx } from 'clsx';
 
 import * as lineStyles from '../../components/line.css';
 import * as fieldStyles from '../common-styles.css';
-import * as styles from './experiences.css';
+import * as styles from './education.css';
 
-function LineExperienceTitle({
+function LineEducationSchool({
   children,
   defaultOpen = false,
   label,
-  experienceId,
+  educationId,
 }: React.PropsWithChildren<{
   defaultOpen?: boolean;
   label: string;
-  experienceId: string;
+  educationId: string;
 }>) {
-  const { updateExperience } = useResumeEditor();
+  const { updateEducation } = useResumeEditor();
   const { activateLine } = useEditableLinesManager();
-  const { closeExperience } = useExperienceEditor();
+  const { closeEducation } = useEducationEditor();
   const { isOpen } = useLineDisclosure();
   const value = typeof children === 'string' ? children : '';
 
-  useHotkeys('esc', closeExperience, {
+  useHotkeys('esc', closeEducation, {
     enableOnFormTags: true,
   });
 
   React.useEffect(() => {
-    defaultOpen && activateLine(experienceId + '-experience-title');
+    defaultOpen && activateLine(educationId + '-education-school');
   }, []);
 
   if (isOpen) {
@@ -44,9 +44,9 @@ function LineExperienceTitle({
           initialValue={value}
           placeholder={label}
           onSave={(value) => {
-            updateExperience(experienceId || '', 'title', value);
+            updateEducation(educationId || '', 'school', value);
             setTimeout(() => {
-              activateLine(experienceId + '-experience-employer');
+              activateLine(educationId + '-education-major');
             });
           }}
         />
@@ -65,21 +65,21 @@ function LineExperienceTitle({
   );
 }
 
-function LineExperienceEmployer({
+function LineEducationMajor({
   children,
   label,
-  experienceId,
+  educationId,
 }: React.PropsWithChildren<{
   label: string;
-  experienceId: string;
+  educationId: string;
 }>) {
-  const { updateExperience } = useResumeEditor();
+  const { updateEducation } = useResumeEditor();
   const { activateLine } = useEditableLinesManager();
-  const { closeExperience } = useExperienceEditor();
+  const { closeEducation } = useEducationEditor();
   const { isOpen } = useLineDisclosure();
   const value = typeof children === 'string' ? children : '';
 
-  useHotkeys('esc', closeExperience, {
+  useHotkeys('esc', closeEducation, {
     enableOnFormTags: true,
   });
 
@@ -92,9 +92,9 @@ function LineExperienceEmployer({
           initialValue={value}
           placeholder={label}
           onSave={(value) => {
-            updateExperience(experienceId || '', 'employer', value);
+            updateEducation(educationId || '', 'major', value);
             setTimeout(() => {
-              activateLine(experienceId + '-experience-description');
+              activateLine(educationId + '-education-description');
             });
           }}
         />
@@ -146,4 +146,4 @@ function HeadingTextInput({
   );
 }
 
-export { LineExperienceTitle, LineExperienceEmployer };
+export { LineEducationSchool, LineEducationMajor };

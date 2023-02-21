@@ -9,39 +9,36 @@ export type EducationEditorContextValue = {
 
 const [EducationEditor, useEducationEditor] =
   makeContext<EducationEditorContextValue>(
-    '`useEducationField` harus dipakai pada child Provider `EducationField`.'
+    '`useEducationEditor` harus dipakai pada child komponen `EducationEditor`.'
   );
 
 function EducationEditorManager({
   children,
+  createId,
   openEducation,
   closeEducation,
 }: React.PropsWithChildren<{
+  createId: string | null;
   openEducation: () => void;
   closeEducation: () => void;
 }>) {
-  const { activeLine, activateLine, resetActiveLine, shouldActivateLine } =
+  const { activeLine, resetActiveLine, shouldActivateLine } =
     useEditableLinesManager();
 
   React.useEffect(() => {
-    if (!activeLine) {
+    if (!createId || !activeLine) {
       return;
     }
-    const shouldCloseEducation =
-      [
-        'education-add-school',
-        'education-add-major',
-        'education-add-description',
-      ].indexOf(activeLine) < 0;
-
-    shouldCloseEducation && closeEducation();
-  }, [activeLine, shouldActivateLine, closeEducation]);
+    const educationEditorIds = new Set([
+      createId + '-education-school',
+      createId + '-education-major',
+      createId + '-education-description',
+    ]);
+    !educationEditorIds.has(activeLine) && closeEducation();
+  }, [createId, activeLine, shouldActivateLine, closeEducation]);
 
   const educationEditor: EducationEditorContextValue = {
-    openEducation: () => {
-      openEducation();
-      setTimeout(() => activateLine('education-add-school'));
-    },
+    openEducation,
     closeEducation: () => {
       closeEducation();
       resetActiveLine();

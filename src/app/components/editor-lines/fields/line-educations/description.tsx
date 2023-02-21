@@ -1,28 +1,29 @@
 import * as React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useResumeEditor } from 'src/app/contexts/resume-editor';
-import { useExperienceEditor } from './context';
+import { useEducationEditor } from './context';
 import { useLineDisclosure } from '../../components/line';
 
 import { clsx } from 'clsx';
 
 import * as fieldStyles from '../common-styles.css';
-import * as styles from './experiences.css';
+import * as styles from './education.css';
 
-function LineExperienceDescription({
+const PLACEHOLDER_LABEL =
+  'Isi deskripsi pendidikan bila perlu (bisa dikosongi)';
+
+function LineEducationDescription({
   children,
-  label = 'Deskripsikan pekerjaannya',
-  experienceId,
+  educationId,
 }: React.PropsWithChildren<{
-  label?: string;
-  experienceId: string;
+  educationId: string;
 }>) {
-  const { updateExperience } = useResumeEditor();
-  const { closeExperience } = useExperienceEditor();
+  const { updateEducation } = useResumeEditor();
+  const { closeEducation } = useEducationEditor();
   const { isOpen } = useLineDisclosure();
   const value = typeof children === 'string' ? children : '';
 
-  useHotkeys('esc', closeExperience, {
+  useHotkeys('esc', closeEducation, {
     enableOnFormTags: true,
   });
 
@@ -30,10 +31,10 @@ function LineExperienceDescription({
     return (
       <ParagraphTextInput
         initialValue={value}
-        placeholder={label}
+        placeholder={PLACEHOLDER_LABEL}
         onSave={(value) => {
-          updateExperience(experienceId || '', 'description', value);
-          setTimeout(closeExperience);
+          updateEducation(educationId || '', 'description', value);
+          setTimeout(closeEducation);
         }}
       />
     );
@@ -41,7 +42,7 @@ function LineExperienceDescription({
 
   return (
     <span className={value ? undefined : fieldStyles.fieldEmptyLabel}>
-      {value || label}
+      {value || PLACEHOLDER_LABEL}
     </span>
   );
 }
@@ -84,4 +85,4 @@ function ParagraphTextInput({
   );
 }
 
-export { LineExperienceDescription };
+export { LineEducationDescription };

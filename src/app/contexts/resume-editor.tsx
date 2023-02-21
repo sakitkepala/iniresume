@@ -5,13 +5,19 @@ import {
   type ResumeData,
   type PhoneNumber,
   type Experience,
+  type Education,
 } from '../data/resume';
 
 type ResumeEditorContextValue = {
   resume: ResumeData;
   updateField: (field: keyof ResumeData, value: ResumeFieldPayload) => void;
   updateTextField: (field: keyof ResumeData, value: string) => void;
-  addExperience: (id: string, field: keyof Experience, value: string) => void;
+  updateExperience: (
+    id: string,
+    field: keyof Experience,
+    value: string
+  ) => void;
+  updateEducation: (id: string, field: keyof Education, value: string) => void;
   addSkill: (value: string) => void;
   editSkill: (value: string, originalValue: string) => void;
   insertSkill: (insertAfterSkill: string, value: string) => void;
@@ -47,6 +53,12 @@ type ResumeEditorActionsType =
   | {
       type: 'UPDATE_EXPERIENCE';
       field: keyof Experience;
+      id: string;
+      payload: string;
+    }
+  | {
+      type: 'UPDATE_EDUCATION';
+      field: keyof Education;
       id: string;
       payload: string;
     }
@@ -117,7 +129,7 @@ function useEditor() {
               employer: '',
               from: '',
               to: '',
-              ongoing: true,
+              ongoing: false,
               description: '',
               projects: [],
             };
@@ -158,6 +170,63 @@ function useEditor() {
           });
 
           return { ...state, experiences: [...experiences.values()] };
+        }
+
+        case 'UPDATE_EDUCATION': {
+          const educationIds = new Set(state.education.map((xp) => xp.id));
+
+          // Harus disediakan ID
+          if (!action.id) {
+            return state;
+          }
+
+          // Create data baru
+          if (!educationIds.has(action.id)) {
+            const newXP: Education = {
+              id: '',
+              school: '',
+              major: '',
+              from: '',
+              to: '',
+              userange: true,
+              ongoing: false,
+              description: '',
+            };
+
+            // Waktu create data, harus disesiakan nama field & payloadnya
+            if (!action.field || !action.payload) {
+              return state;
+            }
+
+            return {
+              ...state,
+              education: [
+                ...state.education,
+                { ...newXP, id: action.id, [action.field]: action.payload },
+              ],
+            };
+          }
+
+          const education = new Map(state.education.map((xp) => [xp.id, xp]));
+          const edit = education.get(action.id);
+
+          if (!edit) {
+            return state;
+          }
+
+          // Khusus field `title` kalau dikasih nilai kosong jadi menghapus data
+          if (action.field === 'school' && !action.payload) {
+            education.delete(action.id);
+            return { ...state, education: [...education.values()] };
+          }
+
+          // Edit data yang ada
+          education.set(action.id, {
+            ...edit,
+            [action.field]: action.payload,
+          });
+
+          return { ...state, education: [...education.values()] };
         }
 
         case 'INSERT_SKILL': {
@@ -237,8 +306,12 @@ function useEditor() {
         dispatch({ type: 'UPDATE_STRING_FIELD', field, payload: value });
       },
 
-      addExperience: (id, field, value) => {
+      updateExperience: (id, field, value) => {
         dispatch({ type: 'UPDATE_EXPERIENCE', id, field, payload: value });
+      },
+
+      updateEducation: (id, field, value) => {
+        dispatch({ type: 'UPDATE_EDUCATION', id, field, payload: value });
       },
 
       addSkill: (value) => {

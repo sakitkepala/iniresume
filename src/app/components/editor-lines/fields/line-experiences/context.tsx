@@ -3,7 +3,6 @@ import { useEditableLinesManager } from '../../contexts/editable-lines-manager';
 import { makeContext } from 'src/app/contexts/makeContext';
 
 export type ExperienceEditorContextValue = {
-  createId: string | null;
   openExperience: () => void;
   closeExperience: () => void;
 };
@@ -15,19 +14,19 @@ const [ExperienceEditor, useExperienceEditor] =
 
 function ExperienceEditorManager({
   children,
+  createId,
   openExperience,
   closeExperience,
-  createId,
 }: React.PropsWithChildren<{
   createId: string | null;
   openExperience: () => void;
   closeExperience: () => void;
 }>) {
-  const { activeLine, resetActiveLine, shouldActivateLine } =
+  const { activeLine, shouldActivateLine, resetActiveLine } =
     useEditableLinesManager();
 
   React.useEffect(() => {
-    if (!activeLine) {
+    if (!createId || !activeLine) {
       return;
     }
     const experienceEditorIds = new Set([
@@ -40,14 +39,13 @@ function ExperienceEditorManager({
 
   const experienceField = React.useMemo<ExperienceEditorContextValue>(
     () => ({
-      createId,
       openExperience,
       closeExperience: () => {
         closeExperience();
         resetActiveLine();
       },
     }),
-    [createId, openExperience, closeExperience, resetActiveLine]
+    [openExperience, closeExperience, resetActiveLine]
   );
 
   return (
