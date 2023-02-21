@@ -2,13 +2,10 @@ import * as React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useEditableLinesManager } from '../contexts/editable-lines-manager';
 
-import { v4 } from 'uuid';
 import { clsx } from 'clsx';
 import { makeContext } from 'src/app/contexts/makeContext';
 
 import * as styles from './line.css';
-
-const generateDisclosureId = () => v4();
 
 type LineDisclosureContextValue = {
   register: () => void;
@@ -18,7 +15,7 @@ type LineDisclosureContextValue = {
   close: () => void;
 };
 
-const [LineDisclosureContext, useLineDisclosure] =
+const [LineDisclosureContext, useLineDisclosureContext] =
   makeContext<LineDisclosureContextValue>(
     '`useLineDisclosure` harus dipakai pada child provider `LineDisclosureContext`.'
   );
@@ -27,25 +24,28 @@ const [LineIdContext, useLineId] = makeContext<string>(
   '`useLineId` harus dipakai pada child provider `LineIdContext`.'
 );
 
-function useRegisterEditable() {
-  const { register } = useLineDisclosure();
+function useLineDisclosure() {
+  const disclosure = useLineDisclosureContext();
+  const { register } = disclosure;
+
   React.useEffect(() => {
     register();
-  }, [register]);
+  }, []);
+
+  return disclosure;
 }
 
 function EditorLine({
   line,
   id = '',
   children,
-}: React.PropsWithChildren<{ line?: number; id?: string }>) {
+}: React.PropsWithChildren<{ line: number; id?: string }>) {
   const {
     registerEditable,
     activateLine,
     shouldActivateLine,
     resetActiveLine,
   } = useEditableLinesManager();
-  const [disclosureId, setDisclosureId] = React.useState(generateDisclosureId);
 
   const disclosure = React.useMemo<LineDisclosureContextValue>(
     () => ({
@@ -69,12 +69,6 @@ function EditorLine({
       resetActiveLine,
     ]
   );
-
-  // Tiap close generate key baru untuk remount
-  // supaya nge-reset semua state children-nya
-  React.useEffect(() => {
-    !disclosure.isOpen && setDisclosureId(generateDisclosureId());
-  }, [disclosure.isOpen]);
 
   useHotkeys('esc', resetActiveLine, {
     enabled: disclosure.isOpen,
@@ -100,7 +94,7 @@ function EditorLine({
         }}
       >
         <LineIdContext.Provider value={id}>
-          <LineDisclosureContext.Provider value={disclosure} key={disclosureId}>
+          <LineDisclosureContext.Provider value={disclosure}>
             {children}
           </LineDisclosureContext.Provider>
         </LineIdContext.Provider>
@@ -113,10 +107,4 @@ function LineBreak() {
   return <span className={styles.textLinebreak}>---</span>;
 }
 
-export {
-  EditorLine,
-  useLineDisclosure,
-  useRegisterEditable,
-  useLineId,
-  LineBreak,
-};
+export { EditorLine, useLineDisclosure, useLineId, LineBreak };

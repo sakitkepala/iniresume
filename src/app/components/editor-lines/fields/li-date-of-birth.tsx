@@ -2,14 +2,13 @@ import * as React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useResumeEditor } from 'src/app/contexts/resume-editor';
 
-import { useRegisterEditable, useLineDisclosure } from '../components/line';
+import { useLineDisclosure } from '../components/line';
 import { ListItemLine } from './list-item-line';
 
 import * as fieldStyles from './common-styles.css';
 import * as styles from './li-date-of-birth.css';
 
 function LineListItemDateOfBirth({ children }: React.PropsWithChildren) {
-  useRegisterEditable();
   const { updateTextField } = useResumeEditor();
   const { isOpen, close: closeEditor } = useLineDisclosure();
   const initialData = typeof children === 'string' ? children : '';

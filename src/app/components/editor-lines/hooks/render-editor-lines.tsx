@@ -12,7 +12,7 @@ import { LineListItemText } from '../fields/li-text';
 import { LineListItemGender } from '../fields/li-gender';
 import { LineListItemDateOfBirth } from '../fields/li-date-of-birth';
 import { LineListItemPhone } from '../fields/li-phone';
-import { LineAddExperience } from '../fields/experiences';
+import { LineAddExperience } from '../fields/line-experiences';
 import { LineHeadingField } from '../fields/heading';
 import { LineListItemSkill, LineAddSkill } from '../fields/li-skill';
 

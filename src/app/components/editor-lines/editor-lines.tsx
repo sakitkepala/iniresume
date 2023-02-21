@@ -5,41 +5,55 @@ import {
   EditableLinesManager,
   useEditableLinesManager,
 } from './contexts/editable-lines-manager';
-import { LinesOperationProvider } from './contexts/lines-operation';
 
 import { EditorLine, LineBreak } from './components/line';
+import { TriggerText } from './fields/trigger-text';
 import { LineSectionHeading } from './components/line-section-heading';
 import { LineListItemText } from './fields/li-text';
 import { LineListItemGender } from './fields/li-gender';
 import { LineListItemDateOfBirth } from './fields/li-date-of-birth';
 import { LineListItemPhone } from './fields/li-phone';
-import { LineAddExperience } from './fields/experiences';
 import { LineHeadingField } from './fields/heading';
-import { ExperienceFieldProvider } from './fields/experiences/context';
-import { TriggerText } from './fields/trigger-text';
+import {
+  ExperienceEditorManager,
+  LineAddExperience,
+  LineExperienceTitle,
+  LineExperienceEmployer,
+  LineExperienceDescription,
+} from './fields/line-experiences';
+import {
+  EducationEditorManager,
+  LineAddEducation,
+} from './fields/line-educations';
+// import { LineListItemSkill } from './fields/li-skill';
 
-import { LineContent } from './types';
+import { type LineContent } from './types';
+
+import { v4 } from 'uuid';
 
 import * as styles from '../editor.css';
 
 function EditorLines() {
-  const { resume } = useResumeEditor();
-  const { contents, operation } = useEditorContents(resume);
   return (
-    <LinesOperationProvider operations={{ operation }}>
-      <EditableLinesManager>
-        <ExperienceFieldProvider>
-          <LinesList contents={contents} />
-        </ExperienceFieldProvider>
-      </EditableLinesManager>
-    </LinesOperationProvider>
+    <EditableLinesManager>
+      <LinesList />
+    </EditableLinesManager>
   );
 }
 
-function LinesList({ contents = [] }: { contents: LineContent[] }) {
+function LinesList() {
+  const {
+    contents,
+    createId,
+    openExperience,
+    closeExperience,
+    openEducation,
+    closeEducation,
+  } = useEditorContents();
   const { resetActiveLine } = useEditableLinesManager();
   const $container = React.useRef<HTMLDivElement>(null);
   useOnClickOutside($container, resetActiveLine);
+
   return (
     <div className={styles.codeLinesContainer}>
       <div
@@ -47,31 +61,62 @@ function LinesList({ contents = [] }: { contents: LineContent[] }) {
         className={styles.codeLinesArea}
         onClick={resetActiveLine}
       >
-        {contents.map(({ id, content }, index) => (
-          <EditorLine key={id} id={id} line={index + 1}>
-            {content}
-          </EditorLine>
-        ))}
+        <ExperienceEditorManager
+          createId={createId}
+          openExperience={openExperience}
+          closeExperience={closeExperience}
+        >
+          <EducationEditorManager
+            openEducation={openEducation}
+            closeEducation={closeEducation}
+          >
+            {contents.map(({ id, content }, index) => (
+              <EditorLine key={id} id={id} line={index + 1}>
+                {content}
+              </EditorLine>
+            ))}
+          </EducationEditorManager>
+        </ExperienceEditorManager>
       </div>
     </div>
   );
 }
 
-function useEditorContents(resume: ResumeData): {
-  contents: LineContent[];
-  operation: React.Dispatch<React.SetStateAction<LineContent[]>>;
-} {
-  const cleanContents = React.useMemo(() => buildContents(resume), [resume]);
-  const [contents, operation] = React.useState(cleanContents);
-  React.useEffect(() => {
-    operation(cleanContents);
-  }, [cleanContents]);
+function useEditorContents() {
+  const { resume } = useResumeEditor();
+  const [experienceIsOpen, setExperienceOpen] = React.useState(false);
+  const [educationIsOpen, setEducationOpen] = React.useState(false);
 
-  return { contents, operation };
+  return React.useMemo(() => {
+    const createId = experienceIsOpen || educationIsOpen ? v4() : null;
+    return {
+      contents: _buildContents(resume, {
+        createId,
+        experienceIsOpen,
+        educationIsOpen,
+      }),
+      createId,
+      openExperience: () => setExperienceOpen(true),
+      closeExperience: () => setExperienceOpen(false),
+      openEducation: () => setEducationOpen(true),
+      closeEducation: () => setEducationOpen(false),
+    };
+  }, [resume, experienceIsOpen, educationIsOpen]);
 }
 
-function buildContents(resume: ResumeData): LineContent[] {
-  return [
+function _buildContents(
+  resume: ResumeData,
+  {
+    createId,
+    experienceIsOpen,
+    educationIsOpen,
+  }: {
+    createId: string | null;
+    experienceIsOpen: boolean;
+    educationIsOpen: boolean;
+  }
+): LineContent[] {
+  const contentsTemplate: LineContent[] = [
     {
       id: 'section-infos',
       content: <LineSectionHeading>Informasi</LineSectionHeading>,
@@ -182,32 +227,91 @@ function buildContents(resume: ResumeData): LineContent[] {
       (contents, experience) => [
         ...contents,
         {
-          id: experience.id + '-title',
+          id: experience.id + '-experience-title',
           content: (
-            <LineHeadingField level={2}>{experience.title}</LineHeadingField>
+            <LineExperienceTitle
+              label="Titel Pekerjaan"
+              experienceId={experience.id}
+            >
+              {experience.title}
+            </LineExperienceTitle>
           ),
         },
-        { id: experience.id + '-title-trail' },
+        { id: experience.id + '-experience-title-trail' },
 
         {
-          id: experience.id + '-employer',
+          id: experience.id + '-experience-employer',
           content: (
-            <LineHeadingField level={3}>{experience.employer}</LineHeadingField>
+            <LineExperienceEmployer
+              label="Nama Perusahaan"
+              experienceId={experience.id}
+            >
+              {experience.employer}
+            </LineExperienceEmployer>
           ),
         },
-        { id: experience.id + '-employer-trail' },
+        { id: experience.id + '-experience-employer-trail' },
 
         {
-          id: experience.id + '-description',
-          content: experience.description,
+          id: experience.id + '-experience-description',
+          content: (
+            <LineExperienceDescription
+              label="Deskripsikan pekerjaannya"
+              experienceId={experience.id}
+            >
+              {experience.description}
+            </LineExperienceDescription>
+          ),
         },
-        { id: experience.id + '-description-trail' },
+        { id: experience.id + '-experience-description-trail' },
       ],
       []
     ),
 
-    { id: 'experience-add', content: <LineAddExperience /> },
-    { id: 'experience-add-trail' },
+    ...(experienceIsOpen
+      ? [
+          {
+            id: createId + '-experience-title',
+            content: (
+              <LineExperienceTitle
+                defaultOpen
+                label="Titel Pekerjaan"
+                experienceId={createId || ''}
+              />
+            ),
+          },
+          { id: createId + '-experience-title-trail' },
+
+          {
+            id: createId + '-experience-employer',
+            content: (
+              <LineExperienceEmployer
+                label="Nama Perusahaan"
+                experienceId={createId || ''}
+              />
+            ),
+          },
+          { id: createId + '-experience-employer-trail' },
+
+          {
+            id: createId + '-experience-description',
+            content: (
+              <LineExperienceDescription
+                label="Deskripsikan pekerjaannya"
+                experienceId={createId || ''}
+              />
+            ),
+          },
+          { id: createId + '-experience-description-trail' },
+        ]
+      : []),
+
+    ...(!experienceIsOpen
+      ? [
+          { id: 'experience-add', content: <LineAddExperience /> },
+          { id: 'experience-add-trail' },
+        ]
+      : []),
 
     { id: 'section-experiences-br', content: <LineBreak /> },
     { id: 'section-experiences-br-trail' },
@@ -218,11 +322,66 @@ function buildContents(resume: ResumeData): LineContent[] {
     },
     { id: 'section-educations-trail' },
 
-    {
-      id: 'education-add',
-      content: <LineAddExperience />,
-    },
-    { id: 'education-add-trail' },
+    ...resume.education.reduce<LineContent[]>(
+      (contents, education) => [
+        ...contents,
+        {
+          id: education.id + '-school',
+          content: (
+            <LineHeadingField level={2}>{education.school}</LineHeadingField>
+          ),
+        },
+        { id: education.id + '-school-trail' },
+
+        {
+          id: education.id + '-major',
+          content: (
+            <LineHeadingField level={3}>{education.major}</LineHeadingField>
+          ),
+        },
+        { id: education.id + '-major-trail' },
+
+        {
+          id: education.id + '-description',
+          content: education.description || 'Isi deskripsi',
+        },
+        { id: education.id + '-description-trail' },
+      ],
+      []
+    ),
+
+    ...(educationIsOpen
+      ? [
+          {
+            id: 'education-add-school',
+            content: (
+              <LineExperienceTitle
+                label="Universitas atau Sekolah"
+                experienceId={''}
+              />
+            ),
+          },
+          { id: 'education-add-school-trail' },
+
+          {
+            id: 'education-add-major',
+            content: (
+              <LineExperienceEmployer label="Jurusan" experienceId={''} />
+            ),
+          },
+          { id: 'education-add-major-trail' },
+
+          { id: 'education-add-description', content: 'Deskripsi' },
+          { id: 'education-add-description-trail' },
+        ]
+      : []),
+
+    ...(!educationIsOpen
+      ? [
+          { id: 'education-add', content: <LineAddEducation /> },
+          { id: 'education-add-trail' },
+        ]
+      : []),
 
     { id: 'section-educations-br', content: <LineBreak /> },
     { id: 'section-educations-br-trail' },
@@ -232,7 +391,21 @@ function buildContents(resume: ResumeData): LineContent[] {
       content: <LineSectionHeading>Skill</LineSectionHeading>,
     },
     { id: 'section-skills-trail' },
+
+    ...resume.skills.map((skill) => ({
+      id: skill,
+      content: (
+        <span>
+          <span>-</span>
+          <span>&nbsp;</span>
+          <span>{skill}</span>
+        </span>
+      ),
+    })),
+    ...(resume.skills.length ? [{ id: 'section-skills-list-trail' }] : []),
   ];
+
+  return contentsTemplate;
 }
 
 export { EditorLines };

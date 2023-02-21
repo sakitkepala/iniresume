@@ -4,6 +4,7 @@ import { makeContext } from 'src/app/contexts/makeContext';
 export type LineId = string;
 
 export type EditableLinesManagerContextValue = {
+  activeLine: LineId | null;
   registerEditable: (id: LineId) => void;
   activateLine: (id?: LineId) => void;
   shouldActivateLine: (id: LineId) => boolean;
@@ -23,6 +24,8 @@ function EditableLinesManager({ children }: React.PropsWithChildren) {
 
   const value = React.useMemo<EditableLinesManagerContextValue>(
     () => ({
+      activeLine,
+
       registerEditable(id) {
         const $lines = registeredLineIds.current;
         !$lines.has(id) && $lines.add(id);

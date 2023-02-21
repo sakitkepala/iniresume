@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useResumeEditor } from 'src/app/contexts/resume-editor';
 
-import { useRegisterEditable, useLineDisclosure } from '../components/line';
+import { useLineDisclosure } from '../components/line';
 import { TriggerText } from './trigger-text';
 import { ListItemLine } from './list-item-line';
 
@@ -32,7 +32,6 @@ function _getGenderOptions(value: string) {
 }
 
 function LineListItemGender({ children }: React.PropsWithChildren) {
-  useRegisterEditable();
   const { updateTextField } = useResumeEditor();
   const { isOpen, close } = useLineDisclosure();
   const [isCustomFieldOpen, setCustomFieldOpen] = React.useState(false);

@@ -1,29 +1,26 @@
 import * as React from 'react';
-
+import { makeContext } from './makeContext';
 import { getInitialData } from '../data/resume';
-import { type ResumeData, type PhoneNumber } from '../data/resume';
+import {
+  type ResumeData,
+  type PhoneNumber,
+  type Experience,
+} from '../data/resume';
 
 type ResumeEditorContextValue = {
   resume: ResumeData;
   updateField: (field: keyof ResumeData, value: ResumeFieldPayload) => void;
   updateTextField: (field: keyof ResumeData, value: string) => void;
+  addExperience: (id: string, field: keyof Experience, value: string) => void;
   addSkill: (value: string) => void;
   editSkill: (value: string, originalValue: string) => void;
   insertSkill: (insertAfterSkill: string, value: string) => void;
 };
 
-const ResumeEditorContext =
-  React.createContext<ResumeEditorContextValue | null>(null);
-
-function useResumeEditor() {
-  const value = React.useContext(ResumeEditorContext);
-  if (!value) {
-    throw new Error(
-      'Hook `useResumeEditor` harus dipakai di child `ResumeEditorProvider`.'
-    );
-  }
-  return value;
-}
+const [ResumeEditorContext, useResumeEditor] =
+  makeContext<ResumeEditorContextValue>(
+    'Hook `useResumeEditor` harus dipakai di child `ResumeEditorProvider`.'
+  );
 
 function ResumeEditorProvider({ children }: React.PropsWithChildren) {
   const value = useEditor();
@@ -45,6 +42,12 @@ type ResumeEditorActionsType =
   | {
       type: 'UPDATE_STRING_FIELD';
       field: keyof ResumeData;
+      payload: string;
+    }
+  | {
+      type: 'UPDATE_EXPERIENCE';
+      field: keyof Experience;
+      id: string;
       payload: string;
     }
   | {
@@ -96,6 +99,65 @@ function useEditor() {
             ...state,
             skills: [...state.skills, action.payload],
           };
+        }
+
+        case 'UPDATE_EXPERIENCE': {
+          const experienceIds = new Set(state.experiences.map((xp) => xp.id));
+
+          // Harus disediakan ID
+          if (!action.id) {
+            return state;
+          }
+
+          // Create data baru
+          if (!experienceIds.has(action.id)) {
+            const newXP: Experience = {
+              id: '',
+              title: '',
+              employer: '',
+              from: '',
+              to: '',
+              ongoing: true,
+              description: '',
+              projects: [],
+            };
+
+            // Waktu create data, harus disesiakan nama field & payloadnya
+            if (!action.field || !action.payload) {
+              return state;
+            }
+
+            return {
+              ...state,
+              experiences: [
+                ...state.experiences,
+                { ...newXP, id: action.id, [action.field]: action.payload },
+              ],
+            };
+          }
+
+          const experiences = new Map(
+            state.experiences.map((xp) => [xp.id, xp])
+          );
+          const edit = experiences.get(action.id);
+
+          if (!edit) {
+            return state;
+          }
+
+          // Khusus field `title` kalau dikasih nilai kosong jadi menghapus data
+          if (action.field === 'title' && !action.payload) {
+            experiences.delete(action.id);
+            return { ...state, experiences: [...experiences.values()] };
+          }
+
+          // Edit data yang ada
+          experiences.set(action.id, {
+            ...edit,
+            [action.field]: action.payload,
+          });
+
+          return { ...state, experiences: [...experiences.values()] };
         }
 
         case 'INSERT_SKILL': {
@@ -173,6 +235,10 @@ function useEditor() {
 
       updateTextField: (field, value) => {
         dispatch({ type: 'UPDATE_STRING_FIELD', field, payload: value });
+      },
+
+      addExperience: (id, field, value) => {
+        dispatch({ type: 'UPDATE_EXPERIENCE', id, field, payload: value });
       },
 
       addSkill: (value) => {

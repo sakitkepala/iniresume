@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useResumeEditor } from 'src/app/contexts/resume-editor';
 
-import { useRegisterEditable, useLineDisclosure } from '../components/line';
+import { useLineDisclosure } from '../components/line';
 import { ListItemLine } from './list-item-line';
 
 import { clsx } from 'clsx';
@@ -14,7 +14,6 @@ function LineListItemPhone({
   children,
   hasWA,
 }: React.PropsWithChildren<{ hasWA: boolean }>) {
-  useRegisterEditable();
   const { isOpen } = useLineDisclosure();
   const value = typeof children === 'string' ? children : '';
 
@@ -90,9 +89,7 @@ function PhoneEditor({
   React.useEffect(() => {
     // otomatis hilangkan message setelah muncul beberapa detik
     if (shouldShowInlineMessage) {
-      const timer = setTimeout(() => {
-        showInlineMessage(false);
-      }, 1500);
+      const timer = setTimeout(() => showInlineMessage(false), 1500);
       return () => {
         clearTimeout(timer);
       };
