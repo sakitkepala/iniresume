@@ -1,5 +1,5 @@
 import * as ScrollArea from '@radix-ui/react-scroll-area';
-import { EditorLines } from './editor-lines';
+import { EditorLines } from '../__legacy-app/components/editor-lines';
 import * as styles from './editor.css';
 
 function Editor() {
