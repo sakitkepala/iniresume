@@ -1,12 +1,12 @@
 import * as ScrollArea from '@radix-ui/react-scroll-area';
-import { EditorLines } from './editor-lines';
+import { LinesContents } from './lines-contents';
 import * as styles from './editor.css';
 
 function Editor() {
   return (
     <ScrollArea.Root className={styles.editorScrollableRoot}>
       <ScrollArea.Viewport className={styles.editorScrollableViewport}>
-        <EditorLines />
+        <LinesContents />
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar orientation="vertical">
         <ScrollArea.Thumb />
