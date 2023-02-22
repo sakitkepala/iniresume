@@ -16,7 +16,7 @@ export type LineContent = {
   id: LineId;
   content?: React.ReactNode;
   show?: boolean;
-  activeable?: true;
+  activateable?: true;
 };
 
 const [LineContentsContext, useLineContents] = makeContext<{
@@ -46,42 +46,134 @@ enum GroupTypes {
   EDUCATION = 'EDUCATION',
 }
 
+enum ActionTypes {
+  LINE_ACTIVATED = 'LINE_ACTIVATED',
+  LINE_CONTENTS_RESET = 'LINE_CONTENTS_RESET',
+  LINES_GROUP_OPEN = 'LINES_GROUP_OPEN',
+  LINES_GROUP_RESET = 'LINES_GROUP_RESET',
+}
+
+type Actions =
+  | {
+      type: ActionTypes.LINE_ACTIVATED;
+      payload: LineId;
+    }
+  | {
+      type: ActionTypes.LINE_CONTENTS_RESET;
+    }
+  | {
+      type: ActionTypes.LINES_GROUP_OPEN;
+      group: GroupTypes;
+      payload?: LineId;
+    }
+  | {
+      type: ActionTypes.LINES_GROUP_RESET;
+    };
+
+const initialState: {
+  activeLine: LineId | null;
+  activeGroup: GroupTypes | null;
+  nextCreateId: string;
+} = {
+  activeLine: null,
+  activeGroup: null,
+  nextCreateId: v4(),
+};
+
 function LinesContents() {
   const { resume } = useResumeEditor();
-  const [activeLine, setActiveLine] = React.useState<LineId | null>(null);
-  const [activeGroup, setActiveGroup] = React.useState<GroupTypes | null>(null);
-  const [nextCreateId, setNextCreateId] = React.useState<string>(() => v4());
 
-  const lines = React.useMemo(() => {
+  const [{ activeLine, activeGroup, nextCreateId }, dispatch] =
+    React.useReducer((state: typeof initialState, action: Actions) => {
+      switch (action.type) {
+        case ActionTypes.LINE_ACTIVATED: {
+          const groupLineIds = new Set([
+            state.nextCreateId + '-experience-title',
+            state.nextCreateId + '-experience-employer',
+            state.nextCreateId + '-experience-description',
+            state.nextCreateId + '-education-school',
+            state.nextCreateId + '-education-major',
+            state.nextCreateId + '-education-description',
+          ]);
+          const lineBelongsToActiveGroup = groupLineIds.has(action.payload);
+
+          if (!state.activeGroup || lineBelongsToActiveGroup) {
+            return {
+              ...state,
+              activeLine: action.payload,
+            };
+          }
+
+          return {
+            ...state,
+            activeLine: action.payload,
+            activeGroup: null,
+            nextCreateId: v4(),
+          };
+        }
+
+        case ActionTypes.LINE_CONTENTS_RESET: {
+          return {
+            activeLine: null,
+            activeGroup: null,
+            nextCreateId: v4(),
+          };
+        }
+
+        case ActionTypes.LINES_GROUP_OPEN: {
+          const activeLine = {
+            [GroupTypes.EXPERIENCE]: state.nextCreateId + '-experience-title',
+            [GroupTypes.EDUCATION]: state.nextCreateId + '-education-school',
+          };
+          return {
+            ...state,
+            activeGroup: action.group,
+            activeLine: action.payload || activeLine[action.group],
+          };
+        }
+
+        case ActionTypes.LINES_GROUP_RESET: {
+          return {
+            ...state,
+            activeGroup: null,
+            nextCreateId: v4(),
+          };
+        }
+
+        default: {
+          return state;
+        }
+      }
+    }, initialState);
+
+  const { contents, activateableLines } = React.useMemo(() => {
     const contents = _buildContents(resume, {
       createId: nextCreateId,
       experienceIsOpen: activeGroup === GroupTypes.EXPERIENCE,
       educationIsOpen: activeGroup === GroupTypes.EDUCATION,
     });
+    return {
+      contents,
+      activateableLines: contents
+        .filter((content) => content.activateable)
+        .map((content) => content.id),
+    };
+  }, [resume, activeGroup, nextCreateId]);
 
-    const activateableLines = contents
-      .filter((content) => content.activeable)
-      .map((content) => content.id);
-
-    const groupLineIds = new Set([
-      nextCreateId + '-experience-title',
-      nextCreateId + '-experience-employer',
-      nextCreateId + '-experience-description',
-      nextCreateId + '-education-school',
-      nextCreateId + '-education-major',
-      nextCreateId + '-education-description',
-    ]);
+  const {
+    resetLineContents,
+    activateLine,
+    activateNext,
+    activatePrevious,
+    openExperience,
+    openEducation,
+  } = React.useMemo(() => {
+    const resetLineContents = () => {
+      dispatch({ type: ActionTypes.LINE_CONTENTS_RESET });
+    };
 
     const activateLine = (lineId: LineId) => {
-      setActiveLine(lineId);
-      if (!activeGroup) {
-        return;
-      }
-      const isLineOfActiveGroup = groupLineIds.has(lineId);
-      if (!isLineOfActiveGroup) {
-        setActiveGroup(null);
-        setNextCreateId(v4());
-      }
+      dispatch({ type: ActionTypes.LINE_ACTIVATED, payload: lineId });
     };
 
     const activateNext = () => {
@@ -89,83 +181,68 @@ function LinesContents() {
         activateLine(activateableLines[0]);
         return;
       }
-
       const index = activateableLines.indexOf(activeLine);
       const nextIndex = index + 1;
-      if (nextIndex >= activateableLines.length) {
-        setActiveLine(null);
-        activeGroup && setActiveGroup(null);
-      } else {
-        activateLine(activateableLines[nextIndex]);
-      }
+      const nextLineId = activateableLines[nextIndex];
+      nextLineId ? activateLine(nextLineId) : resetLineContents();
     };
 
     const activatePrevious = () => {
       if (!activeLine) {
-        setActiveLine(activateableLines[activateableLines.length - 1]);
+        activateLine(activateableLines[activateableLines.length - 1]);
         return;
       }
-
       const index = activateableLines.indexOf(activeLine);
       const prevIndex = index - 1;
-      if (prevIndex < 0) {
-        setActiveLine(null);
-        activeGroup && setActiveGroup(null);
-      } else {
-        activateLine(activateableLines[prevIndex]);
-      }
+      const prevLineId = activateableLines[prevIndex];
+      prevLineId ? activateLine(prevLineId) : resetLineContents();
     };
 
-    const value = {
-      contents,
+    const openExperience = () => {
+      dispatch({
+        type: ActionTypes.LINES_GROUP_OPEN,
+        group: GroupTypes.EXPERIENCE,
+      });
+    };
 
+    const closeExperience = () => {
+      dispatch({ type: ActionTypes.LINES_GROUP_RESET });
+    };
+
+    const openEducation = () => {
+      dispatch({
+        type: ActionTypes.LINES_GROUP_OPEN,
+        group: GroupTypes.EDUCATION,
+      });
+    };
+
+    const closeEducation = () => {
+      dispatch({ type: ActionTypes.LINES_GROUP_RESET });
+    };
+
+    return {
+      resetLineContents,
       activateLine,
       activateNext,
       activatePrevious,
-
-      openExperience: () => {
-        setActiveGroup(GroupTypes.EXPERIENCE);
-        setActiveLine(nextCreateId + '-experience-title');
-      },
-      closeExperience: () => {
-        setActiveGroup(null);
-        setNextCreateId(v4());
-      },
-
-      openEducation: () => {
-        setActiveGroup(GroupTypes.EDUCATION);
-        setActiveLine(nextCreateId + '-education-school');
-      },
-      closeEducation: () => {
-        setActiveGroup(null);
-        setNextCreateId(v4());
-      },
+      openExperience,
+      closeExperience,
+      openEducation,
+      closeEducation,
     };
+  }, [activeLine, activateableLines]);
 
-    return value;
-  }, [resume, activeLine, activeGroup, nextCreateId]);
+  useHotkeys('esc', resetLineContents, {
+    enabled: Boolean(activeLine),
+    enableOnFormTags: true,
+  });
 
-  useHotkeys(
-    'esc',
-    () => {
-      setActiveLine(null);
-      if (activeGroup) {
-        setActiveGroup(null);
-        setNextCreateId(v4());
-      }
-    },
-    {
-      enabled: Boolean(activeLine),
-      enableOnFormTags: true,
-    }
-  );
-
-  useHotkeys('enter, tab, down', lines.activateNext, {
+  useHotkeys('enter, tab, down', activateNext, {
     enableOnFormTags: true,
     preventDefault: true,
   });
 
-  useHotkeys('shift+tab, up', lines.activatePrevious, {
+  useHotkeys('shift+tab, up', activatePrevious, {
     enableOnFormTags: true,
     preventDefault: true,
   });
@@ -177,20 +254,20 @@ function LinesContents() {
           activeLine,
           activeGroup,
           nextCreateId,
-          openExperience: lines.openExperience,
-          openEducation: lines.openEducation,
+          openExperience,
+          openEducation,
         }}
       >
-        {lines.contents.map((content, contentIndex) => (
+        {contents.map((content, contentIndex) => (
           <LineItem
             key={content.id}
             id={content.id}
             number={contentIndex + 1}
             element={content.content}
             isActive={activeLine === content.id}
-            onActivate={lines.activateLine}
-            onNext={lines.activateNext}
-            onPrevious={lines.activatePrevious}
+            onActivate={activateLine}
+            onNext={activateNext}
+            onPrevious={activatePrevious}
           />
         ))}
       </LineContentsContext.Provider>
@@ -220,10 +297,6 @@ function LineItem({
     [onActivate, id]
   );
 
-  const handleNext = React.useCallback(onNext, [onNext]);
-
-  const handlePrevious = React.useCallback(onPrevious, [onPrevious]);
-
   return (
     <div style={isActive ? { backgroundColor: 'yellowgreen' } : undefined}>
       {number < 10 && <span>&nbsp;</span>}
@@ -244,8 +317,8 @@ function LineItem({
               value={{
                 activate: handleActivate,
                 isActive,
-                next: handleNext,
-                previous: handlePrevious,
+                next: onNext,
+                previous: onPrevious,
               }}
             >
               {element}
@@ -293,22 +366,22 @@ function _buildContents(
     {
       id: 'fullName',
       content: <FieldText value="Nama lengkap" />,
-      activeable: true,
+      activateable: true,
     },
     {
       id: 'title',
       content: <FieldText>Titel profesi</FieldText>,
-      activeable: true,
+      activateable: true,
     },
     {
       id: 'city',
       content: <FieldText>Kota Domisili</FieldText>,
-      activeable: true,
+      activateable: true,
     },
     {
       id: 'province',
       content: <FieldText>Provinsi Domisili</FieldText>,
-      activeable: true,
+      activateable: true,
     },
     { id: 'infos-general-list-trail' },
 
@@ -327,21 +400,21 @@ function _buildContents(
         {
           id: experience.id + '-experience-title',
           content: <GroupMainField value="Titel Pekerjaan" />,
-          activeable: true,
+          activateable: true,
         },
         { id: experience.id + '-experience-title-trail' },
 
         {
           id: experience.id + '-experience-employer',
           content: <FieldText>Nama Perusahaan</FieldText>,
-          activeable: true,
+          activateable: true,
         },
         { id: experience.id + '-experience-employer-trail' },
 
         {
           id: experience.id + '-experience-description',
           content: <FieldText>Deskripsikan pekerjaannya</FieldText>,
-          activeable: true,
+          activateable: true,
         },
         { id: experience.id + '-experience-description-trail' },
       ],
@@ -351,7 +424,7 @@ function _buildContents(
     {
       id: createId + '-experience-title',
       content: <GroupMainField value="Titel Pekerjaan" />,
-      activeable: true,
+      activateable: true,
       show: experienceIsOpen,
     },
     {
@@ -362,7 +435,7 @@ function _buildContents(
     {
       id: createId + '-experience-employer',
       content: <FieldText>Nama Perusahaan</FieldText>,
-      activeable: true,
+      activateable: true,
       show: experienceIsOpen,
     },
     {
@@ -373,7 +446,7 @@ function _buildContents(
     {
       id: createId + '-experience-description',
       content: <FieldText>Deskripsikan pekerjaannya</FieldText>,
-      activeable: true,
+      activateable: true,
       show: experienceIsOpen,
     },
     {
@@ -384,7 +457,7 @@ function _buildContents(
     {
       id: 'experience-add',
       content: <LineAddExperience />,
-      activeable: true,
+      activateable: true,
       show: !experienceIsOpen,
     },
     {
@@ -407,21 +480,21 @@ function _buildContents(
         {
           id: education.id + '-education-school',
           content: <GroupMainField value="Universitas atau Sekolah" />,
-          activeable: true,
+          activateable: true,
         },
         { id: education.id + '-education-school-trail' },
 
         {
           id: education.id + '-education-major',
           content: <FieldText>Jurusan</FieldText>,
-          activeable: true,
+          activateable: true,
         },
         { id: education.id + '-education-major-trail' },
 
         {
           id: education.id + '-education-description',
           content: <FieldText>Deskripsi</FieldText>,
-          activeable: true,
+          activateable: true,
         },
         { id: education.id + '-education-description-trail' },
       ],
@@ -431,7 +504,7 @@ function _buildContents(
     {
       id: createId + '-education-school',
       content: <GroupMainField value="Universitas atau Sekolah" />,
-      activeable: true,
+      activateable: true,
       show: educationIsOpen,
     },
     {
@@ -442,7 +515,7 @@ function _buildContents(
     {
       id: createId + '-education-major',
       content: <FieldText>Jurusan</FieldText>,
-      activeable: true,
+      activateable: true,
       show: educationIsOpen,
     },
     {
@@ -453,7 +526,7 @@ function _buildContents(
     {
       id: createId + '-education-description',
       content: <FieldText>Deskripsi</FieldText>,
-      activeable: true,
+      activateable: true,
       show: educationIsOpen,
     },
     {
@@ -464,7 +537,7 @@ function _buildContents(
     {
       id: 'education-add',
       content: <LineAddEducation />,
-      activeable: true,
+      activateable: true,
       show: !educationIsOpen,
     },
     {
