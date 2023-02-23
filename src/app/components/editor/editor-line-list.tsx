@@ -8,6 +8,10 @@ import { ActiveLineContext } from './contexts/active-line';
 
 import { type LineId } from './types';
 
+import { clsx } from 'clsx';
+
+import * as styles from './editor-line-list.css';
+
 function EditorLineList() {
   const {
     activeLine,
@@ -30,7 +34,7 @@ function EditorLineList() {
     enableOnFormTags: true,
   });
 
-  useHotkeys('enter, tab, down', activateNext, {
+  useHotkeys('down', activateNext, {
     enableOnFormTags: true,
     preventDefault: true,
   });
@@ -41,7 +45,7 @@ function EditorLineList() {
   });
 
   return (
-    <div ref={$containerDiv} style={{ fontFamily: 'monospace', fontSize: 13 }}>
+    <div ref={$containerDiv} className={styles.lineList}>
       <LineContentsContext.Provider
         value={{
           activeLine,
@@ -57,6 +61,7 @@ function EditorLineList() {
             id={content.id}
             number={contentIndex + 1}
             element={content.content}
+            activateable={content.activateable}
             isActive={activeLine === content.id}
             onActivate={activateLine}
             onNext={activateNext}
@@ -71,6 +76,7 @@ function EditorLineList() {
 function LineItem({
   id,
   number,
+  activateable,
   isActive,
   onActivate,
   onNext,
@@ -79,6 +85,7 @@ function LineItem({
 }: {
   id: string;
   number: number;
+  activateable?: true;
   isActive: boolean;
   onActivate: (lineId: LineId) => void;
   onNext: () => void;
@@ -91,14 +98,23 @@ function LineItem({
   );
 
   return (
-    <div style={isActive ? { backgroundColor: 'yellowgreen' } : undefined}>
-      {number < 10 && <span>&nbsp;</span>}
-      {number < 100 && <span>&nbsp;</span>}
-      <span>{number}</span>
-      <span>&nbsp;</span>
+    <div
+      className={clsx(styles.line, isActive ? styles.lineActive : undefined)}
+    >
+      <div className={styles.lineNumber}>{number}</div>
 
-      {element ? (
-        <span>
+      <div
+        className={styles.lineContent}
+        onClick={
+          activateable
+            ? (ev) => {
+                ev.stopPropagation();
+                handleActivate();
+              }
+            : undefined
+        }
+      >
+        {element ? (
           <LineItemContext.Provider
             value={{
               lineId: id,
@@ -117,19 +133,10 @@ function LineItem({
               {element}
             </ActiveLineContext.Provider>
           </LineItemContext.Provider>
-        </span>
-      ) : (
-        <>
-          <span>&nbsp;</span>
-          <span>&nbsp;</span>
-          <span>&nbsp;</span>
-          <span>&nbsp;</span>
-          <span>&nbsp;</span>
-        </>
-      )}
-
-      <span>&nbsp;</span>
-      <span style={{ color: 'turquoise' }}>`{id}`</span>
+        ) : (
+          element
+        )}
+      </div>
     </div>
   );
 }

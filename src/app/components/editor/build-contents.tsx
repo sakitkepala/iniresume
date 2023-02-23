@@ -3,6 +3,9 @@ import { useLineContents } from './contexts/line-contents';
 import { useActiveLine } from './contexts/active-line';
 
 import { LineBreak } from './components/line-break';
+import { LineSectionHeading } from './components/section-heading';
+import { FieldListItemText } from './components/field-list-item-text';
+import { FieldGender } from './components/field-gender';
 
 import { type ResumeData } from 'src/app/data/resume';
 import { type LineContent } from './types';
@@ -22,7 +25,7 @@ function buildContents(
   const contentsTemplate: LineContent[] = [
     {
       id: 'section-infos',
-      content: 'Informasi',
+      content: <LineSectionHeading>Informasi</LineSectionHeading>,
     },
     { id: 'section-infos-trail' },
 
@@ -31,32 +34,97 @@ function buildContents(
 
     {
       id: 'fullName',
-      content: <FieldText value="Nama lengkap" />,
       activateable: true,
+      content: (
+        <FieldListItemText
+          field="fullName"
+          label="Nama lengkap"
+          value={resume.fullName}
+        />
+      ),
     },
     {
       id: 'title',
-      content: <FieldText>Titel profesi</FieldText>,
       activateable: true,
+      content: (
+        <FieldListItemText
+          field="title"
+          label="Titel profesi"
+          value={resume.title}
+        />
+      ),
+    },
+    {
+      id: 'gender',
+      activateable: true,
+      content: <FieldGender value={resume.gender} />,
+    },
+    {
+      id: 'birthdate',
+      activateable: true,
+      content:
+        '<LineListItemDateOfBirth>{resume.birthdate}</LineListItemDateOfBirth>',
     },
     {
       id: 'city',
-      content: <FieldText>Kota Domisili</FieldText>,
       activateable: true,
+      content: <FieldText>Kota Domisili</FieldText>,
     },
     {
       id: 'province',
-      content: <FieldText>Provinsi Domisili</FieldText>,
       activateable: true,
+      content: <FieldText>Provinsi Domisili</FieldText>,
     },
     { id: 'infos-general-list-trail' },
+
+    { id: 'infos-contact', content: <>Kontak:</> },
+    { id: 'infos-contact-trail' },
+
+    {
+      id: 'email',
+      activateable: true,
+      content: `<LineListItemText field="email" label="Email">
+          {resume.email}
+        </LineListItemText>`,
+    },
+    {
+      id: 'phone',
+      activateable: true,
+      content: `<LineListItemPhone hasWA={resume.phone.wa}>
+          {resume.phone.number}
+        </LineListItemPhone>`,
+    },
+    { id: 'infos-contact-list-trail' },
+
+    { id: 'infos-profile', content: <>Profil:</> },
+    { id: 'infos-profile-trail' },
+
+    {
+      id: 'website',
+      activateable: true,
+      content: `<LineListItemText field="website" label="Website personal">
+          {resume.website?.url || ''}
+        </LineListItemText>`,
+    },
+    {
+      id: 'profile-add',
+      activateable: true,
+      content: (
+        <span>
+          <span>&nbsp;</span>
+          <span>&nbsp;</span>
+          {'<TriggerText>Tambah profil lainnya</TriggerText>'}
+        </span>
+      ),
+    },
+    { id: 'infos-profile-list-trail' },
 
     { id: 'section-infos-br', content: <LineBreak /> },
     { id: 'section-infos-br-trail' },
 
     {
       id: 'section-experiences',
-      content: 'Pengalaman',
+      content: <LineSectionHeading>Pengalaman</LineSectionHeading>,
     },
     { id: 'section-experiences-trail' },
 
@@ -136,7 +204,7 @@ function buildContents(
 
     {
       id: 'section-educations',
-      content: 'Pendidikan',
+      content: <LineSectionHeading>Pendidikan</LineSectionHeading>,
     },
     { id: 'section-educations-trail' },
 
@@ -213,6 +281,12 @@ function buildContents(
 
     { id: 'section-educations-br', content: <LineBreak /> },
     { id: 'section-educations-br-trail' },
+
+    {
+      id: 'section-skills',
+      content: <LineSectionHeading>Skill</LineSectionHeading>,
+    },
+    { id: 'section-skills-trail' },
   ];
 
   return contentsTemplate.filter(
