@@ -20,6 +20,7 @@ function EditorLineList() {
     contents,
     resetLineContents,
     activateLine,
+    activateAfterReset,
     activateNext,
     activatePrevious,
     openExperience,
@@ -64,6 +65,7 @@ function EditorLineList() {
             activateable={content.activateable}
             isActive={activeLine === content.id}
             onActivate={activateLine}
+            onActivateAfterReset={activateAfterReset}
             onNext={activateNext}
             onPrevious={activatePrevious}
           />
@@ -79,6 +81,7 @@ function LineItem({
   activateable,
   isActive,
   onActivate,
+  onActivateAfterReset,
   onNext,
   onPrevious,
   element,
@@ -88,12 +91,13 @@ function LineItem({
   activateable?: true;
   isActive: boolean;
   onActivate: (lineId: LineId) => void;
+  onActivateAfterReset: (lineId: LineId) => void;
   onNext: () => void;
   onPrevious: () => void;
   element: React.ReactNode;
 }) {
   const handleActivate = React.useCallback(
-    () => onActivate(id),
+    (lineId?: LineId) => onActivate(lineId || id),
     [onActivate, id]
   );
 
@@ -125,6 +129,7 @@ function LineItem({
             <ActiveLineContext.Provider
               value={{
                 activate: handleActivate,
+                activateAfterReset: onActivateAfterReset,
                 isActive,
                 next: onNext,
                 previous: onPrevious,

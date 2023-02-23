@@ -1,11 +1,22 @@
-import * as React from 'react';
-import { useLineContents } from './contexts/line-contents';
-import { useActiveLine } from './contexts/active-line';
-
 import { LineBreak } from './components/line-break';
 import { LineSectionHeading } from './components/section-heading';
 import { FieldListItemText } from './components/field-list-item-text';
 import { FieldGender } from './components/field-gender';
+import { FieldDateOfBirth } from './components/field-date-of-birth';
+import {
+  FieldExperienceTitle,
+  FieldExperienceEmployer,
+  FieldEducationSchool,
+  FieldEducationMajor,
+} from './components/field-heading';
+import {
+  FieldExperienceDescription,
+  FieldEducationDescription,
+} from './components/field-paragraph';
+import {
+  LineAddExperience,
+  LineAddEducation,
+} from './components/line-add-item';
 
 import { type ResumeData } from 'src/app/data/resume';
 import { type LineContent } from './types';
@@ -62,18 +73,29 @@ function buildContents(
     {
       id: 'birthdate',
       activateable: true,
-      content:
-        '<LineListItemDateOfBirth>{resume.birthdate}</LineListItemDateOfBirth>',
+      content: <FieldDateOfBirth value={resume.birthdate} />,
     },
     {
       id: 'city',
       activateable: true,
-      content: <FieldText>Kota Domisili</FieldText>,
+      content: (
+        <FieldListItemText
+          field="city"
+          label="Kota domisili"
+          value={resume.city}
+        />
+      ),
     },
     {
       id: 'province',
       activateable: true,
-      content: <FieldText>Provinsi Domisili</FieldText>,
+      content: (
+        <FieldListItemText
+          field="province"
+          label="Provinsi domisili"
+          value={resume.province}
+        />
+      ),
     },
     { id: 'infos-general-list-trail' },
 
@@ -133,22 +155,39 @@ function buildContents(
         ...contents,
         {
           id: experience.id + '-experience-title',
-          content: <GroupMainField value="Titel Pekerjaan" />,
           activateable: true,
+          content: (
+            <FieldExperienceTitle
+              label="Titel Pekerjaan"
+              experienceId={experience.id}
+              value={experience.title}
+            />
+          ),
         },
         { id: experience.id + '-experience-title-trail' },
 
         {
           id: experience.id + '-experience-employer',
-          content: <FieldText>Nama Perusahaan</FieldText>,
           activateable: true,
+          content: (
+            <FieldExperienceEmployer
+              label="Nama Perusahaan"
+              experienceId={experience.id}
+              value={experience.employer}
+            />
+          ),
         },
         { id: experience.id + '-experience-employer-trail' },
 
         {
           id: experience.id + '-experience-description',
-          content: <FieldText>Deskripsikan pekerjaannya</FieldText>,
           activateable: true,
+          content: (
+            <FieldExperienceDescription
+              experienceId={experience.id}
+              value={experience.description}
+            />
+          ),
         },
         { id: experience.id + '-experience-description-trail' },
       ],
@@ -157,9 +196,14 @@ function buildContents(
 
     {
       id: createId + '-experience-title',
-      content: <GroupMainField value="Titel Pekerjaan" />,
       activateable: true,
       show: experienceIsOpen,
+      content: (
+        <FieldExperienceTitle
+          label="Titel Pekerjaan"
+          experienceId={createId || ''}
+        />
+      ),
     },
     {
       id: createId + '-experience-title-trail',
@@ -168,9 +212,14 @@ function buildContents(
 
     {
       id: createId + '-experience-employer',
-      content: <FieldText>Nama Perusahaan</FieldText>,
       activateable: true,
       show: experienceIsOpen,
+      content: (
+        <FieldExperienceEmployer
+          label="Nama Perusahaan"
+          experienceId={createId || ''}
+        />
+      ),
     },
     {
       id: createId + '-experience-employer-trail',
@@ -179,9 +228,9 @@ function buildContents(
 
     {
       id: createId + '-experience-description',
-      content: <FieldText>Deskripsikan pekerjaannya</FieldText>,
       activateable: true,
       show: experienceIsOpen,
+      content: <FieldExperienceDescription experienceId={createId || ''} />,
     },
     {
       id: createId + '-experience-description-trail',
@@ -190,9 +239,9 @@ function buildContents(
 
     {
       id: 'experience-add',
-      content: <LineAddExperience />,
       activateable: true,
       show: !experienceIsOpen,
+      content: <LineAddExperience />,
     },
     {
       id: 'experience-add-trail',
@@ -213,22 +262,39 @@ function buildContents(
         ...contents,
         {
           id: education.id + '-education-school',
-          content: <GroupMainField value="Universitas atau Sekolah" />,
           activateable: true,
+          content: (
+            <FieldEducationSchool
+              label="Universitas atau Sekolah"
+              educationId={education.id || ''}
+              value={education.school}
+            />
+          ),
         },
         { id: education.id + '-education-school-trail' },
 
         {
           id: education.id + '-education-major',
-          content: <FieldText>Jurusan</FieldText>,
           activateable: true,
+          content: (
+            <FieldEducationMajor
+              label="Jurusan"
+              educationId={education.id || ''}
+              value={education.major}
+            />
+          ),
         },
         { id: education.id + '-education-major-trail' },
 
         {
           id: education.id + '-education-description',
-          content: <FieldText>Deskripsi</FieldText>,
           activateable: true,
+          content: (
+            <FieldEducationDescription
+              educationId={education.id}
+              value={education.description}
+            />
+          ),
         },
         { id: education.id + '-education-description-trail' },
       ],
@@ -237,9 +303,14 @@ function buildContents(
 
     {
       id: createId + '-education-school',
-      content: <GroupMainField value="Universitas atau Sekolah" />,
       activateable: true,
       show: educationIsOpen,
+      content: (
+        <FieldEducationSchool
+          label="Universitas atau Sekolah"
+          educationId={createId || ''}
+        />
+      ),
     },
     {
       id: createId + '-education-school-trail',
@@ -248,9 +319,11 @@ function buildContents(
 
     {
       id: createId + '-education-major',
-      content: <FieldText>Jurusan</FieldText>,
       activateable: true,
       show: educationIsOpen,
+      content: (
+        <FieldEducationMajor label="Jurusan" educationId={createId || ''} />
+      ),
     },
     {
       id: createId + '-education-major-trail',
@@ -259,9 +332,9 @@ function buildContents(
 
     {
       id: createId + '-education-description',
-      content: <FieldText>Deskripsi</FieldText>,
       activateable: true,
       show: educationIsOpen,
+      content: <FieldEducationDescription educationId={createId || ''} />,
     },
     {
       id: createId + '-education-description-trail',
@@ -270,9 +343,9 @@ function buildContents(
 
     {
       id: 'education-add',
-      content: <LineAddEducation />,
       activateable: true,
       show: !educationIsOpen,
+      content: <LineAddEducation />,
     },
     {
       id: 'education-add-trail',
@@ -292,57 +365,6 @@ function buildContents(
   return contentsTemplate.filter(
     (content) => typeof content.show === 'undefined' || content.show
   );
-}
-
-function FieldText({
-  children = null,
-  value = '',
-}: React.PropsWithChildren<{
-  value?: string;
-}>) {
-  const { isActive, activate } = useActiveLine();
-  return (
-    <span onClick={activate}>
-      {value || children}
-      {isActive ? ' (buka)' : null}
-    </span>
-  );
-}
-
-function GroupMainField({ value = '' }: { value: string }) {
-  const { activate } = useActiveLine();
-  return <span onClick={activate}>{value}</span>;
-}
-
-function LineAddExperience() {
-  const { isActive } = useActiveLine();
-  const { openExperience } = useLineContents();
-
-  React.useEffect(() => {
-    isActive && openExperience();
-  }, [isActive, openExperience]);
-
-  return (
-    <button
-      onClick={(ev) => {
-        ev.stopPropagation();
-        openExperience();
-      }}
-    >
-      Isi pengalaman
-    </button>
-  );
-}
-
-function LineAddEducation() {
-  const { isActive } = useActiveLine();
-  const { openEducation } = useLineContents();
-
-  React.useEffect(() => {
-    isActive && openEducation();
-  }, [isActive, openEducation]);
-
-  return <button onClick={openEducation}>Isi pendidikan</button>;
 }
 
 export { buildContents };

@@ -29,12 +29,19 @@ function _getGenderOptions(value: string) {
 }
 
 function FieldGender({ value = '' }: { value?: string }) {
-  const { isActive } = useActiveLine();
+  const { updateTextField } = useResumeEditor();
+  const { isActive, next } = useActiveLine();
 
   if (isActive) {
     return (
       <ListItemLine muted>
-        <GenderPick value={value} />
+        <GenderPick
+          value={value}
+          onSave={(value: string) => {
+            updateTextField('gender', value || '');
+            next();
+          }}
+        />
       </ListItemLine>
     );
   }
@@ -52,17 +59,15 @@ function FieldGender({ value = '' }: { value?: string }) {
   );
 }
 
-function GenderPick({ value = '' }: { value?: string }) {
-  const { updateTextField } = useResumeEditor();
-  const { next } = useActiveLine();
+function GenderPick({
+  value = '',
+  onSave,
+}: {
+  value?: string;
+  onSave: (selectedValue: string) => void;
+}) {
   const [isCustomFieldOpen, setCustomFieldOpen] = React.useState(false);
-
   const optionIsSelected = (option: string) => option === value;
-
-  const handleSave = (value: string) => {
-    updateTextField('gender', value || '');
-    next();
-  };
 
   return (
     <span className={styles.fieldOpen}>
@@ -81,7 +86,7 @@ function GenderPick({ value = '' }: { value?: string }) {
               )}
               onClick={(ev) => {
                 ev.stopPropagation();
-                handleSave(option);
+                onSave(option);
               }}
             >
               {VALUE_LABEL[option]}
@@ -94,7 +99,7 @@ function GenderPick({ value = '' }: { value?: string }) {
         key={value || 'field-custom-gender'}
         defaultValue={[MALE, FEMALE].includes(value) ? '' : value}
         onOpen={() => setCustomFieldOpen(true)}
-        onSave={handleSave}
+        onSave={onSave}
       />
     </span>
   );

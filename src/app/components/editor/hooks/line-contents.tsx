@@ -13,6 +13,7 @@ export enum GroupTypes {
 
 export enum ActionTypes {
   LINE_ACTIVATED = 'LINE_ACTIVATED',
+  LINE_ACTIVATED_AFTER_RESET = 'LINE_ACTIVATED_AFTER_RESET',
   LINE_CONTENTS_RESET = 'LINE_CONTENTS_RESET',
   LINES_GROUP_OPEN = 'LINES_GROUP_OPEN',
   LINES_GROUP_RESET = 'LINES_GROUP_RESET',
@@ -21,6 +22,10 @@ export enum ActionTypes {
 export type Actions =
   | {
       type: ActionTypes.LINE_ACTIVATED;
+      payload: LineId;
+    }
+  | {
+      type: ActionTypes.LINE_ACTIVATED_AFTER_RESET;
       payload: LineId;
     }
   | {
@@ -66,6 +71,15 @@ function configReducer(state: typeof initialState, action: Actions) {
         };
       }
 
+      return {
+        ...state,
+        activeLine: action.payload,
+        activeGroup: null,
+        nextCreateId: v4(),
+      };
+    }
+
+    case ActionTypes.LINE_ACTIVATED_AFTER_RESET: {
       return {
         ...state,
         activeLine: action.payload,
@@ -122,6 +136,13 @@ function useEditorLineContents() {
       dispatch({ type: ActionTypes.LINE_ACTIVATED, payload: lineId });
     };
 
+    const activateAfterReset = (lineId: LineId) => {
+      dispatch({
+        type: ActionTypes.LINE_ACTIVATED_AFTER_RESET,
+        payload: lineId,
+      });
+    };
+
     const openExperience = () => {
       dispatch({
         type: ActionTypes.LINES_GROUP_OPEN,
@@ -147,6 +168,7 @@ function useEditorLineContents() {
     return {
       resetLineContents,
       activateLine,
+      activateAfterReset,
       openExperience,
       closeExperience,
       openEducation,
@@ -158,6 +180,7 @@ function useEditorLineContents() {
     const {
       resetLineContents,
       activateLine,
+      activateAfterReset,
       openExperience,
       closeExperience,
       openEducation,
@@ -203,6 +226,7 @@ function useEditorLineContents() {
       contents,
       resetLineContents,
       activateLine,
+      activateAfterReset,
       activateNext,
       activatePrevious,
       openExperience,

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useResumeEditor } from 'src/app/contexts/resume-editor';
 
-import { useLineItem } from '../contexts/line-item';
 import { useActiveLine } from '../contexts/active-line';
 import { ListItemLine } from './list-item-line';
 
@@ -19,15 +18,19 @@ function FieldListItemText({
   label: string;
   field: keyof ResumeData;
 }) {
-  const { isActive } = useLineItem();
+  const { updateTextField } = useResumeEditor();
+  const { isActive, next } = useActiveLine();
 
   if (isActive) {
     return (
       <ListItemLine muted>
         <PlainTextInput
-          field={field}
           initialValue={value}
           placeholder={label}
+          onSave={(inputValue) => {
+            updateTextField(field, inputValue.trim());
+            next();
+          }}
         />
       </ListItemLine>
     );
@@ -49,14 +52,12 @@ function FieldListItemText({
 function PlainTextInput({
   initialValue = '',
   placeholder,
-  field,
+  onSave,
 }: {
   initialValue?: string;
   placeholder?: string;
-  field: keyof ResumeData;
+  onSave: (inputValue: string) => void;
 }) {
-  const { updateTextField } = useResumeEditor();
-  const { next } = useActiveLine();
   const [inputValue, setInputValue] = React.useState<string>(initialValue);
   const $input = React.useRef<HTMLInputElement>(null);
 
@@ -64,17 +65,10 @@ function PlainTextInput({
     $input.current?.focus();
   }, []);
 
-  useHotkeys(
-    'enter, tab',
-    () => {
-      updateTextField(field, inputValue.trim());
-      next();
-    },
-    {
-      enableOnFormTags: true,
-      preventDefault: true,
-    }
-  );
+  useHotkeys('enter, tab', () => onSave(inputValue), {
+    enableOnFormTags: true,
+    preventDefault: true,
+  });
 
   return (
     <input
