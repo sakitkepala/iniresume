@@ -5,7 +5,7 @@ import { useEditableLinesManager } from '../contexts/editable-lines-manager';
 import { useTemporaryInsertLine } from '../contexts/temporary-insert-line';
 
 import { EditorLine, useLineDisclosure } from '../components/line';
-import { TriggerText } from '../fields/trigger-text';
+import { TriggerText } from './trigger-text';
 
 import { type TemporaryInsertLine } from '../contexts/temporary-insert-line';
 import { type LineComponentProps } from '../components/line-legacy';
