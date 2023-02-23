@@ -1,69 +1,18 @@
 import * as React from 'react';
-import { useResumeEditor } from '../contexts/resume-editor';
-import {
-  EditableLinesManagerProvider,
-  useEditableLinesManager,
-  useOnClickOutside,
-} from './line-editors';
 
-import * as ScrollArea from '@radix-ui/react-scroll-area';
-import { ListItemLineEditor } from './line-editors';
-import { PlainTextLineEditor } from './line-editors';
-import { GenderEditor } from './gender-editor';
-import { DateOfBirthEditor } from './date-of-birth-editor';
-import { PhoneNumberEditor } from './phone-number-editor';
+import { ListItemLineEditor } from '../components/line-editors';
+import { PlainTextLineEditor } from '../components/line-editors';
+import { GenderEditor } from '../components/gender-editor';
+// import { DateOfBirthEditor } from '../components/date-of-birth-editor';
+import { PhoneNumberEditor } from '../components/phone-number-editor';
 
 import { clsx } from 'clsx';
 import { parseISO, format } from 'date-fns';
 import id from 'date-fns/locale/id';
 
-import * as styles from './editor.css';
-
 import { type ResumeData } from '../data/resume';
 
-function Editor() {
-  const { resume } = useResumeEditor();
-  const codeLinesUI = React.useMemo(() => _buildCodeLinesUI(resume), [resume]);
-  return (
-    <EditorScrollable>
-      <EditableLinesManagerProvider>
-        <CodeLinesContainer>{codeLinesUI}</CodeLinesContainer>
-      </EditableLinesManagerProvider>
-    </EditorScrollable>
-  );
-}
-
-function CodeLinesContainer({ children }: React.PropsWithChildren) {
-  const { resetActiveLine } = useEditableLinesManager();
-  const $container = React.useRef<HTMLDivElement>(null);
-  useOnClickOutside($container, () => {
-    resetActiveLine?.();
-  });
-  return (
-    <div className={styles.codeLinesContainer}>
-      <div
-        ref={$container}
-        className={styles.codeLinesArea}
-        onClick={resetActiveLine}
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function EditorScrollable({ children = null }: React.PropsWithChildren) {
-  return (
-    <ScrollArea.Root className={styles.editorScrollableRoot}>
-      <ScrollArea.Viewport className={styles.editorScrollableViewport}>
-        {children}
-      </ScrollArea.Viewport>
-      <ScrollArea.Scrollbar orientation="vertical">
-        <ScrollArea.Thumb />
-      </ScrollArea.Scrollbar>
-    </ScrollArea.Root>
-  );
-}
+import * as styles from '../components/editor.css';
 
 export type CodeLineProps = { line?: number };
 
@@ -220,7 +169,7 @@ function _buildCodeLinesUI(resume?: ResumeData) {
       label={'...isi title'}
     />,
     <GenderEditor key={resume.gender || 'field-gender'} />,
-    <DateOfBirthEditor key={resume.birthdate || 'field-birthdate'} />,
+    // <DateOfBirthEditor key={resume.birthdate || 'field-birthdate'} />,
     <PlainTextLineEditor
       key={resume.city || 'field-city'}
       fieldName="city"
@@ -298,4 +247,4 @@ function _getMonthRangeText(from: string, to: string) {
   return `${_formatMonth(from)} - ${_formatMonth(to)}`;
 }
 
-export { Editor };
+export { _buildCodeLinesUI };
