@@ -35,12 +35,12 @@ function EditorLineList() {
     enableOnFormTags: true,
   });
 
-  useHotkeys('down', activateNext, {
+  useHotkeys('up', activatePrevious, {
     enableOnFormTags: true,
     preventDefault: true,
   });
 
-  useHotkeys('shift+tab, up', activatePrevious, {
+  useHotkeys('down', activateNext, {
     enableOnFormTags: true,
     preventDefault: true,
   });

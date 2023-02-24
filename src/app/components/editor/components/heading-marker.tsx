@@ -8,7 +8,7 @@ function HeadingMarker({
 }: React.PropsWithChildren<{ sub?: boolean }>) {
   return (
     <span className={clsx(styles.wrapper, styles.text)}>
-      <span>{sub ? '##' : '###'}</span>
+      <span>{!sub ? '##' : '###'}</span>
       <span>&nbsp;</span>
       {children}
     </span>

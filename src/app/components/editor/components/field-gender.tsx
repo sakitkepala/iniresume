@@ -41,6 +41,7 @@ function FieldGender({ value = '' }: { value?: string }) {
             updateTextField('gender', value || '');
             next();
           }}
+          onEnter={next}
         />
       </ListItemLine>
     );
@@ -62,12 +63,20 @@ function FieldGender({ value = '' }: { value?: string }) {
 function GenderPick({
   value = '',
   onSave,
+  onEnter,
 }: {
   value?: string;
   onSave: (selectedValue: string) => void;
+  onEnter: () => void;
 }) {
   const [isCustomFieldOpen, setCustomFieldOpen] = React.useState(false);
   const optionIsSelected = (option: string) => option === value;
+
+  useHotkeys('enter', onEnter, {
+    enabled: !isCustomFieldOpen,
+    enableOnFormTags: true,
+    preventDefault: true,
+  });
 
   return (
     <span className={styles.fieldOpen}>
@@ -79,7 +88,7 @@ function GenderPick({
                 styles.option,
                 optionIsSelected(option) ? styles.optionSelected : undefined,
                 index === 0
-                  ? value
+                  ? new Set([MALE, FEMALE]).has(value)
                     ? styles.fakeCaret
                     : styles.fakeCaretEmpty
                   : undefined
@@ -117,7 +126,7 @@ function CustomGenderInput({
   const $input = React.useRef<HTMLInputElement>(null);
   const [isOpen, setOpen] = React.useState(false);
 
-  useHotkeys('enter, tab', () => onSave($input.current?.value || ''), {
+  useHotkeys('enter', () => onSave($input.current?.value || ''), {
     enabled: isOpen,
     enableOnFormTags: true,
     preventDefault: true,

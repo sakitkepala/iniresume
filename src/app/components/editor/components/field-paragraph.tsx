@@ -92,7 +92,7 @@ function ParagraphTextInput({
   const $textarea = React.useRef<HTMLTextAreaElement>(null);
   const [inputValue, setInputValue] = React.useState<string>(initialValue);
 
-  useHotkeys('enter, tab', () => onSave(inputValue.trim()), {
+  useHotkeys('enter', () => onSave(inputValue.trim()), {
     enableOnFormTags: true,
     preventDefault: true,
   });

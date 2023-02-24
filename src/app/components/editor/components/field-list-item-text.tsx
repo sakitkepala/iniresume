@@ -65,7 +65,7 @@ function PlainTextInput({
     $input.current?.focus();
   }, []);
 
-  useHotkeys('enter, tab', () => onSave(inputValue), {
+  useHotkeys('enter', () => onSave(inputValue), {
     enableOnFormTags: true,
     preventDefault: true,
   });

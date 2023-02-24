@@ -1,8 +1,14 @@
 import { LineBreak } from './components/line-break';
+import { ListItemLine } from './components/list-item-line';
+import { FieldParagraph } from './components/field-paragraph';
 import { LineSectionHeading } from './components/section-heading';
 import { FieldListItemText } from './components/field-list-item-text';
 import { FieldGender } from './components/field-gender';
 import { FieldDateOfBirth } from './components/field-date-of-birth';
+import { FieldListItemPhone } from './components/field-list-item-phone';
+import { FieldWebsite } from './components/field-website';
+import { FieldProfileAccount } from './components/field-profile-account';
+import { FieldListItemAddProfile } from './components/field-list-item-add-profile';
 import {
   FieldExperienceTitle,
   FieldExperienceEmployer,
@@ -105,16 +111,19 @@ function buildContents(
     {
       id: 'email',
       activateable: true,
-      content: `<LineListItemText field="email" label="Email">
-          {resume.email}
-        </LineListItemText>`,
+      content: (
+        <FieldListItemText field="email" label="Email" value={resume.email} />
+      ),
     },
     {
       id: 'phone',
       activateable: true,
-      content: `<LineListItemPhone hasWA={resume.phone.wa}>
-          {resume.phone.number}
-        </LineListItemPhone>`,
+      content: (
+        <FieldListItemPhone
+          value={resume.phone.number}
+          hasWA={resume.phone.wa}
+        />
+      ),
     },
     { id: 'infos-contact-list-trail' },
 
@@ -124,20 +133,23 @@ function buildContents(
     {
       id: 'website',
       activateable: true,
-      content: `<LineListItemText field="website" label="Website personal">
-          {resume.website?.url || ''}
-        </LineListItemText>`,
+      content: <FieldWebsite />,
     },
+    ...resume.accounts.reduce<LineContent[]>(
+      (contents, account) => [
+        ...contents,
+        {
+          id: account.id,
+          activateable: true,
+          content: <FieldProfileAccount account={account} />,
+        },
+      ],
+      []
+    ),
     {
       id: 'profile-add',
       activateable: true,
-      content: (
-        <span>
-          <span>&nbsp;</span>
-          <span>&nbsp;</span>
-          {'<TriggerText>Tambah profil lainnya</TriggerText>'}
-        </span>
-      ),
+      content: <FieldListItemAddProfile />,
     },
     { id: 'infos-profile-list-trail' },
 
@@ -223,6 +235,22 @@ function buildContents(
     },
     {
       id: createId + '-experience-employer-trail',
+      show: experienceIsOpen,
+    },
+
+    {
+      id: createId + '-experience-range',
+      activateable: true,
+      show: experienceIsOpen,
+      content: (
+        <FieldParagraph
+          label="TODO: range waktu kerja"
+          onSave={() => console.log(createId + '-experience-range')}
+        />
+      ),
+    },
+    {
+      id: createId + '-experience-range-trail',
       show: experienceIsOpen,
     },
 
@@ -331,6 +359,22 @@ function buildContents(
     },
 
     {
+      id: createId + '-education-range',
+      activateable: true,
+      show: educationIsOpen,
+      content: (
+        <FieldParagraph
+          label="TODO: range waktu studi"
+          onSave={() => console.log(createId + '-education-range')}
+        />
+      ),
+    },
+    {
+      id: createId + '-education-range-trail',
+      show: educationIsOpen,
+    },
+
+    {
       id: createId + '-education-description',
       activateable: true,
       show: educationIsOpen,
@@ -360,6 +404,13 @@ function buildContents(
       content: <LineSectionHeading>Skill</LineSectionHeading>,
     },
     { id: 'section-skills-trail' },
+
+    {
+      id: 'skills-item-id',
+      activateable: true,
+      content: <ListItemLine>Item skill pak</ListItemLine>,
+    },
+    { id: 'skills-item-id-trail' },
   ];
 
   return contentsTemplate.filter(

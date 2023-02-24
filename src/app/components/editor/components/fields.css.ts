@@ -32,6 +32,7 @@ export const inputText = style({
   fontWeight: 'inherit',
 
   '::placeholder': {
+    opacity: 0.5,
     fontStyle: 'italic',
     color: '#79cc50',
     fontSize: 'inherit',

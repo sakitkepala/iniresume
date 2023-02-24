@@ -152,7 +152,7 @@ function HeadingTextInput({
   const $input = React.useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = React.useState<string>(initialValue);
 
-  useHotkeys('enter, tab', () => onSave(inputValue.trim()), {
+  useHotkeys('enter', () => onSave(inputValue.trim()), {
     enableOnFormTags: true,
     preventDefault: true,
   });

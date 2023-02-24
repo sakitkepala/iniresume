@@ -10,15 +10,17 @@ export type ResumeData = {
 
   email: string;
   phone: PhoneNumber;
-  website?: {
-    url: string;
-    text?: string;
-  };
+  website?: Website;
 
   accounts: Account[];
   experiences: Experience[];
   education: Education[];
   skills: string[];
+};
+
+export type Website = {
+  url: string;
+  text: string;
 };
 
 export type PhoneNumber = {
@@ -29,7 +31,6 @@ export type PhoneNumber = {
 export type Account = {
   id: string;
   account: string;
-  username: string;
   url: string;
   text?: string;
 };
@@ -89,15 +90,13 @@ export function getInitialData(): ResumeData {
       {
         id: v4(),
         account: 'github',
-        url: 'https://github.com/',
-        username: '',
+        url: '',
         text: '',
       },
       {
         id: v4(),
         account: 'linkedin',
-        url: 'https://linkedin.com/in/',
-        username: '',
+        url: '',
         text: '',
       },
     ],
@@ -129,23 +128,20 @@ export const exampleDataAndika: ResumeData = {
     {
       id: v4(),
       account: 'github',
-      username: 'sakitkepala',
       url: 'https://github.com/sakitkepala',
-      text: '',
-    },
-    {
-      id: v4(),
-      account: 'gitlab',
-      username: 'andikapriyotamad',
-      url: 'https://gitlab.com/andikapriyotamad',
-      text: '',
+      text: 'sakitkepala',
     },
     {
       id: v4(),
       account: 'linkedin',
-      username: 'andikapriyotama',
       url: 'https://linkedin.com/in/andikapriyotama',
-      text: '',
+      text: 'Andika Priyotama Dharminto',
+    },
+    {
+      id: v4(),
+      account: 'gitlab',
+      url: 'https://gitlab.com/andikapriyotamad',
+      text: 'andikapriyotamad',
     },
   ],
 

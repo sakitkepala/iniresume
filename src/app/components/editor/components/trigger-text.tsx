@@ -8,6 +8,7 @@ const TriggerText = React.forwardRef<
   return (
     <button
       ref={$buttonRef}
+      tabIndex={-1}
       className={styles.triggerText}
       onClick={(ev) => {
         ev.stopPropagation();
