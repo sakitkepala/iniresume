@@ -51,6 +51,7 @@ const AutogrowingInput = React.forwardRef<
       <span className={styles.autogrowingWrapper}>
         <input
           ref={$input}
+          multiple
           tabIndex={-1}
           size={initialSize}
           spellCheck={false}

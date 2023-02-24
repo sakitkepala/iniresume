@@ -25,6 +25,8 @@ function EditorLineList() {
     activatePrevious,
     openExperience,
     openEducation,
+    insertSkillOnTop,
+    insertSkillBelow,
   } = useEditorLineContents();
 
   const $containerDiv = React.useRef<HTMLDivElement>(null);
@@ -54,6 +56,8 @@ function EditorLineList() {
           nextCreateId,
           openExperience,
           openEducation,
+          insertSkillOnTop,
+          insertSkillBelow,
         }}
       >
         {contents.map((content, contentIndex) => (
@@ -65,6 +69,7 @@ function EditorLineList() {
             activateable={content.activateable}
             isActive={activeLine === content.id}
             onActivate={activateLine}
+            onReset={resetLineContents}
             onActivateAfterReset={activateAfterReset}
             onNext={activateNext}
             onPrevious={activatePrevious}
@@ -81,6 +86,7 @@ function LineItem({
   activateable,
   isActive,
   onActivate,
+  onReset,
   onActivateAfterReset,
   onNext,
   onPrevious,
@@ -91,6 +97,7 @@ function LineItem({
   activateable?: true;
   isActive: boolean;
   onActivate: (lineId: LineId) => void;
+  onReset: () => void;
   onActivateAfterReset: (lineId: LineId) => void;
   onNext: () => void;
   onPrevious: () => void;
@@ -129,6 +136,7 @@ function LineItem({
             <ActiveLineContext.Provider
               value={{
                 activate: handleActivate,
+                reset: onReset,
                 activateAfterReset: onActivateAfterReset,
                 isActive,
                 next: onNext,

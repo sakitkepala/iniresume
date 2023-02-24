@@ -1,5 +1,4 @@
 import { LineBreak } from './components/line-break';
-import { ListItemLine } from './components/list-item-line';
 import { FieldParagraph } from './components/field-paragraph';
 import { LineSectionHeading } from './components/section-heading';
 import { FieldListItemText } from './components/field-list-item-text';
@@ -23,6 +22,10 @@ import {
   LineAddExperience,
   LineAddEducation,
 } from './components/line-add-item';
+import {
+  FieldListItemAddSkill,
+  FieldListItemSkill,
+} from './components/field-list-item-skill';
 
 import { type ResumeData } from 'src/app/data/resume';
 import { type LineContent } from './types';
@@ -33,10 +36,14 @@ function buildContents(
     createId,
     experienceIsOpen,
     educationIsOpen,
+    skillInsertTop,
+    skillInsertBelow,
   }: {
     createId: string | null;
     experienceIsOpen: boolean;
     educationIsOpen: boolean;
+    skillInsertTop: boolean;
+    skillInsertBelow: string | null;
   }
 ): LineContent[] {
   const contentsTemplate: LineContent[] = [
@@ -406,11 +413,45 @@ function buildContents(
     { id: 'section-skills-trail' },
 
     {
-      id: 'skills-item-id',
+      id: 'skills-insert-top',
       activateable: true,
-      content: <ListItemLine>Item skill pak</ListItemLine>,
+      show: skillInsertTop,
+      content: <FieldListItemAddSkill asInsertTop />,
     },
-    { id: 'skills-item-id-trail' },
+    ...resume.skills.reduce<LineContent[]>((skillItems, skill, index) => {
+      const isLast = index === resume.skills.length - 1;
+      const skills: LineContent[] = [
+        ...skillItems,
+        {
+          id: 'skills-' + skill,
+          activateable: true,
+          content: (
+            <FieldListItemSkill
+              value={skill}
+              first={index === 0}
+              last={isLast}
+            />
+          ),
+        },
+      ];
+
+      !isLast &&
+        skillInsertBelow === skill &&
+        skills.push({
+          id: 'skills-insert-under-' + skill,
+          activateable: true,
+          content: <FieldListItemAddSkill asInsert insertBelow={skill} />,
+        });
+
+      return skills;
+    }, []),
+
+    {
+      id: 'skills-add',
+      activateable: true,
+      content: <FieldListItemAddSkill />,
+    },
+    { id: 'skills-add-trail' },
   ];
 
   return contentsTemplate.filter(

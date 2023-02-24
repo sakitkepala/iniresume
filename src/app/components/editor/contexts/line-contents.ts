@@ -7,6 +7,8 @@ const [LineContentsContext, useLineContents] = makeContext<{
   nextCreateId: string;
   openExperience: () => void;
   openEducation: () => void;
+  insertSkillOnTop: (shouldOpen?: boolean) => void;
+  insertSkillBelow: (insertBelow: string) => void;
 }>('`useLineContents` ini harus dipakai pada provider `LineContentsContext`.');
 
 export { LineContentsContext, useLineContents };

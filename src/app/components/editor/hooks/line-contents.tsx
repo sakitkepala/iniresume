@@ -17,6 +17,8 @@ export enum ActionTypes {
   LINE_CONTENTS_RESET = 'LINE_CONTENTS_RESET',
   LINES_GROUP_OPEN = 'LINES_GROUP_OPEN',
   LINES_GROUP_RESET = 'LINES_GROUP_RESET',
+  TOP_INSERT_SKILL_TOGGLE = 'TOP_INSERT_SKILL_TOGGLE',
+  INSERT_SKILL_BELOW_OPEN = 'INSERT_SKILL_BELOW_OPEN',
 }
 
 export type Actions =
@@ -38,19 +40,39 @@ export type Actions =
     }
   | {
       type: ActionTypes.LINES_GROUP_RESET;
+    }
+  | {
+      type: ActionTypes.TOP_INSERT_SKILL_TOGGLE;
+      payload?: boolean;
+    }
+  | {
+      type: ActionTypes.INSERT_SKILL_BELOW_OPEN;
+      payload: string;
     };
 
 const initialState: {
   activeLine: LineId | null;
   activeGroup: GroupTypes | null;
   nextCreateId: string;
+  insertSkillTop: boolean;
+  insertSkillBelow: string | null;
 } = {
   activeLine: null,
   activeGroup: null,
   nextCreateId: v4(),
+  insertSkillTop: false,
+  insertSkillBelow: null,
 };
 
-function configReducer(state: typeof initialState, action: Actions) {
+const initialInsertState = {
+  insertSkillTop: false,
+  insertSkillBelow: null,
+};
+
+function configReducer(
+  state: typeof initialState,
+  action: Actions
+): typeof initialState {
   switch (action.type) {
     case ActionTypes.LINE_ACTIVATED: {
       // hard coded nih
@@ -67,12 +89,14 @@ function configReducer(state: typeof initialState, action: Actions) {
       if (!state.activeGroup || lineBelongsToActiveGroup) {
         return {
           ...state,
+          ...initialInsertState,
           activeLine: action.payload,
         };
       }
 
       return {
         ...state,
+        ...initialInsertState,
         activeLine: action.payload,
         activeGroup: null,
         nextCreateId: v4(),
@@ -82,6 +106,7 @@ function configReducer(state: typeof initialState, action: Actions) {
     case ActionTypes.LINE_ACTIVATED_AFTER_RESET: {
       return {
         ...state,
+        ...initialInsertState,
         activeLine: action.payload,
         activeGroup: null,
         nextCreateId: v4(),
@@ -90,8 +115,7 @@ function configReducer(state: typeof initialState, action: Actions) {
 
     case ActionTypes.LINE_CONTENTS_RESET: {
       return {
-        activeLine: null,
-        activeGroup: null,
+        ...initialState,
         nextCreateId: v4(),
       };
     }
@@ -103,6 +127,7 @@ function configReducer(state: typeof initialState, action: Actions) {
       };
       return {
         ...state,
+        ...initialInsertState,
         activeGroup: action.group,
         activeLine: action.payload || activeLine[action.group],
       };
@@ -111,8 +136,35 @@ function configReducer(state: typeof initialState, action: Actions) {
     case ActionTypes.LINES_GROUP_RESET: {
       return {
         ...state,
+        ...initialInsertState,
         activeGroup: null,
         nextCreateId: v4(),
+      };
+    }
+
+    case ActionTypes.TOP_INSERT_SKILL_TOGGLE: {
+      if (typeof action.payload === 'undefined') {
+        return {
+          ...state,
+          insertSkillBelow: null,
+          insertSkillTop: !state.insertSkillTop,
+        };
+      }
+
+      return {
+        ...state,
+        insertSkillBelow: null,
+        insertSkillTop: action.payload,
+        activeLine: action.payload ? 'skills-insert-top' : null,
+      };
+    }
+
+    case ActionTypes.INSERT_SKILL_BELOW_OPEN: {
+      return {
+        ...state,
+        insertSkillTop: false,
+        insertSkillBelow: action.payload,
+        activeLine: 'skills-insert-under-' + action.payload,
       };
     }
 
@@ -125,7 +177,13 @@ function configReducer(state: typeof initialState, action: Actions) {
 function useEditorLineContents() {
   const { resume } = useResumeEditor();
   const [config, dispatch] = React.useReducer(configReducer, initialState);
-  const { activeLine, activeGroup, nextCreateId } = config;
+  const {
+    activeLine,
+    activeGroup,
+    nextCreateId,
+    insertSkillTop,
+    insertSkillBelow,
+  } = config;
 
   const independentDispatches = React.useMemo(() => {
     const resetLineContents = () => {
@@ -165,6 +223,20 @@ function useEditorLineContents() {
       dispatch({ type: ActionTypes.LINES_GROUP_RESET });
     };
 
+    const insertSkillOnTop = (shouldOpen?: boolean) => {
+      dispatch({
+        type: ActionTypes.TOP_INSERT_SKILL_TOGGLE,
+        payload: shouldOpen,
+      });
+    };
+
+    const insertSkillBelow = (insertBelow: string) => {
+      dispatch({
+        type: ActionTypes.INSERT_SKILL_BELOW_OPEN,
+        payload: insertBelow,
+      });
+    };
+
     return {
       resetLineContents,
       activateLine,
@@ -173,24 +245,20 @@ function useEditorLineContents() {
       closeExperience,
       openEducation,
       closeEducation,
+      insertSkillOnTop,
+      insertSkillBelow,
     };
   }, []);
 
   const editorLineContents = React.useMemo(() => {
-    const {
-      resetLineContents,
-      activateLine,
-      activateAfterReset,
-      openExperience,
-      closeExperience,
-      openEducation,
-      closeEducation,
-    } = independentDispatches;
+    const { resetLineContents, activateLine } = independentDispatches;
 
     const contents = buildContents(resume, {
       createId: nextCreateId,
       experienceIsOpen: activeGroup === GroupTypes.EXPERIENCE,
       educationIsOpen: activeGroup === GroupTypes.EDUCATION,
+      skillInsertTop: insertSkillTop,
+      skillInsertBelow: insertSkillBelow,
     });
 
     const activateableLines = contents
@@ -220,21 +288,23 @@ function useEditorLineContents() {
     };
 
     return {
+      ...independentDispatches,
       activeLine,
       activeGroup,
       nextCreateId,
       contents,
-      resetLineContents,
-      activateLine,
-      activateAfterReset,
       activateNext,
       activatePrevious,
-      openExperience,
-      closeExperience,
-      openEducation,
-      closeEducation,
     };
-  }, [resume, nextCreateId, activeGroup, activeLine, independentDispatches]);
+  }, [
+    independentDispatches,
+    resume,
+    nextCreateId,
+    activeGroup,
+    insertSkillTop,
+    insertSkillBelow,
+    activeLine,
+  ]);
 
   return editorLineContents;
 }

@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useResumeEditor } from 'src/app/contexts/resume-editor';
-
 import { useActiveLine } from '../contexts/active-line';
+
 import { ListItemLine } from './list-item-line';
+import { AutogrowingInput } from './autogrowing-input';
 
 import { type ResumeData } from 'src/app/data/resume';
 
@@ -65,21 +66,20 @@ function PlainTextInput({
     $input.current?.focus();
   }, []);
 
-  useHotkeys('enter', () => onSave(inputValue), {
+  useHotkeys('enter', () => onSave(inputValue.trim()), {
     enableOnFormTags: true,
     preventDefault: true,
   });
 
   return (
-    <input
+    <AutogrowingInput
       ref={$input}
-      type="text"
-      className={fieldStyles.inputText}
       placeholder={placeholder}
+      initialSize={!inputValue ? placeholder?.length : undefined}
       value={inputValue}
-      onChange={(ev) => setInputValue(ev.target.value)}
+      onChange={setInputValue}
     />
   );
 }
 
-export { FieldListItemText };
+export { FieldListItemText, PlainTextInput };

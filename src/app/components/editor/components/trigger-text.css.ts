@@ -12,6 +12,7 @@ export const triggerText = style({
   fontFamily: 'inherit',
   fontWeight: 'inherit',
   letterSpacing: -0.75,
+  whiteSpace: 'nowrap',
   ':hover': {
     textDecoration: 'underline',
     cursor: 'pointer',

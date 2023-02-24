@@ -4,6 +4,7 @@ import { type LineId } from '../types';
 const [ActiveLineContext, useActiveLine] = makeContext<{
   isActive: boolean;
   activate: (lineId?: LineId) => void;
+  reset: () => void;
   activateAfterReset: (lineId: LineId) => void;
   next: () => void; // ini kenapa perlu di register list id-nya...
   previous: () => void; // ...supaya bisa diurutkan & di-switch ke next/prev

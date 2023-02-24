@@ -25,6 +25,7 @@ type ResumeEditorContextValue = {
   addSkill: (value: string) => void;
   editSkill: (value: string, originalValue: string) => void;
   insertSkill: (insertAfterSkill: string, value: string) => void;
+  insertSkillTop: (skill: string) => void;
 };
 
 const [ResumeEditorContext, useResumeEditor] =
@@ -91,6 +92,10 @@ type ResumeEditorActionsType =
         insertAfterSkill: string;
         value: string;
       };
+    }
+  | {
+      type: 'INSERT_SKILL_TOP';
+      payload: string;
     };
 
 function reducer(state: ResumeData, action: ResumeEditorActionsType) {
@@ -318,6 +323,10 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
       };
     }
 
+    case 'INSERT_SKILL_TOP': {
+      return { ...state, skills: [action.payload, ...state.skills] };
+    }
+
     case 'EDIT_SKILL': {
       // Nge-hapus skill
       if (!action.payload.value && action.payload.original) {
@@ -332,7 +341,7 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
       // skip kalau udah ada
       if (
         !action.payload.value ||
-        state.skills.indexOf(action.payload.value) >= 0
+        new Set(state.skills).has(action.payload.value)
       ) {
         return state;
       }
@@ -403,6 +412,13 @@ function useEditor() {
             insertAfterSkill,
             value,
           },
+        });
+      },
+
+      insertSkillTop: (skill: string) => {
+        dispatch({
+          type: 'INSERT_SKILL_TOP',
+          payload: skill,
         });
       },
     }),
