@@ -102,7 +102,9 @@ function FieldProfileAccount({
   if (!value) {
     return (
       <ListItemLine muted>
-        <span className={fieldStyles.fieldEmptyLabel}>{accountLabel}</span>
+        <span className={fieldStyles.fieldEmptyLabel}>
+          {'//'} {accountLabel}
+        </span>
       </ListItemLine>
     );
   }

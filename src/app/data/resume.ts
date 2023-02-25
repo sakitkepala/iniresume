@@ -174,8 +174,8 @@ export const exampleDataAndika: ResumeData = {
       id: v4(),
       employer: 'PT Reka Cipta Digital',
       title: 'Frontend Developer',
-      from: '2021-10-01',
-      to: '2022-10-31',
+      from: '2021-10',
+      to: '2022-10',
       ongoing: false,
       description:
         'Bersama rekan tim My Archery membangun produk event-organizing olahraga Panahan.',
@@ -198,8 +198,8 @@ export const exampleDataAndika: ResumeData = {
       id: v4(),
       employer: 'PT Bumi Tekno Indonesia',
       title: 'Frontend Developer',
-      from: '2021-06-01',
-      to: '2021-08-31',
+      from: '2021-06',
+      to: '2021-08',
       ongoing: false,
       description:
         'Mengembangkan produk aplikasi sekolah yang bermodel on-premises.',
@@ -219,8 +219,8 @@ export const exampleDataAndika: ResumeData = {
       id: v4(),
       employer: 'PT Eka Reka Palakerti Indonesia',
       title: 'Odoo Software Developer',
-      from: '2019-07-01',
-      to: '2020-11-01',
+      from: '2019-07',
+      to: '2020-11',
       ongoing: false,
       description:
         'Bersama rekan tim mengembangkan kustomisasi sistem ERP' +

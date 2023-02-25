@@ -20,7 +20,7 @@ function FieldExperienceDescription({
   return (
     <FieldParagraph
       value={value}
-      label="Deskripsikan pekerjaannya"
+      label="// Deskripsikan pekerjaannya"
       onSave={(description) => {
         updateExperience(experienceId, 'description', description);
         next();
@@ -41,7 +41,7 @@ function FieldEducationDescription({
   return (
     <FieldParagraph
       value={value}
-      label="Isi deskripsi pendidikan bila perlu (bisa dikosongi)"
+      label="// Isi deskripsi pendidikan bila perlu (bisa dikosongi)"
       onSave={(description) => {
         updateEducation(educationId, 'description', description);
         next();

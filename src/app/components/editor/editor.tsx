@@ -6,7 +6,9 @@ function Editor() {
   return (
     <ScrollArea.Root className={styles.editorScrollableRoot}>
       <ScrollArea.Viewport className={styles.editorScrollableViewport}>
-        <EditorLineList />
+        <div className={styles.lineListContainer}>
+          <EditorLineList />
+        </div>
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar orientation="vertical">
         <ScrollArea.Thumb />

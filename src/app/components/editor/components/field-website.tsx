@@ -35,7 +35,9 @@ function FieldWebsite() {
   if (!value) {
     return (
       <ListItemLine muted>
-        <span className={fieldStyles.fieldEmptyLabel}>Website personal</span>
+        <span className={fieldStyles.fieldEmptyLabel}>
+          {'//'} Website personal
+        </span>
       </ListItemLine>
     );
   }

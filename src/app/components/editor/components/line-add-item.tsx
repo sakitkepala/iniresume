@@ -24,7 +24,7 @@ function LineAddExperience() {
       }}
     >
       <span className={fieldStyles.fieldEmptyLabel}>
-        {resume.experiences.length > 0 ? 'Tambah' : 'Isi'} pengalaman
+        {'//'} {resume.experiences.length > 0 ? 'Tambah' : 'Isi'} pengalaman
       </span>
     </div>
   );
@@ -48,7 +48,7 @@ function LineAddEducation() {
       }}
     >
       <span className={fieldStyles.fieldEmptyLabel}>
-        {resume.education.length > 0 ? 'Tambah' : 'Isi'} pendidikan
+        {'//'} {resume.education.length > 0 ? 'Tambah' : 'Isi'} pendidikan
       </span>
     </div>
   );

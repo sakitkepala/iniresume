@@ -13,6 +13,7 @@ export type AutogrowingInputProps = {
   value?: string;
   onChange?: (inputValue: string) => void;
   onFocus?: () => void;
+  inputClassName?: string;
 };
 
 export type AutogrowingInputHandle = {
@@ -32,6 +33,7 @@ const AutogrowingInput = React.forwardRef<
       value,
       onChange,
       onFocus,
+      inputClassName,
     },
     $ref
   ) => {
@@ -51,11 +53,10 @@ const AutogrowingInput = React.forwardRef<
       <span className={styles.autogrowingWrapper}>
         <input
           ref={$input}
-          multiple
           tabIndex={-1}
           size={initialSize}
           spellCheck={false}
-          className={clsx(fieldStyles.inputText, styles.input)}
+          className={clsx(fieldStyles.inputText, styles.input, inputClassName)}
           placeholder={placeholder}
           value={typeof value === 'undefined' ? inputValue : value}
           onChange={(ev) => {

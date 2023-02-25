@@ -41,7 +41,9 @@ function FieldListItemPhone({
   if (!value) {
     return (
       <ListItemLine muted>
-        <span className={fieldStyles.fieldEmptyLabel}>Nomor telepon</span>
+        <span className={fieldStyles.fieldEmptyLabel}>
+          {'//'} Nomor telepon
+        </span>
       </ListItemLine>
     );
   }

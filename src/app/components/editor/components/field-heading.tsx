@@ -51,7 +51,7 @@ function FieldExperienceEmployer({
       label={label}
       onSave={(inputValue) => {
         updateExperience(experienceId || '', 'employer', inputValue);
-        activateAfterReset(`${experienceId}-experience-description`);
+        activateAfterReset(`${experienceId}-experience-dates`);
       }}
     />
   );
@@ -98,7 +98,7 @@ function FieldEducationMajor({
       label={label}
       onSave={(inputValue) => {
         updateEducation(educationId || '', 'major', inputValue);
-        activateAfterReset(`${educationId}-education-description`);
+        activateAfterReset(`${educationId}-education-dates`);
       }}
     />
   );

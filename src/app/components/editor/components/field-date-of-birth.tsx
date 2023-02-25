@@ -35,7 +35,7 @@ function FieldDateOfBirth({ value: initialData = '' }: { value?: string }) {
             : fieldStyles.fieldEmptyLabel
         }
       >
-        {initialData || 'Tanggal lahir (dipakai hitung usia)'}
+        {initialData || '// Tanggal lahir (dipakai hitung usia)'}
       </span>
     </ListItemLine>
   );

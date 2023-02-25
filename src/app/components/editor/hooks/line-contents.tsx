@@ -79,9 +79,11 @@ function configReducer(
       const groupLineIds = new Set([
         state.nextCreateId + '-experience-title',
         state.nextCreateId + '-experience-employer',
+        state.nextCreateId + '-experience-dates',
         state.nextCreateId + '-experience-description',
         state.nextCreateId + '-education-school',
         state.nextCreateId + '-education-major',
+        state.nextCreateId + '-education-dates',
         state.nextCreateId + '-education-description',
       ]);
       const lineBelongsToActiveGroup = groupLineIds.has(action.payload);

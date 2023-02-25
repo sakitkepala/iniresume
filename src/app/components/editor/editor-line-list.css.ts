@@ -1,7 +1,6 @@
 import { style } from '@vanilla-extract/css';
 
 export const lineList = style({
-  width: 600,
   fontSize: 13,
   fontFamily: "'Fira Code', monospace",
   cursor: 'text',

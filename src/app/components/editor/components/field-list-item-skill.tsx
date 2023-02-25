@@ -55,7 +55,7 @@ function FieldListItemAddSkill({
   if (!resume.skills.length || asInsert) {
     return (
       <ListItemLine muted>
-        <span className={fieldStyles.fieldEmptyLabel}>Isi skill</span>
+        <span className={fieldStyles.fieldEmptyLabel}>{'//'} Isi skill</span>
       </ListItemLine>
     );
   }
@@ -100,7 +100,7 @@ function FieldListItemSkill({
   if (!resume.skills.length) {
     return (
       <ListItemLine muted>
-        <span className={fieldStyles.fieldEmptyLabel}>Isi skill</span>
+        <span className={fieldStyles.fieldEmptyLabel}>{'//'} Isi skill</span>
       </ListItemLine>
     );
   }

@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { useOnClickOutside } from '../../../hooks/click-outside';
-import { type ResumeData, useResumeEditor } from '../../../contexts/resume-editor';
+import {
+  type ResumeData,
+  useResumeEditor,
+} from '../../../contexts/resume-editor';
 import {
   EditableLinesManager,
   useEditableLinesManager,
@@ -33,7 +36,7 @@ import { type LineContent } from './types';
 
 import { v4 } from 'uuid';
 
-import * as styles from '../../../components/editor/editor.css';
+import * as styles from '../editor.css';
 
 function EditorLines() {
   return (

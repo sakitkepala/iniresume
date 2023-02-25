@@ -19,6 +19,10 @@ import {
   FieldEducationDescription,
 } from './components/field-paragraph';
 import {
+  FieldExperienceDates,
+  FieldEducationDates,
+} from './components/field-date-range';
+import {
   LineAddExperience,
   LineAddEducation,
 } from './components/line-add-item';
@@ -62,7 +66,7 @@ function buildContents(
       content: (
         <FieldListItemText
           field="fullName"
-          label="Nama lengkap"
+          label="// Nama lengkap"
           value={resume.fullName}
         />
       ),
@@ -73,7 +77,7 @@ function buildContents(
       content: (
         <FieldListItemText
           field="title"
-          label="Titel profesi"
+          label="// Titel profesi"
           value={resume.title}
         />
       ),
@@ -94,7 +98,7 @@ function buildContents(
       content: (
         <FieldListItemText
           field="city"
-          label="Kota domisili"
+          label="// Kota domisili"
           value={resume.city}
         />
       ),
@@ -105,7 +109,7 @@ function buildContents(
       content: (
         <FieldListItemText
           field="province"
-          label="Provinsi domisili"
+          label="// Provinsi domisili"
           value={resume.province}
         />
       ),
@@ -119,7 +123,11 @@ function buildContents(
       id: 'email',
       activateable: true,
       content: (
-        <FieldListItemText field="email" label="Email" value={resume.email} />
+        <FieldListItemText
+          field="email"
+          label="// Email"
+          value={resume.email}
+        />
       ),
     },
     {
@@ -134,7 +142,7 @@ function buildContents(
     },
     { id: 'infos-contact-list-trail' },
 
-    { id: 'infos-profile', content: <>Profil:</> },
+    { id: 'infos-profile', content: <>Profil online:</> },
     { id: 'infos-profile-trail' },
 
     {
@@ -199,6 +207,19 @@ function buildContents(
         { id: experience.id + '-experience-employer-trail' },
 
         {
+          id: experience.id + '-experience-dates',
+          activateable: true,
+          content: (
+            <FieldExperienceDates
+              experienceId={experience.id}
+              from={experience.from}
+              to={experience.to}
+            />
+          ),
+        },
+        { id: experience.id + '-experience-dates-trail' },
+
+        {
           id: experience.id + '-experience-description',
           activateable: true,
           content: (
@@ -246,18 +267,13 @@ function buildContents(
     },
 
     {
-      id: createId + '-experience-range',
+      id: createId + '-experience-dates',
       activateable: true,
       show: experienceIsOpen,
-      content: (
-        <FieldParagraph
-          label="TODO: range waktu kerja"
-          onSave={() => console.log(createId + '-experience-range')}
-        />
-      ),
+      content: <FieldExperienceDates experienceId={createId || ''} />,
     },
     {
-      id: createId + '-experience-range-trail',
+      id: createId + '-experience-dates-trail',
       show: experienceIsOpen,
     },
 
@@ -322,6 +338,19 @@ function buildContents(
         { id: education.id + '-education-major-trail' },
 
         {
+          id: education.id + '-education-dates',
+          activateable: true,
+          content: (
+            <FieldEducationDates
+              educationId={education.id}
+              from={education.from.toString()}
+              to={education.to?.toString() || ''}
+            />
+          ),
+        },
+        { id: education.id + '-education-dates-trail' },
+
+        {
           id: education.id + '-education-description',
           activateable: true,
           content: (
@@ -366,18 +395,13 @@ function buildContents(
     },
 
     {
-      id: createId + '-education-range',
+      id: createId + '-education-dates',
       activateable: true,
       show: educationIsOpen,
-      content: (
-        <FieldParagraph
-          label="TODO: range waktu studi"
-          onSave={() => console.log(createId + '-education-range')}
-        />
-      ),
+      content: <FieldEducationDates educationId={createId || ''} />,
     },
     {
-      id: createId + '-education-range-trail',
+      id: createId + '-education-dates-trail',
       show: educationIsOpen,
     },
 

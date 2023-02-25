@@ -21,7 +21,15 @@ type ResumeEditorContextValue = {
     field: keyof Experience,
     value: string
   ) => void;
+  updateExperienceDates: (
+    id: string,
+    dates: { from: string; to: string }
+  ) => void;
   updateEducation: (id: string, field: keyof Education, value: string) => void;
+  updateEducationDates: (
+    id: string,
+    range: { from: number | string; to: number | string }
+  ) => void;
   addSkill: (value: string) => void;
   editSkill: (value: string, originalValue: string) => void;
   insertSkill: (insertAfterSkill: string, value: string) => void;
@@ -70,10 +78,20 @@ type ResumeEditorActionsType =
       payload: string;
     }
   | {
+      type: 'UPDATE_EXPERIENCE_DATES';
+      id: string;
+      payload: { from: string; to: string };
+    }
+  | {
       type: 'UPDATE_EDUCATION';
       field: keyof Education;
       id: string;
       payload: string;
+    }
+  | {
+      type: 'UPDATE_EDUCATION_DATES';
+      id: string;
+      payload: { from: number | string; to: number | string };
     }
   | {
       type: 'ADD_SKILL';
@@ -173,7 +191,7 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
 
     case 'ADD_SKILL': {
       // skip kalau udah ada
-      if (state.skills.indexOf(action.payload) >= 0) {
+      if (!action.payload || new Set(state.skills).has(action.payload)) {
         return state;
       }
 
@@ -240,6 +258,67 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
       return { ...state, experiences: [...experiences.values()] };
     }
 
+    case 'UPDATE_EXPERIENCE_DATES': {
+      const experienceIds = new Set(state.experiences.map((xp) => xp.id));
+
+      // Harus disediakan ID & payload lengkap
+      if (!action.id || (!action.payload.from && !action.payload.to)) {
+        return state;
+      }
+
+      // Create data baru
+      if (!experienceIds.has(action.id)) {
+        const newXP: Experience = {
+          id: '',
+          title: '',
+          employer: '',
+          from: '',
+          to: '',
+          ongoing: false,
+          description: '',
+          projects: [],
+        };
+
+        if (!action.payload.from || !action.payload.to) {
+          return state;
+        }
+
+        return {
+          ...state,
+          experiences: [
+            ...state.experiences,
+            {
+              ...newXP,
+              id: action.id,
+              from: action.payload.from,
+              to: action.payload.to,
+            },
+          ],
+        };
+      }
+
+      const experiences = new Map(state.experiences.map((xp) => [xp.id, xp]));
+      const edit = experiences.get(action.id);
+
+      if (!edit) {
+        return state;
+      }
+
+      if (!action.payload.from || !action.payload.to) {
+        experiences.set(action.id, { ...edit, from: '', to: '' });
+        return { ...state, experiences: [...experiences.values()] };
+      }
+
+      // Edit data yang ada
+      experiences.set(action.id, {
+        ...edit,
+        from: action.payload.from,
+        to: action.payload.to,
+      });
+
+      return { ...state, experiences: [...experiences.values()] };
+    }
+
     case 'UPDATE_EDUCATION': {
       const educationIds = new Set(state.education.map((xp) => xp.id));
 
@@ -250,7 +329,7 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
 
       // Create data baru
       if (!educationIds.has(action.id)) {
-        const newXP: Education = {
+        const newEduItem: Education = {
           id: '',
           school: '',
           major: '',
@@ -270,7 +349,7 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
           ...state,
           education: [
             ...state.education,
-            { ...newXP, id: action.id, [action.field]: action.payload },
+            { ...newEduItem, id: action.id, [action.field]: action.payload },
           ],
         };
       }
@@ -292,6 +371,67 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
       education.set(action.id, {
         ...edit,
         [action.field]: action.payload,
+      });
+
+      return { ...state, education: [...education.values()] };
+    }
+
+    case 'UPDATE_EDUCATION_DATES': {
+      const educationIds = new Set(state.education.map((xp) => xp.id));
+
+      // Harus disediakan ID & payload lengkap
+      if (!action.id || (!action.payload.from && !action.payload.to)) {
+        return state;
+      }
+
+      // Create data baru
+      if (!educationIds.has(action.id)) {
+        const newEduItem: Education = {
+          id: '',
+          school: '',
+          major: '',
+          from: '',
+          to: '',
+          userange: true,
+          ongoing: false,
+          description: '',
+        };
+
+        if (!action.payload.from || !action.payload.to) {
+          return state;
+        }
+
+        return {
+          ...state,
+          education: [
+            ...state.education,
+            {
+              ...newEduItem,
+              id: action.id,
+              from: action.payload.from,
+              to: action.payload.to,
+            },
+          ],
+        };
+      }
+
+      const education = new Map(state.education.map((xp) => [xp.id, xp]));
+      const edit = education.get(action.id);
+
+      if (!edit) {
+        return state;
+      }
+
+      if (!action.payload.from || !action.payload.to) {
+        education.set(action.id, { ...edit, from: '', to: '' });
+        return { ...state, education: [...education.values()] };
+      }
+
+      // Edit data yang ada
+      education.set(action.id, {
+        ...edit,
+        from: action.payload.from,
+        to: action.payload.to,
       });
 
       return { ...state, education: [...education.values()] };
@@ -387,8 +527,24 @@ function useEditor() {
         dispatch({ type: 'UPDATE_EXPERIENCE', id, field, payload: value });
       },
 
+      updateExperienceDates: (id, dates) => {
+        dispatch({
+          type: 'UPDATE_EXPERIENCE_DATES',
+          id: id,
+          payload: dates,
+        });
+      },
+
       updateEducation: (id, field, value) => {
         dispatch({ type: 'UPDATE_EDUCATION', id, field, payload: value });
+      },
+
+      updateEducationDates: (id, range) => {
+        dispatch({
+          type: 'UPDATE_EDUCATION_DATES',
+          id: id,
+          payload: range,
+        });
       },
 
       addSkill: (value) => {
