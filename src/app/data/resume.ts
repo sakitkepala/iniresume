@@ -43,7 +43,7 @@ export type Experience = {
   to: string;
   ongoing: boolean;
   description: string;
-  projects?: Project[];
+  projects: Project[];
 };
 
 export type Project = {
