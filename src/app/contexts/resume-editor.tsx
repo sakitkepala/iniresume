@@ -7,6 +7,7 @@ import {
   type Account,
   type Website,
   type Experience,
+  type Project,
   type Education,
 } from '../data/resume';
 
@@ -24,6 +25,12 @@ type ResumeEditorContextValue = {
   updateExperienceDates: (
     id: string,
     dates: { from: string; to: string }
+  ) => void;
+  updateProject: (
+    experienceId: string,
+    projectId: string,
+    field: keyof Project,
+    value: string
   ) => void;
   updateEducation: (id: string, field: keyof Education, value: string) => void;
   updateEducationDates: (
@@ -81,6 +88,13 @@ type ResumeEditorActionsType =
       type: 'UPDATE_EXPERIENCE_DATES';
       id: string;
       payload: { from: string; to: string };
+    }
+  | {
+      type: 'UPDATE_PROJECT_ITEM';
+      experienceId: string;
+      projectId: string;
+      field: keyof Project;
+      payload: string;
     }
   | {
       type: 'UPDATE_EDUCATION';
@@ -319,6 +333,63 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
       return { ...state, experiences: [...experiences.values()] };
     }
 
+    case 'UPDATE_PROJECT_ITEM': {
+      if (!action.experienceId || !action.projectId) {
+        return state;
+      }
+
+      const experiences = new Map(
+        state.experiences.map((exp) => [exp.id, exp])
+      );
+      const targetExp = experiences.get(action.experienceId);
+
+      if (!targetExp) {
+        return state;
+      }
+
+      const projects = new Map(
+        targetExp.projects.map((project) => [project.id, project])
+      );
+      const targetProject = projects.get(action.projectId);
+
+      if (!targetProject && !action.payload) {
+        return state;
+      }
+
+      if (!targetProject) {
+        const newProject: Project = {
+          id: action.projectId,
+          name: '',
+          description: '',
+          [action.field]: action.payload,
+        };
+
+        experiences.set(action.experienceId, {
+          ...targetExp,
+          projects: [...projects.values(), newProject],
+        });
+
+        return {
+          ...state,
+          experiences: [...experiences.values()],
+        };
+      }
+
+      projects.set(action.projectId, {
+        ...targetProject,
+        [action.field]: action.payload,
+      });
+      experiences.set(action.experienceId, {
+        ...targetExp,
+        projects: [...projects.values()],
+      });
+
+      return {
+        ...state,
+        experiences: [...experiences.values()],
+      };
+    }
+
     case 'UPDATE_EDUCATION': {
       const educationIds = new Set(state.education.map((xp) => xp.id));
 
@@ -532,6 +603,16 @@ function useEditor() {
           type: 'UPDATE_EXPERIENCE_DATES',
           id: id,
           payload: dates,
+        });
+      },
+
+      updateProject: (experienceId, projectId, field, value) => {
+        dispatch({
+          type: 'UPDATE_PROJECT_ITEM',
+          experienceId,
+          projectId,
+          field,
+          payload: value,
         });
       },
 

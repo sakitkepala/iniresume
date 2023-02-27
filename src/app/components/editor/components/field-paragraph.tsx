@@ -41,7 +41,7 @@ function FieldEducationDescription({
   return (
     <FieldParagraph
       value={value}
-      label="// Isi deskripsi pendidikan bila perlu (bisa dikosongi)"
+      label="// Tuliskan deskripsi studi bila perlu *bisa dikosongi"
       onSave={(description) => {
         updateEducation(educationId, 'description', description);
         next();

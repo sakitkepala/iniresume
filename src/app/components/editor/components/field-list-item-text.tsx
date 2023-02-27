@@ -50,15 +50,16 @@ function FieldListItemText({
   );
 }
 
-function PlainTextInput({
-  initialValue = '',
-  placeholder,
-  onSave,
-}: {
+export type PlainTextInputProps = {
   initialValue?: string;
   placeholder?: string;
   onSave: (inputValue: string) => void;
-}) {
+};
+
+const PlainTextInput = React.forwardRef<
+  { focus: () => void },
+  PlainTextInputProps
+>(({ initialValue = '', placeholder, onSave }, $ref) => {
   const [inputValue, setInputValue] = React.useState<string>(initialValue);
   const $input = React.useRef<HTMLInputElement>(null);
 
@@ -71,6 +72,10 @@ function PlainTextInput({
     preventDefault: true,
   });
 
+  React.useImperativeHandle($ref, () => ({
+    focus: () => $input.current?.focus(),
+  }));
+
   return (
     <AutogrowingInput
       ref={$input}
@@ -80,6 +85,6 @@ function PlainTextInput({
       onChange={setInputValue}
     />
   );
-}
+});
 
 export { FieldListItemText, PlainTextInput };

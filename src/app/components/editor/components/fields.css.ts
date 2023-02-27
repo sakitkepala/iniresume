@@ -4,6 +4,10 @@ export const staticDisplay = style({
   color: '#79cc50',
 });
 
+export const linkTextLabel = style({
+  textDecoration: 'underline',
+});
+
 export const fieldEmptyLabel = style({
   color: '#79cc50',
   fontStyle: 'italic',

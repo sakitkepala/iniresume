@@ -1,15 +1,11 @@
 import * as React from 'react';
 import { useResumeEditor } from 'src/app/contexts/resume-editor';
-import { buildContents } from '../build-contents';
+import { buildContents, GroupTypeNames } from '../build-contents';
 
 import { type LineId } from '../types';
+import { type BuildConfigState, type OpenGroup } from '../build-contents';
 
 import { v4 } from 'uuid';
-
-export enum GroupTypes {
-  EXPERIENCE = 'EXPERIENCE',
-  EDUCATION = 'EDUCATION',
-}
 
 export enum ActionTypes {
   LINE_ACTIVATED = 'LINE_ACTIVATED',
@@ -17,8 +13,9 @@ export enum ActionTypes {
   LINE_CONTENTS_RESET = 'LINE_CONTENTS_RESET',
   LINES_GROUP_OPEN = 'LINES_GROUP_OPEN',
   LINES_GROUP_RESET = 'LINES_GROUP_RESET',
-  TOP_INSERT_SKILL_TOGGLE = 'TOP_INSERT_SKILL_TOGGLE',
+  INSERT_SKILL_TOP_TOGGLE = 'INSERT_SKILL_TOP_TOGGLE',
   INSERT_SKILL_BELOW_OPEN = 'INSERT_SKILL_BELOW_OPEN',
+  HOTKEY_PREVENTED = 'HOTKEY_PREVENTED',
 }
 
 export type Actions =
@@ -35,33 +32,31 @@ export type Actions =
     }
   | {
       type: ActionTypes.LINES_GROUP_OPEN;
-      group: GroupTypes;
+      group: OpenGroup;
       payload?: LineId;
     }
   | {
       type: ActionTypes.LINES_GROUP_RESET;
     }
   | {
-      type: ActionTypes.TOP_INSERT_SKILL_TOGGLE;
+      type: ActionTypes.INSERT_SKILL_TOP_TOGGLE;
       payload?: boolean;
     }
   | {
       type: ActionTypes.INSERT_SKILL_BELOW_OPEN;
       payload: string;
+    }
+  | {
+      type: ActionTypes.HOTKEY_PREVENTED;
     };
 
-const initialState: {
-  activeLine: LineId | null;
-  activeGroup: GroupTypes | null;
-  nextCreateId: string;
-  insertSkillTop: boolean;
-  insertSkillBelow: string | null;
-} = {
+const initialState: BuildConfigState = {
   activeLine: null,
   activeGroup: null,
   nextCreateId: v4(),
   insertSkillTop: false,
   insertSkillBelow: null,
+  hotkeyPrevented: false,
 };
 
 const initialInsertState = {
@@ -69,131 +64,165 @@ const initialInsertState = {
   insertSkillBelow: null,
 };
 
-function configReducer(
-  state: typeof initialState,
-  action: Actions
-): typeof initialState {
-  switch (action.type) {
-    case ActionTypes.LINE_ACTIVATED: {
-      // hard coded nih
-      const groupLineIds = new Set([
-        state.nextCreateId + '-experience-title',
-        state.nextCreateId + '-experience-employer',
-        state.nextCreateId + '-experience-dates',
-        state.nextCreateId + '-experience-description',
-        state.nextCreateId + '-education-school',
-        state.nextCreateId + '-education-major',
-        state.nextCreateId + '-education-dates',
-        state.nextCreateId + '-education-description',
-      ]);
-      const lineBelongsToActiveGroup = groupLineIds.has(action.payload);
-
-      if (!state.activeGroup || lineBelongsToActiveGroup) {
-        return {
-          ...state,
-          ...initialInsertState,
-          activeLine: action.payload,
-        };
-      }
-
-      return {
-        ...state,
-        ...initialInsertState,
-        activeLine: action.payload,
-        activeGroup: null,
-        nextCreateId: v4(),
-      };
-    }
-
-    case ActionTypes.LINE_ACTIVATED_AFTER_RESET: {
-      return {
-        ...state,
-        ...initialInsertState,
-        activeLine: action.payload,
-        activeGroup: null,
-        nextCreateId: v4(),
-      };
-    }
-
-    case ActionTypes.LINE_CONTENTS_RESET: {
-      return {
-        ...initialState,
-        nextCreateId: v4(),
-      };
-    }
-
-    case ActionTypes.LINES_GROUP_OPEN: {
-      const activeLine = {
-        [GroupTypes.EXPERIENCE]: state.nextCreateId + '-experience-title',
-        [GroupTypes.EDUCATION]: state.nextCreateId + '-education-school',
-      };
-      return {
-        ...state,
-        ...initialInsertState,
-        activeGroup: action.group,
-        activeLine: action.payload || activeLine[action.group],
-      };
-    }
-
-    case ActionTypes.LINES_GROUP_RESET: {
-      return {
-        ...state,
-        ...initialInsertState,
-        activeGroup: null,
-        nextCreateId: v4(),
-      };
-    }
-
-    case ActionTypes.TOP_INSERT_SKILL_TOGGLE: {
-      if (typeof action.payload === 'undefined') {
-        return {
-          ...state,
-          insertSkillBelow: null,
-          insertSkillTop: !state.insertSkillTop,
-        };
-      }
-
-      return {
-        ...state,
-        insertSkillBelow: null,
-        insertSkillTop: action.payload,
-        activeLine: action.payload ? 'skills-insert-top' : null,
-      };
-    }
-
-    case ActionTypes.INSERT_SKILL_BELOW_OPEN: {
-      return {
-        ...state,
-        insertSkillTop: false,
-        insertSkillBelow: action.payload,
-        activeLine: 'skills-insert-under-' + action.payload,
-      };
-    }
-
-    default: {
-      return state;
-    }
-  }
-}
-
 function useEditorLineContents() {
   const { resume } = useResumeEditor();
-  const [config, dispatch] = React.useReducer(configReducer, initialState);
+  const lastActiveLine = React.useRef<string | null>(null);
+
+  const [config, dispatch] = React.useReducer(
+    (state: BuildConfigState, action: Actions): BuildConfigState => {
+      switch (action.type) {
+        case ActionTypes.HOTKEY_PREVENTED: {
+          return { ...state, hotkeyPrevented: true };
+        }
+
+        case ActionTypes.LINE_ACTIVATED: {
+          // hard coded nih
+          const groupLineIds = new Set([
+            state.nextCreateId + '-experience-title',
+            state.nextCreateId + '-experience-employer',
+            state.nextCreateId + '-experience-dates',
+            state.nextCreateId + '-experience-description',
+            state.nextCreateId + '-project-item-headline',
+            state.nextCreateId + '-project-item-description',
+            state.nextCreateId + '-project-item-url',
+            state.nextCreateId + '-education-school',
+            state.nextCreateId + '-education-major',
+            state.nextCreateId + '-education-dates',
+            state.nextCreateId + '-education-description',
+          ]);
+
+          const activeLine = action.payload;
+          lastActiveLine.current = activeLine;
+
+          const lineBelongsToActiveGroup = groupLineIds.has(action.payload);
+
+          if (!state.activeGroup || lineBelongsToActiveGroup) {
+            return {
+              ...state,
+              ...initialInsertState,
+              activeLine,
+              hotkeyPrevented: false,
+            };
+          }
+
+          return {
+            ...state,
+            ...initialInsertState,
+            activeLine,
+            activeGroup: null,
+            nextCreateId: v4(),
+            hotkeyPrevented: false,
+          };
+        }
+
+        case ActionTypes.LINE_ACTIVATED_AFTER_RESET: {
+          const activeLine = action.payload;
+          lastActiveLine.current = activeLine;
+
+          return {
+            ...state,
+            ...initialInsertState,
+            activeLine,
+            activeGroup: null,
+            nextCreateId: v4(),
+            hotkeyPrevented: false,
+          };
+        }
+
+        case ActionTypes.LINE_CONTENTS_RESET: {
+          return {
+            ...initialState,
+            nextCreateId: v4(),
+          };
+        }
+
+        case ActionTypes.LINES_GROUP_OPEN: {
+          // Line yang langsung aktif ketika group di-open
+          const autoActiveLine = {
+            [GroupTypeNames.EXPERIENCE]:
+              state.nextCreateId + '-experience-title',
+            [GroupTypeNames.EDUCATION]:
+              state.nextCreateId + '-education-school',
+            [GroupTypeNames.PROJECT]:
+              state.nextCreateId + '-project-item-headline',
+          };
+
+          const activeLine =
+            action.payload || autoActiveLine[action.group.type];
+          lastActiveLine.current = activeLine;
+
+          return {
+            ...state,
+            ...initialInsertState,
+            activeGroup: action.group,
+            activeLine,
+            hotkeyPrevented: false,
+          };
+        }
+
+        case ActionTypes.LINES_GROUP_RESET: {
+          return {
+            ...state,
+            ...initialInsertState,
+            activeGroup: null,
+            nextCreateId: v4(),
+            hotkeyPrevented: false,
+          };
+        }
+
+        case ActionTypes.INSERT_SKILL_TOP_TOGGLE: {
+          if (typeof action.payload === 'undefined') {
+            return {
+              ...state,
+              insertSkillBelow: null,
+              insertSkillTop: !state.insertSkillTop,
+              hotkeyPrevented: false,
+            };
+          }
+
+          return {
+            ...state,
+            insertSkillBelow: null,
+            insertSkillTop: action.payload,
+            activeLine: action.payload ? 'skills-insert-top' : null,
+            hotkeyPrevented: false,
+          };
+        }
+
+        case ActionTypes.INSERT_SKILL_BELOW_OPEN: {
+          return {
+            ...state,
+            insertSkillTop: false,
+            insertSkillBelow: action.payload,
+            activeLine: 'skills-insert-under-' + action.payload,
+            hotkeyPrevented: false,
+          };
+        }
+
+        default: {
+          return state;
+        }
+      }
+    },
+    initialState
+  );
+
   const {
     activeLine,
     activeGroup,
     nextCreateId,
+    hotkeyPrevented,
     insertSkillTop,
     insertSkillBelow,
   } = config;
 
-  const independentDispatches = React.useMemo(() => {
-    const resetLineContents = () => {
-      dispatch({ type: ActionTypes.LINE_CONTENTS_RESET });
-    };
-
+  const dispatches = React.useMemo(() => {
     const activateLine = (lineId: LineId) => {
       dispatch({ type: ActionTypes.LINE_ACTIVATED, payload: lineId });
+    };
+
+    const resetLineContents = () => {
+      dispatch({ type: ActionTypes.LINE_CONTENTS_RESET });
     };
 
     const activateAfterReset = (lineId: LineId) => {
@@ -206,7 +235,14 @@ function useEditorLineContents() {
     const openExperience = () => {
       dispatch({
         type: ActionTypes.LINES_GROUP_OPEN,
-        group: GroupTypes.EXPERIENCE,
+        group: { type: GroupTypeNames.EXPERIENCE },
+      });
+    };
+
+    const openProject = (experienceId: string) => {
+      dispatch({
+        type: ActionTypes.LINES_GROUP_OPEN,
+        group: { type: GroupTypeNames.PROJECT, id: experienceId },
       });
     };
 
@@ -217,7 +253,7 @@ function useEditorLineContents() {
     const openEducation = () => {
       dispatch({
         type: ActionTypes.LINES_GROUP_OPEN,
-        group: GroupTypes.EDUCATION,
+        group: { type: GroupTypeNames.EDUCATION },
       });
     };
 
@@ -227,7 +263,7 @@ function useEditorLineContents() {
 
     const insertSkillOnTop = (shouldOpen?: boolean) => {
       dispatch({
-        type: ActionTypes.TOP_INSERT_SKILL_TOGGLE,
+        type: ActionTypes.INSERT_SKILL_TOP_TOGGLE,
         payload: shouldOpen,
       });
     };
@@ -239,29 +275,37 @@ function useEditorLineContents() {
       });
     };
 
+    const preventHotkey = () => {
+      dispatch({ type: ActionTypes.HOTKEY_PREVENTED });
+    };
+
     return {
-      resetLineContents,
       activateLine,
+      resetLineContents,
       activateAfterReset,
       openExperience,
+      openProject,
       closeExperience,
       openEducation,
       closeEducation,
       insertSkillOnTop,
       insertSkillBelow,
+      preventHotkey,
     };
   }, []);
 
   const editorLineContents = React.useMemo(() => {
-    const { resetLineContents, activateLine } = independentDispatches;
+    const { activateLine } = dispatches;
+    const config: BuildConfigState = {
+      activeLine,
+      activeGroup,
+      nextCreateId,
+      hotkeyPrevented,
+      insertSkillTop,
+      insertSkillBelow,
+    };
 
-    const contents = buildContents(resume, {
-      createId: nextCreateId,
-      experienceIsOpen: activeGroup === GroupTypes.EXPERIENCE,
-      educationIsOpen: activeGroup === GroupTypes.EDUCATION,
-      skillInsertTop: insertSkillTop,
-      skillInsertBelow: insertSkillBelow,
-    });
+    const contents = buildContents(resume, config);
 
     const activateableLines = contents
       .filter((content) => content.activateable)
@@ -269,43 +313,51 @@ function useEditorLineContents() {
 
     const activateNext = () => {
       if (!activeLine) {
-        activateLine(activateableLines[0]);
+        activateLine(lastActiveLine.current || activateableLines[0]);
         return;
       }
+
       const index = activateableLines.indexOf(activeLine);
       const nextIndex = index + 1;
       const nextLineId = activateableLines[nextIndex];
-      nextLineId ? activateLine(nextLineId) : resetLineContents();
+      nextLineId && activateLine(nextLineId);
     };
 
     const activatePrevious = () => {
       if (!activeLine) {
-        activateLine(activateableLines[activateableLines.length - 1]);
+        const previousLine =
+          lastActiveLine.current ||
+          activateableLines[activateableLines.length - 1];
+        activateLine(previousLine);
         return;
       }
+
       const index = activateableLines.indexOf(activeLine);
       const prevIndex = index - 1;
       const prevLineId = activateableLines[prevIndex];
-      prevLineId ? activateLine(prevLineId) : resetLineContents();
+      prevLineId && activateLine(prevLineId);
     };
 
     return {
-      ...independentDispatches,
+      ...dispatches,
+      contents,
       activeLine,
       activeGroup,
       nextCreateId,
-      contents,
+      hotkeyPrevented,
+      activateLine,
       activateNext,
       activatePrevious,
     };
   }, [
-    independentDispatches,
     resume,
-    nextCreateId,
+    dispatches,
+    activeLine,
     activeGroup,
+    nextCreateId,
+    hotkeyPrevented,
     insertSkillTop,
     insertSkillBelow,
-    activeLine,
   ]);
 
   return editorLineContents;

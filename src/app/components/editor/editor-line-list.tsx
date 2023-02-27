@@ -24,13 +24,18 @@ function EditorLineList() {
     activateNext,
     activatePrevious,
     openExperience,
+    openProject,
     openEducation,
     insertSkillOnTop,
     insertSkillBelow,
+    hotkeyPrevented,
+    preventHotkey,
   } = useEditorLineContents();
 
   const $containerDiv = React.useRef<HTMLDivElement>(null);
-  useOnClickOutside($containerDiv, resetLineContents);
+  useOnClickOutside($containerDiv, () => {
+    activeLine && resetLineContents();
+  });
 
   useHotkeys('esc', resetLineContents, {
     enabled: Boolean(activeLine),
@@ -38,11 +43,13 @@ function EditorLineList() {
   });
 
   useHotkeys('up', activatePrevious, {
+    enabled: !hotkeyPrevented,
     enableOnFormTags: true,
     preventDefault: true,
   });
 
   useHotkeys('down', activateNext, {
+    enabled: !hotkeyPrevented,
     enableOnFormTags: true,
     preventDefault: true,
   });
@@ -52,12 +59,14 @@ function EditorLineList() {
       <LineContentsContext.Provider
         value={{
           activeLine,
-          activeGroup,
+          activeGroup: activeGroup?.type || null,
           nextCreateId,
           openExperience,
+          openProject,
           openEducation,
           insertSkillOnTop,
           insertSkillBelow,
+          preventHotkey,
         }}
       >
         {contents.map((content, contentIndex) => (

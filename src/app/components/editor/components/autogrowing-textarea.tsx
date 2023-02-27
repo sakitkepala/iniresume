@@ -1,62 +1,54 @@
 import * as React from 'react';
-
 import { clsx } from 'clsx';
+import * as styles from './autogrowing-textarea.css';
 
-import * as fieldStyles from './fields.css';
-import * as styles from './autogrowing-input.css';
-
-export type AutogrowingInputProps = {
+export type AutogrowingTextareaProps = {
   autofocus?: boolean;
-  initialSize?: number;
   initialValue?: string;
   placeholder?: string;
   value?: string;
   onChange?: (inputValue: string) => void;
   onFocus?: () => void;
-  inputClassName?: string;
+  textareaClassName?: string;
 };
 
-export type AutogrowingInputHandle = {
+export type AutogrowingTextareaHandle = {
   focus: () => void;
 };
 
-const AutogrowingInput = React.forwardRef<
-  AutogrowingInputHandle,
-  AutogrowingInputProps
+const AutogrowingTextarea = React.forwardRef<
+  AutogrowingTextareaHandle,
+  AutogrowingTextareaProps
 >(
   (
     {
       autofocus = false,
-      initialSize = 1,
       initialValue = '',
       placeholder,
       value,
       onChange,
       onFocus,
-      inputClassName,
+      textareaClassName,
     },
     $ref
   ) => {
-    const $input = React.useRef<HTMLInputElement>(null);
-    // support "uncontrolled" dari parent
+    const $textarea = React.useRef<HTMLTextAreaElement>(null);
     const [inputValue, setInputValue] = React.useState<string>(initialValue);
 
     React.useImperativeHandle($ref, () => ({
-      focus: () => $input.current?.focus(),
+      focus: () => $textarea.current?.focus(),
     }));
 
     React.useEffect(() => {
-      autofocus && $input.current?.focus();
+      autofocus && $textarea.current?.focus();
     }, []);
 
     return (
       <span className={styles.autogrowingWrapper}>
-        <input
-          ref={$input}
-          tabIndex={-1}
-          size={initialSize}
-          spellCheck={false}
-          className={clsx(fieldStyles.inputText, styles.input, inputClassName)}
+        <textarea
+          ref={$textarea}
+          rows={1}
+          className={clsx(styles.textarea, textareaClassName)}
           placeholder={placeholder}
           value={typeof value === 'undefined' ? inputValue : value}
           onChange={(ev) => {
@@ -65,13 +57,7 @@ const AutogrowingInput = React.forwardRef<
           }}
           onFocus={onFocus}
         />
-        <span
-          className={clsx(
-            fieldStyles.inputText,
-            styles.input,
-            styles.autogrowingBase
-          )}
-        >
+        <span className={clsx(styles.textarea, styles.autogrowingBase)}>
           {typeof value === 'undefined' ? inputValue : value}
         </span>
       </span>
@@ -79,4 +65,4 @@ const AutogrowingInput = React.forwardRef<
   }
 );
 
-export { AutogrowingInput };
+export { AutogrowingTextarea };
