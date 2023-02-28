@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { makeContext } from './makeContext';
-import { getInitialData } from '../data/resume';
+import { getInitialData, saveData, clearSaveData } from '../data/resume';
+
 import {
   type ResumeData,
   type PhoneNumber,
@@ -10,6 +11,8 @@ import {
   type Project,
   type Education,
 } from '../data/resume';
+
+import zod from 'zod';
 
 type ResumeEditorContextValue = {
   resume: ResumeData;
@@ -574,6 +577,15 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
 function useEditor() {
   const [resume, dispatch] = React.useReducer(reducer, getInitialData());
 
+  React.useEffect(() => {
+    const isEmpty = _checkIsEmpty(resume);
+    if (!isEmpty) {
+      saveData(resume);
+    } else {
+      clearSaveData();
+    }
+  }, [resume]);
+
   return React.useMemo<ResumeEditorContextValue>(
     () => ({
       resume,
@@ -662,6 +674,33 @@ function useEditor() {
 
     [resume]
   );
+}
+
+const fields = zod.object({
+  fullName: zod.string().min(1),
+  title: zod.string().min(1),
+  gender: zod.string().min(1),
+  birthdate: zod.string().min(1),
+  city: zod.string().min(1),
+  province: zod.string().min(1),
+  email: zod.string().min(1),
+  phone: zod.object({ number: zod.string().min(1) }),
+  website: zod.object({ url: zod.string().min(1) }),
+  accounts: zod.array(zod.object({ url: zod.string().min(1) })).nonempty(),
+  experiences: zod.array(zod.object({ id: zod.string().min(1) })).nonempty(),
+  education: zod.array(zod.object({ id: zod.string().min(1) })).nonempty(),
+  skills: zod.array(zod.string().min(1)).nonempty(),
+});
+
+type ValidationFields = zod.infer<typeof fields>;
+
+function _checkIsEmpty(resume: ResumeData): boolean {
+  const isDirty = Object.keys(resume).some((field) => {
+    const schema = fields.shape[field as keyof ValidationFields];
+    const result = schema.safeParse(resume[field as keyof ResumeData]);
+    return result.success;
+  });
+  return !isDirty;
 }
 
 export * from '../data/resume';

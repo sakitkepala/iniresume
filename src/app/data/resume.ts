@@ -66,8 +66,54 @@ export type Education = {
   description?: string;
 };
 
-export function getInitialData(): ResumeData {
+const LOCAL_DATA_KEY = 'iniresume';
+
+function loadSaveData() {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  try {
+    const savedResume = window.localStorage.getItem(LOCAL_DATA_KEY);
+    if (savedResume) {
+      const saved: { data: ResumeData } = JSON.parse(savedResume);
+      return saved.data;
+    }
+    return null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+function saveData(resume: ResumeData) {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(
+      LOCAL_DATA_KEY,
+      JSON.stringify({ data: resume })
+    );
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function clearSaveData() {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.removeItem(LOCAL_DATA_KEY);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function getInitialData(): ResumeData {
+  // get local storage (sync):
+  const save = loadSaveData();
+  if (save) {
+    return save;
+  }
   // return exampleDataAndika;
+  // Empty initial data
   return {
     fullName: '',
     title: '',
@@ -280,3 +326,10 @@ export const exampleDataAndika: ResumeData = {
 };
 
 export default exampleDataAndika;
+export {
+  LOCAL_DATA_KEY,
+  loadSaveData,
+  saveData,
+  clearSaveData,
+  getInitialData,
+};
