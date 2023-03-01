@@ -22,7 +22,6 @@ function FieldExperienceDates({
 }) {
   const { updateExperienceDates } = useResumeEditor();
   const { isActive, activateAfterReset } = useActiveLine();
-  const isEmpty = !from || !to;
 
   if (isActive) {
     return (
@@ -37,7 +36,7 @@ function FieldExperienceDates({
     );
   }
 
-  if (isEmpty) {
+  if (!from && !to) {
     return (
       <span className={fieldStyles.fieldEmptyLabel}>
         {'//'} Isi waktu masa bekerja
@@ -59,7 +58,6 @@ function FieldEducationDates({
 }) {
   const { updateEducationDates } = useResumeEditor();
   const { isActive, activateAfterReset } = useActiveLine();
-  const isEmpty = !from || !to;
 
   if (isActive) {
     return (
@@ -74,7 +72,7 @@ function FieldEducationDates({
     );
   }
 
-  if (isEmpty) {
+  if (!from && !to) {
     return (
       <span className={fieldStyles.fieldEmptyLabel}>
         {'//'} Isi waktu masa studi
@@ -264,13 +262,13 @@ function RangeInputWithMonth({
   );
 }
 
-function _getYearRangeText({ from, to }: { from: string; to: string }) {
+function _getYearRangeText({ from, to }: { from: string; to?: string }) {
   const _formatYear = (dateString: string) =>
     format(parseISO(dateString), 'yyyy', { locale: id });
-  return `${_formatYear(from)}-${_formatYear(to)}`;
+  return to ? `${_formatYear(from)}-${_formatYear(to)}` : _formatYear(from);
 }
 
-function _getMonthRangeText({ from, to }: { from: string; to: string }) {
+function _getMonthRangeText({ from, to }: { from: string; to?: string }) {
   const _formatMonth = (dateString: string) => {
     try {
       return format(parseISO(dateString), 'MMMM yyyy', { locale: id });
@@ -278,6 +276,11 @@ function _getMonthRangeText({ from, to }: { from: string; to: string }) {
       return dateString;
     }
   };
+  if (!to) {
+    return `${_formatMonth(
+      from
+    )} - belum diisi (centang bila "masih berlangsung")`;
+  }
   return `${_formatMonth(from)} - ${_formatMonth(to)}`;
 }
 

@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { usePDF } from '@react-pdf/renderer';
 import { useResumeEditor } from '../contexts/resume-editor';
-import { ResumePDF } from './resume-pdf';
+import { ResumePDF } from './resume-template';
 import { Document as ViewerDocument, Page as ViewerPage } from 'react-pdf';
 
 import * as styles from './preview-paper.css';
 
 export type PreviewPaperProps = {
+  config: { useEnglish: boolean };
   onFileUrlChange?: (url: string | null) => void;
 };
 
@@ -14,23 +15,23 @@ export type PreviewPaperProps = {
 // https://github.com/diegomura/react-pdf-site/blob/master/src/components/Repl/PDFViewer.js
 // ...sama di sini, tapi ini lebih rumit, cek aja:
 // https://github.com/jeetiss/react-pdf-repl/blob/main/components/viewer.js
-function PreviewPaper({ onFileUrlChange }: PreviewPaperProps) {
+function PreviewPaper({ config, onFileUrlChange }: PreviewPaperProps) {
   const { resume } = useResumeEditor();
   const [instance] = usePDF({
-    document: resume ? <ResumePDF data={resume} /> : <div />,
+    document: resume ? <ResumePDF config={config} data={resume} /> : <div />,
   });
   const [isRenderingPreview, setRenderingPreview] =
     React.useState<boolean>(true);
 
   React.useEffect(() => {
-    if (!onFileUrlChange) {
+    if (!onFileUrlChange || isRenderingPreview) {
       return;
     }
     instance.url && onFileUrlChange(instance.url);
     return () => {
       onFileUrlChange(null);
     };
-  }, [onFileUrlChange, instance.url]);
+  }, [onFileUrlChange, instance.url, isRenderingPreview]);
 
   if (!instance.url || instance.loading) {
     return <div className={styles.paper}>Meng-generate PDF...</div>;

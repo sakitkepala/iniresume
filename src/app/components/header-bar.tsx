@@ -1,16 +1,9 @@
 import { useResumeEditor } from '../contexts/resume-editor';
 
-import * as appStyles from '../app.css';
 import * as styles from './header-bar.css';
 
-function HeaderBar({
-  rich = false,
-  downloadUrl,
-}: {
-  rich?: boolean;
-  downloadUrl?: string;
-}) {
-  return rich ? <RichHeader downloadUrl={downloadUrl} /> : <StaticHeader />;
+function HeaderBar({ rich = false }: { rich?: boolean }) {
+  return rich ? <RichHeader /> : <StaticHeader />;
 }
 
 function StaticHeader() {
@@ -25,7 +18,7 @@ function StaticHeader() {
   );
 }
 
-function RichHeader({ downloadUrl }: { downloadUrl?: string }) {
+function RichHeader() {
   const { resume } = useResumeEditor();
   const hasTitle = resume.fullName && resume.title;
   return (
@@ -39,16 +32,6 @@ function RichHeader({ downloadUrl }: { downloadUrl?: string }) {
               {resume.fullName}, {resume.title}
             </div>
           </>
-        )}
-      </div>
-      <div className={styles.headerAction}>
-        {Boolean(downloadUrl) && (
-          <button
-            className={appStyles.actionButton}
-            onClick={() => window.open(downloadUrl)}
-          >
-            Unduh
-          </button>
         )}
       </div>
     </header>

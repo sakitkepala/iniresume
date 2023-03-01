@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 export type ResumeData = {
   fullName: string;
   title: string;
+  about: string;
   gender: string;
   birthdate: string;
   city: string;
@@ -117,6 +118,7 @@ function getInitialData(): ResumeData {
   return {
     fullName: '',
     title: '',
+    about: '',
     gender: '',
     birthdate: '',
     city: '',
@@ -155,6 +157,7 @@ function getInitialData(): ResumeData {
 export const exampleDataAndika: ResumeData = {
   fullName: 'Andika Priyotama Dharminto',
   title: 'Frontend Developer',
+  about: '',
   gender: 'male',
   birthdate: '1991-08-27',
   city: 'Kota Semarang',

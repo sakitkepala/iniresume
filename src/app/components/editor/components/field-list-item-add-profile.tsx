@@ -74,9 +74,7 @@ const ACCOUNT_LABELS: {
 };
 
 const _getUrlTemplate = (account = '') => {
-  if (!account) return 'https://';
-  const { urlTemplate } = ACCOUNT_LABELS[account.toLowerCase()];
-  return urlTemplate || 'https://';
+  return ACCOUNT_LABELS[account?.toLowerCase()]?.urlTemplate || 'https://';
 };
 
 const PLACEHOLDER_PLATFORM = 'Platform';

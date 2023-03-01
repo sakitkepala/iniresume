@@ -108,7 +108,7 @@ type ResumeEditorActionsType =
   | {
       type: 'UPDATE_EDUCATION_DATES';
       id: string;
-      payload: { from: number | string; to: number | string };
+      payload: { from: number | string; to?: number | string };
     }
   | {
       type: 'ADD_SKILL';
@@ -167,7 +167,7 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
       const accounts = new Map(state.accounts.map((acc) => [acc.id, acc]));
       const target = accounts.get(action.payload.id);
 
-      if (!target && !action.payload.url) {
+      if (!target && (!action.payload.url || !action.payload.account)) {
         return state;
       }
 
@@ -178,6 +178,7 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
         };
       }
 
+      // Kedua akun ini template, item gak dihapus tapi dikosongkan aja nilainya
       if (
         !action.payload.url &&
         new Set(['github', 'linkedin']).has(
@@ -191,7 +192,7 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
         };
       }
 
-      if (!action.payload.url) {
+      if (!action.payload.account || !action.payload.url) {
         accounts.delete(action.payload.id);
         return {
           ...state,
@@ -296,7 +297,7 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
           projects: [],
         };
 
-        if (!action.payload.from || !action.payload.to) {
+        if (!action.payload.from) {
           return state;
         }
 
@@ -321,7 +322,7 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
         return state;
       }
 
-      if (!action.payload.from || !action.payload.to) {
+      if (!action.payload.from) {
         experiences.set(action.id, { ...edit, from: '', to: '' });
         return { ...state, experiences: [...experiences.values()] };
       }
@@ -471,7 +472,7 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
           description: '',
         };
 
-        if (!action.payload.from || !action.payload.to) {
+        if (!action.payload.from) {
           return state;
         }
 
@@ -496,7 +497,7 @@ function reducer(state: ResumeData, action: ResumeEditorActionsType) {
         return state;
       }
 
-      if (!action.payload.from || !action.payload.to) {
+      if (!action.payload.from) {
         education.set(action.id, { ...edit, from: '', to: '' });
         return { ...state, education: [...education.values()] };
       }
@@ -679,6 +680,7 @@ function useEditor() {
 const fields = zod.object({
   fullName: zod.string().min(1),
   title: zod.string().min(1),
+  about: zod.string().min(1),
   gender: zod.string().min(1),
   birthdate: zod.string().min(1),
   city: zod.string().min(1),
@@ -697,8 +699,8 @@ type ValidationFields = zod.infer<typeof fields>;
 function _checkIsEmpty(resume: ResumeData): boolean {
   const isDirty = Object.keys(resume).some((field) => {
     const schema = fields.shape[field as keyof ValidationFields];
-    const result = schema.safeParse(resume[field as keyof ResumeData]);
-    return result.success;
+    const result = schema?.safeParse(resume[field as keyof ResumeData]);
+    return result.success || false;
   });
   return !isDirty;
 }

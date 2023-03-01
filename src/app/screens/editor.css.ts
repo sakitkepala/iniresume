@@ -9,13 +9,6 @@ export const mainContainer = style({
   gap: '2rem',
 });
 
-export const previewPanel = style({
+export const asideContainer = style({
   flexShrink: 0,
-});
-
-export const previewWrapper = style({
-  marginTop: '4rem',
-  marginInline: 'auto',
-  paddingInline: '1rem',
-  minWidth: 595,
 });
