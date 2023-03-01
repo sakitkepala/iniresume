@@ -16,8 +16,8 @@ import zod from 'zod';
 
 type ResumeEditorContextValue = {
   resume: ResumeData;
-  updateField: (field: keyof ResumeData, value: ResumeFieldPayload) => void;
   updateTextField: (field: keyof ResumeData, value: string) => void;
+  updatePhone: (value: PhoneNumber) => void;
   updateWebsite: (value: Website) => void;
   updateAccount: (account: Account) => void;
   updateExperience: (
@@ -60,18 +60,15 @@ function ResumeEditorProvider({ children }: React.PropsWithChildren) {
   );
 }
 
-type ResumeFieldPayload = string | PhoneNumber;
-
 type ResumeEditorActionsType =
-  | {
-      type: 'UPDATE_GENERIC_FIELD';
-      field: keyof ResumeData;
-      payload: ResumeData[keyof ResumeData];
-    }
   | {
       type: 'UPDATE_STRING_FIELD';
       field: keyof ResumeData;
       payload: string;
+    }
+  | {
+      type: 'UPDATE_PHONE';
+      payload: PhoneNumber;
     }
   | {
       type: 'UPDATE_WEBSITE';
@@ -133,20 +130,21 @@ type ResumeEditorActionsType =
       payload: string;
     };
 
-function reducer(state: ResumeData, action: ResumeEditorActionsType) {
+function reducer(
+  state: ResumeData,
+  action: ResumeEditorActionsType
+): ResumeData {
   switch (action.type) {
     case 'UPDATE_STRING_FIELD': {
       return { ...state, [action.field]: action.payload };
     }
 
-    case 'UPDATE_GENERIC_FIELD': {
-      const currentData = state[action.field];
-      const dataObject = typeof currentData === 'string' ? {} : currentData;
+    case 'UPDATE_PHONE': {
       return {
         ...state,
-        [action.field]: {
-          ...dataObject,
-          ...(typeof action.payload !== 'string' ? action.payload : {}),
+        phone: {
+          ...state.phone,
+          ...action.payload,
         },
       };
     }
@@ -591,12 +589,12 @@ function useEditor() {
     () => ({
       resume,
 
-      updateField: (field, value) => {
-        dispatch({ type: 'UPDATE_GENERIC_FIELD', field, payload: value });
-      },
-
       updateTextField: (field, value) => {
         dispatch({ type: 'UPDATE_STRING_FIELD', field, payload: value });
+      },
+
+      updatePhone: (value) => {
+        dispatch({ type: 'UPDATE_PHONE', payload: value });
       },
 
       updateWebsite: (value: Website) => {

@@ -58,7 +58,7 @@ function PhoneEditor({
   initialValue?: string;
   hasWA: boolean;
 }) {
-  const { updateField } = useResumeEditor();
+  const { updatePhone } = useResumeEditor();
   const { close } = useLineDisclosure();
   const [inputValue, setInputValue] = React.useState<string>(initialValue);
   const [shouldShowInlineMessage, showInlineMessage] = React.useState(false);
@@ -74,7 +74,7 @@ function PhoneEditor({
         phoneNumber.number = $input.current?.value;
         phoneNumber.wa = Boolean($checkbox.current?.checked);
       }
-      updateField('phone', phoneNumber);
+      updatePhone(phoneNumber);
     },
     {
       enableOnFormTags: true,

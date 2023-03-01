@@ -20,7 +20,7 @@ function FieldListItemPhone({
   value?: string;
   hasWA: boolean;
 }) {
-  const { updateField } = useResumeEditor();
+  const { updatePhone } = useResumeEditor();
   const { isActive, next } = useActiveLine();
 
   if (isActive) {
@@ -30,7 +30,7 @@ function FieldListItemPhone({
           initialValue={value}
           hasWA={hasWA}
           onSave={(phone) => {
-            updateField('phone', phone);
+            updatePhone(phone);
             next();
           }}
         />

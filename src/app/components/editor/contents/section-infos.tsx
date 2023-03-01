@@ -2,6 +2,7 @@ import { LineSectionHeading } from '../components/section-heading';
 import { FieldListItemText } from '../components/field-list-item-text';
 import { FieldGender } from '../components/field-gender';
 import { FieldDateOfBirth } from '../components/field-date-of-birth';
+import { FieldAbout } from '../components/field-about';
 import { FieldListItemPhone } from '../components/field-list-item-phone';
 import { FieldWebsite } from '../components/field-website';
 import { FieldProfileAccount } from '../components/field-profile-account';
@@ -76,6 +77,16 @@ function sectionInfos(resume: ResumeData): LineContent[] {
       ),
     },
     { id: 'infos-general-list-trail' },
+
+    { id: 'infos-about', content: <>Tentang:</> },
+    { id: 'infos-about-trail' },
+
+    {
+      id: 'about-description',
+      activateable: true,
+      content: <FieldAbout value={resume.about} />,
+    },
+    { id: 'about-description-trail' },
 
     { id: 'infos-contact', content: <>Kontak:</> },
     { id: 'infos-contact-trail' },
