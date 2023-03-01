@@ -20,8 +20,8 @@ function SectionAbout({ en, data }: { en?: boolean; data: ResumeData }) {
 function _getLineGenderAndAge(data: ResumeData, en = false) {
   const gender =
     {
-      male: 'Laki-laki',
-      female: 'Perempuan',
+      male: !en ? 'Laki-laki' : 'Male',
+      female: !en ? 'Perempuan' : 'Female',
     }[data.gender] ||
     data.gender ||
     undefined;
@@ -45,7 +45,7 @@ function _getLineDomicile(data: ResumeData, en = false) {
   if (!parts.length) {
     return '';
   }
-  return `Domisi ${parts.join(', ')}`;
+  return !en ? `Domisili ${parts.join(', ')}` : `Living in ${parts.join(', ')}`;
 }
 
 export { SectionAbout };
