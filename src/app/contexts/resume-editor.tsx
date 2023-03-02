@@ -44,6 +44,11 @@ type ResumeEditorContextValue = {
   editSkill: (value: string, originalValue: string) => void;
   insertSkill: (insertAfterSkill: string, value: string) => void;
   insertSkillTop: (skill: string) => void;
+  updateOtherProjects: (
+    projectId: string,
+    field: keyof Project,
+    value: string
+  ) => void;
 };
 
 const [ResumeEditorContext, useResumeEditor] =
@@ -127,6 +132,12 @@ type ResumeEditorActionsType =
     }
   | {
       type: 'INSERT_SKILL_TOP';
+      payload: string;
+    }
+  | {
+      type: 'UPDATE_OTHER_PROJECT_ITEM';
+      projectId: string;
+      field: keyof Project;
       payload: string;
     };
 
@@ -363,6 +374,7 @@ function reducer(
           id: action.projectId,
           name: '',
           description: '',
+          url: '',
           [action.field]: action.payload,
         };
 
@@ -377,6 +389,18 @@ function reducer(
         };
       }
 
+      if (action.field === 'name' && !action.payload) {
+        projects.delete(action.projectId);
+        experiences.set(action.experienceId, {
+          ...targetExp,
+          projects: [...projects.values()],
+        });
+        return {
+          ...state,
+          experiences: [...experiences.values()],
+        };
+      }
+
       projects.set(action.projectId, {
         ...targetProject,
         [action.field]: action.payload,
@@ -385,7 +409,6 @@ function reducer(
         ...targetExp,
         projects: [...projects.values()],
       });
-
       return {
         ...state,
         experiences: [...experiences.values()],
@@ -567,6 +590,53 @@ function reducer(
       };
     }
 
+    case 'UPDATE_OTHER_PROJECT_ITEM': {
+      if (!action.projectId) {
+        return state;
+      }
+
+      const projects = new Map(
+        state.otherProjects.map((project) => [project.id, project])
+      );
+      const targetProject = projects.get(action.projectId);
+
+      if (!targetProject && !action.payload) {
+        return state;
+      }
+
+      if (!targetProject) {
+        const newProject: Project = {
+          id: action.projectId,
+          name: '',
+          description: '',
+          url: '',
+          [action.field]: action.payload,
+        };
+
+        return {
+          ...state,
+          otherProjects: [...projects.values(), newProject],
+        };
+      }
+
+      if (action.field === 'name' && !action.payload) {
+        projects.delete(action.projectId);
+        return {
+          ...state,
+          otherProjects: [...projects.values()],
+        };
+      }
+
+      projects.set(action.projectId, {
+        ...targetProject,
+        [action.field]: action.payload,
+      });
+      return {
+        ...state,
+        otherProjects: [...projects.values()],
+      };
+    }
+
     default: {
       return state;
     }
@@ -669,6 +739,15 @@ function useEditor() {
           payload: skill,
         });
       },
+
+      updateOtherProjects: (projectId, field, value) => {
+        dispatch({
+          type: 'UPDATE_OTHER_PROJECT_ITEM',
+          projectId,
+          field,
+          payload: value,
+        });
+      },
     }),
 
     [resume]
@@ -690,15 +769,16 @@ const fields = zod.object({
   experiences: zod.array(zod.object({ id: zod.string().min(1) })).nonempty(),
   education: zod.array(zod.object({ id: zod.string().min(1) })).nonempty(),
   skills: zod.array(zod.string().min(1)).nonempty(),
+  otherProjects: zod.array(zod.object({ id: zod.string().min(1) })).nonempty(),
 });
 
 type ValidationFields = zod.infer<typeof fields>;
 
 function _checkIsEmpty(resume: ResumeData): boolean {
-  const isDirty = Object.keys(resume).some((field) => {
-    const schema = fields.shape[field as keyof ValidationFields];
-    const result = schema?.safeParse(resume[field as keyof ResumeData]);
-    return result.success || false;
+  const isDirty = Object.keys(resume).some((fieldKey) => {
+    const schema = fields.shape[fieldKey as keyof ValidationFields];
+    const result = schema?.safeParse(resume[fieldKey as keyof ResumeData]);
+    return result?.success || false;
   });
   return !isDirty;
 }

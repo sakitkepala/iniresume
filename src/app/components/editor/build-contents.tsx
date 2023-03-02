@@ -2,31 +2,16 @@ import { sectionInfos } from './contents/section-infos';
 import { sectionExperiences } from './contents/section-experiences';
 import { sectionEducation } from './contents/section-education';
 import { sectionSkills } from './contents/section-skills';
+import { sectionOtherProjects } from './contents/section-other-projects';
 
 import { LineBreak } from './components/line-break';
 
 import { type ResumeData } from 'src/app/data/resume';
-import { type LineContent, type LineId } from './types';
-
-export enum GroupTypeNames {
-  EXPERIENCE = 'EXPERIENCE',
-  EDUCATION = 'EDUCATION',
-  PROJECT = 'PROJECT',
-}
-
-export type OpenGroup = {
-  type: GroupTypeNames;
-  id?: string;
-};
-
-export type BuildConfigState = {
-  activeLine: LineId | null;
-  activeGroup: OpenGroup | null;
-  nextCreateId: string;
-  insertSkillTop: boolean;
-  insertSkillBelow: string | null;
-  hotkeyPrevented: boolean;
-};
+import {
+  type LineContent,
+  GroupTypeNames,
+  type BuildConfigState,
+} from './types';
 
 function buildContents(
   resume: ResumeData,
@@ -64,6 +49,10 @@ function buildContents(
     { id: 'section-educations-br-trail' },
 
     ...sectionSkills(resume, { skillInsertTop, skillInsertBelow }),
+    { id: 'section-skills-br', content: <LineBreak /> },
+    { id: 'section-skills-br-trail' },
+
+    ...sectionOtherProjects(resume, configState),
   ];
 
   return contentsTemplate.filter(

@@ -1,9 +1,13 @@
 import * as React from 'react';
 import { useResumeEditor } from 'src/app/contexts/resume-editor';
-import { buildContents, GroupTypeNames } from '../build-contents';
+import { buildContents } from '../build-contents';
 
 import { type LineId } from '../types';
-import { type BuildConfigState, type OpenGroup } from '../build-contents';
+import {
+  type BuildConfigState,
+  type OpenGroup,
+  GroupTypeNames,
+} from '../types';
 
 import { v4 } from 'uuid';
 
@@ -89,6 +93,9 @@ function useEditorLineContents() {
             state.nextCreateId + '-education-major',
             state.nextCreateId + '-education-dates',
             state.nextCreateId + '-education-description',
+            state.nextCreateId + '-other-projects-item-headline',
+            state.nextCreateId + '-other-projects-item-description',
+            state.nextCreateId + '-other-projects-item-url',
           ]);
 
           const activeLine = action.payload;
@@ -145,6 +152,8 @@ function useEditorLineContents() {
               state.nextCreateId + '-education-school',
             [GroupTypeNames.PROJECT]:
               state.nextCreateId + '-project-item-headline',
+            [GroupTypeNames.OTHER_PROJECTS]:
+              state.nextCreateId + '-other-projects-item-headline',
           };
 
           const activeLine =
@@ -275,6 +284,13 @@ function useEditorLineContents() {
       });
     };
 
+    const openOtherProject = () => {
+      dispatch({
+        type: ActionTypes.LINES_GROUP_OPEN,
+        group: { type: GroupTypeNames.OTHER_PROJECTS },
+      });
+    };
+
     const preventHotkey = () => {
       dispatch({ type: ActionTypes.HOTKEY_PREVENTED });
     };
@@ -290,6 +306,7 @@ function useEditorLineContents() {
       closeEducation,
       insertSkillOnTop,
       insertSkillBelow,
+      openOtherProject,
       preventHotkey,
     };
   }, []);

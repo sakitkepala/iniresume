@@ -54,4 +54,35 @@ function LineAddEducation() {
   );
 }
 
-export { LineAddExperience, LineAddEducation };
+function LineAddOtherProject({ nextLine }: { nextLine?: boolean }) {
+  const { resume } = useResumeEditor();
+  const { openOtherProject } = useLineContents();
+  const { isActive } = useActiveLine();
+
+  React.useEffect(() => {
+    isActive && openOtherProject();
+  }, [isActive, openOtherProject]);
+
+  return (
+    <div
+      className={styles.wrapper}
+      onClick={(ev) => {
+        ev.stopPropagation();
+        openOtherProject();
+      }}
+    >
+      {!nextLine ? (
+        <span className={fieldStyles.fieldEmptyLabel}>
+          {'//'} {resume.otherProjects.length > 0 ? 'Tambah' : 'Masukkan'}{' '}
+          beberapa projek lain (projek personal, dsb.)
+        </span>
+      ) : (
+        <span className={fieldStyles.fieldEmptyLabel}>
+          {'//'} yang kamu banggakan
+        </span>
+      )}
+    </div>
+  );
+}
+
+export { LineAddExperience, LineAddEducation, LineAddOtherProject };

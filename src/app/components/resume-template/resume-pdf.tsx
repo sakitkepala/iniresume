@@ -5,6 +5,7 @@ import { SectionAbout } from './components/section-about';
 import { SectionEducation } from './components/section-education';
 import { SectionKeySkills } from './components/section-skills';
 import { SectionProfiles } from './components/section-profiles';
+import { SectionOtherProjects } from './components/section-other-projects';
 
 import dmSansReg from 'src/assets/DMSans-Regular.ttf';
 import dmSansBold from 'src/assets/DMSans-Bold.ttf';
@@ -31,7 +32,6 @@ export type ResumePDFProps = {
 
 function ResumePDF({ data, config }: ResumePDFProps) {
   const { useEnglish } = config;
-  const labelOtherProjects = useEnglish ? 'Other Projects' : 'Projek Lain';
   return (
     <Document
       author={data.fullName}
@@ -52,15 +52,10 @@ function ResumePDF({ data, config }: ResumePDFProps) {
               en={useEnglish}
               experiences={data.experiences}
             />
-
-            <View style={pdfStyles.contentBlock}>
-              <View style={pdfStyles.list}>
-                <Text style={pdfStyles.sectionHeading}>
-                  {labelOtherProjects}
-                </Text>
-                <Text>...konten list projek</Text>
-              </View>
-            </View>
+            <SectionOtherProjects
+              en={useEnglish}
+              projects={data.otherProjects}
+            />
           </View>
 
           <View style={pdfStyles.colRight}>

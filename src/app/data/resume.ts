@@ -17,6 +17,8 @@ export type ResumeData = {
   experiences: Experience[];
   education: Education[];
   skills: string[];
+
+  otherProjects: Project[];
 };
 
 export type Website = {
@@ -151,6 +153,8 @@ function getInitialData(): ResumeData {
     experiences: [],
     education: [],
     skills: [],
+
+    otherProjects: [],
   };
 }
 
@@ -326,6 +330,8 @@ export const exampleDataAndika: ResumeData = {
     // 'Odoo',
     // 'Unity (game engine)',
   ],
+
+  otherProjects: [],
 };
 
 export default exampleDataAndika;

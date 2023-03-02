@@ -8,6 +8,7 @@ const [LineContentsContext, useLineContents] = makeContext<{
   openExperience: () => void;
   openProject: (experienceId: string) => void;
   openEducation: () => void;
+  openOtherProject: () => void;
   insertSkillOnTop: (shouldOpen?: boolean) => void;
   insertSkillBelow: (insertBelow: string) => void;
   preventHotkey: () => void;

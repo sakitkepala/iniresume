@@ -41,25 +41,25 @@ function SectionExperiences({
           {!en ? <>Pengalaman</> : <>Experiences</>}
         </Text>
 
-        {experiences.map((edu) => (
-          <View key={edu.employer} style={styles.experienceContainer}>
-            <Text style={pdfStyles.textHeading}>{edu.title}</Text>
-            <Text style={pdfStyles.textSubheading}>{edu.employer}</Text>
+        {experiences.map((experience) => (
+          <View key={experience.employer} style={styles.experienceContainer}>
+            <Text style={pdfStyles.textHeading}>{experience.title}</Text>
+            <Text style={pdfStyles.textSubheading}>{experience.employer}</Text>
 
             <Text style={pdfStyles.textDaterange}>
-              {_getMonthRangeText(edu.from, edu.to, en)}
+              {_getMonthRangeText(experience.from, experience.to, en)}
             </Text>
-            <Text>{edu.description}</Text>
+            <Text>{experience.description}</Text>
 
-            {!edu.projects?.length ? null : (
+            {!experience.projects?.length ? null : (
               <View>
-                {edu.projects.map((project) => (
+                {experience.projects.map((project) => (
                   <View key={project.name} style={styles.projectContainer}>
                     <Text style={styles.projectName}>{project.name}</Text>
                     <Text>{project.description}</Text>
                     {!project.url ? null : (
                       <Link style={styles.projectLink} src={project.url}>
-                        Link projek &#187;
+                        {en ? 'Project link' : 'Link projek'} &#187;
                       </Link>
                     )}
                   </View>

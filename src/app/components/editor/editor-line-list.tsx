@@ -28,6 +28,7 @@ function EditorLineList() {
     openEducation,
     insertSkillOnTop,
     insertSkillBelow,
+    openOtherProject,
     hotkeyPrevented,
     preventHotkey,
   } = useEditorLineContents();
@@ -66,6 +67,7 @@ function EditorLineList() {
           openEducation,
           insertSkillOnTop,
           insertSkillBelow,
+          openOtherProject,
           preventHotkey,
         }}
       >

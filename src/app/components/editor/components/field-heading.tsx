@@ -178,4 +178,5 @@ export {
   FieldExperienceEmployer,
   FieldEducationSchool,
   FieldEducationMajor,
+  FieldHeading,
 };
