@@ -9,9 +9,7 @@ import * as styles from './welcome.css';
 
 export function ScreenWelcome() {
   const navigate = useNavigate();
-  const [resume] = React.useState(() => loadSaveData());
-  const hasSavedResume = Boolean(resume);
-
+  const hasSavedResume = React.useMemo(() => Boolean(loadSaveData()), []);
   return (
     <>
       <HeaderBar />
@@ -21,7 +19,10 @@ export function ScreenWelcome() {
         {hasSavedResume ? (
           <div>
             <div>
-              Punya simpanan nih wkwk. <Link to="/editor">Klik untuk edit</Link>
+              Punya simpanan nih wkwk.{' '}
+              <Link role="button" to="/editor">
+                Klik untuk edit
+              </Link>
             </div>
 
             <div>
@@ -38,7 +39,7 @@ export function ScreenWelcome() {
           </div>
         ) : (
           <div>
-            <Link className={appStyles.actionButton} to="/editor">
+            <Link role="button" className={appStyles.actionButton} to="/editor">
               Buat Resume
             </Link>
           </div>
