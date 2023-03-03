@@ -1,16 +1,23 @@
+import * as React from 'react';
 import { useResumeEditor } from '../contexts/resume-editor';
 
 import * as styles from './header-bar.css';
 
 function HeaderBar({ rich = false }: { rich?: boolean }) {
-  return rich ? <RichHeader /> : <StaticHeader />;
+  if (!rich) {
+    return <StaticHeader />;
+  }
+  return <StaticHeader breadcrumb={<Breadcrumb />} />;
 }
 
-function StaticHeader() {
+function StaticHeader({ breadcrumb }: { breadcrumb?: React.ReactNode }) {
   return (
     <header className={styles.header}>
       <div className={styles.breadcrumb}>
-        <div className={styles.logoType}>iniresume.</div>
+        <div aria-label="App Logo" className={styles.logoType}>
+          iniresume.
+        </div>
+        {breadcrumb}
       </div>
 
       <div className={styles.headerAction}></div>
@@ -18,23 +25,21 @@ function StaticHeader() {
   );
 }
 
-function RichHeader() {
+function Breadcrumb() {
   const { resume } = useResumeEditor();
   const hasTitle = resume.fullName && resume.title;
+
+  if (!hasTitle) {
+    return null;
+  }
+
   return (
-    <header className={styles.header}>
-      <div className={styles.breadcrumb}>
-        <div className={styles.logoType}>iniresume.</div>
-        {hasTitle && (
-          <>
-            <div>&#47;</div>
-            <div>
-              {resume.fullName}, {resume.title}
-            </div>
-          </>
-        )}
+    <>
+      <div>&#47;</div>
+      <div aria-label="Resume Info">
+        {resume.fullName}, {resume.title}
       </div>
-    </header>
+    </>
   );
 }
 
