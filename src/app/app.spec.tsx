@@ -1,15 +1,39 @@
-import { render } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import App from './app';
 
-describe.skip('App', () => {
-  it('should render successfully', () => {
-    const { baseElement } = render(<App />);
-    expect(baseElement).toBeTruthy();
-  });
+jest.mock('react-pdf', () => ({
+  pdfjs: {
+    GlobalWorkerOptions: {
+      workerSrc: 'https://fake.url',
+    },
+  },
+}));
 
-  it('should have a greeting as the title', () => {
-    const { getByText } = render(<App />);
-    expect(getByText(/Welcome iniresume/gi)).toBeTruthy();
+jest.mock('@react-pdf/renderer', () => ({
+  StyleSheet: {
+    create: jest.fn(),
+  },
+  Font: {
+    register: jest.fn(),
+  },
+}));
+
+describe('App', () => {
+  it('Render default screen Welcome & navigasi ke screen Editor', async () => {
+    render(<App />);
+
+    expect(screen.getByText(/welcome/i)).toBeInTheDocument();
+    expect(screen.getByText(/buat/i)).toBeInTheDocument();
+
+    await userEvent.click(screen.getByText(/buat/i));
+    await waitFor(() => {
+      expect(screen.queryByText(/informasi/i)).toBeInTheDocument();
+    });
+
+    expect(
+      screen.queryByRole('heading', { name: /generate/i })
+    ).toBeInTheDocument();
   });
 });
