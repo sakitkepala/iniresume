@@ -14,9 +14,11 @@ function FieldListItemText({
   value = '',
   field,
   label,
+  placeholder,
 }: {
   value?: string;
   label: string;
+  placeholder?: string;
   field: keyof ResumeData;
 }) {
   const { updateTextField } = useResumeEditor();
@@ -27,7 +29,7 @@ function FieldListItemText({
       <ListItemLine muted>
         <PlainTextInput
           initialValue={value}
-          placeholder={label}
+          placeholder={placeholder || `// ${label}`}
           onSave={(inputValue) => {
             updateTextField(field, inputValue.trim());
             next();
@@ -44,7 +46,7 @@ function FieldListItemText({
           value ? fieldStyles.fieldValueLabel : fieldStyles.fieldEmptyLabel
         }
       >
-        {value || label}
+        {value || placeholder || `// ${label}`}
       </span>
     </ListItemLine>
   );

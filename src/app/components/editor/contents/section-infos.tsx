@@ -28,7 +28,7 @@ function sectionInfos(resume: ResumeData): LineContent[] {
       content: (
         <FieldListItemText
           field="fullName"
-          label="// Nama lengkap"
+          label="Nama lengkap"
           value={resume.fullName}
         />
       ),
@@ -39,7 +39,7 @@ function sectionInfos(resume: ResumeData): LineContent[] {
       content: (
         <FieldListItemText
           field="title"
-          label="// Titel profesi"
+          label="Titel profesi"
           value={resume.title}
         />
       ),
@@ -60,7 +60,7 @@ function sectionInfos(resume: ResumeData): LineContent[] {
       content: (
         <FieldListItemText
           field="city"
-          label="// Kota domisili"
+          label="Kota domisili"
           value={resume.city}
         />
       ),
@@ -71,7 +71,7 @@ function sectionInfos(resume: ResumeData): LineContent[] {
       content: (
         <FieldListItemText
           field="province"
-          label="// Provinsi domisili"
+          label="Provinsi domisili"
           value={resume.province}
         />
       ),
@@ -95,11 +95,7 @@ function sectionInfos(resume: ResumeData): LineContent[] {
       id: 'email',
       activateable: true,
       content: (
-        <FieldListItemText
-          field="email"
-          label="// Email"
-          value={resume.email}
-        />
+        <FieldListItemText field="email" label="Email" value={resume.email} />
       ),
     },
     {

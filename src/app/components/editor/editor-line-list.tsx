@@ -56,7 +56,7 @@ function EditorLineList() {
   });
 
   return (
-    <div ref={$containerDiv} className={styles.lineList}>
+    <div ref={$containerDiv} role="listitem" className={styles.lineList}>
       <LineContentsContext.Provider
         value={{
           activeLine,
@@ -121,6 +121,9 @@ function LineItem({
 
   return (
     <div
+      role="listitem"
+      aria-labelledby={`Line ${number}`}
+      aria-current={isActive || undefined}
       className={clsx(styles.line, isActive ? styles.lineActive : undefined)}
     >
       <div className={styles.lineNumber}>{number}</div>
