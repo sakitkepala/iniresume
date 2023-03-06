@@ -122,7 +122,7 @@ function LineItem({
   return (
     <div
       role="listitem"
-      aria-labelledby={`Line ${number}`}
+      aria-label={`Line ${number}`}
       aria-current={isActive || undefined}
       className={clsx(styles.line, isActive ? styles.lineActive : undefined)}
     >
@@ -168,4 +168,4 @@ function LineItem({
   );
 }
 
-export { EditorLineList };
+export { EditorLineList, LineItem };

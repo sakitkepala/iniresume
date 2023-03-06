@@ -85,11 +85,14 @@ function DateInput({
         focusLastInput();
       }}
     >
+      <label htmlFor="birth-year" className={styles.label}>
+        Tahun lahir
+      </label>
       <input
         {...getInputProps('year')}
         type="text"
         className={styles.inputField}
-        id="year"
+        id="birth-year"
         name="year"
         placeholder="19xx"
         value={input.year}
@@ -101,11 +104,14 @@ function DateInput({
       <span>&nbsp;</span>
       <span className={fieldStyles.staticDisplay}>-</span>
       <span>&nbsp;</span>
+      <label htmlFor="birth-month" className={styles.label}>
+        Bulan lahir
+      </label>
       <input
         {...getInputProps('month')}
         type="text"
         className={styles.inputField}
-        id="month"
+        id="birth-month"
         name="month"
         placeholder="12"
         value={input.month}
@@ -117,11 +123,14 @@ function DateInput({
       <span>&nbsp;</span>
       <span className={fieldStyles.staticDisplay}>-</span>
       <span>&nbsp;</span>
+      <label htmlFor="birth-day" className={styles.label}>
+        Tanggal lahir
+      </label>
       <input
         {...getInputProps('day')}
         type="text"
         className={styles.inputField}
-        id="day"
+        id="birth-day"
         name="day"
         placeholder="01"
         value={input.day}

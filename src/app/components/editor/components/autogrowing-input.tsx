@@ -6,6 +6,7 @@ import * as fieldStyles from './fields.css';
 import * as styles from './autogrowing-input.css';
 
 export type AutogrowingInputProps = {
+  id?: string;
   autofocus?: boolean;
   initialSize?: number;
   initialValue?: string;
@@ -26,6 +27,7 @@ const AutogrowingInput = React.forwardRef<
 >(
   (
     {
+      id,
       autofocus = false,
       initialSize = 1,
       initialValue = '',
@@ -53,6 +55,7 @@ const AutogrowingInput = React.forwardRef<
       <span className={styles.autogrowingWrapper}>
         <input
           ref={$input}
+          id={id}
           tabIndex={-1}
           size={initialSize}
           spellCheck={false}

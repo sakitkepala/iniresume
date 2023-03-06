@@ -31,3 +31,11 @@ export const inputField = style({
     },
   },
 });
+
+export const label = style({
+  visibility: 'hidden',
+  opacity: 0,
+  position: 'absolute',
+  top: -9999,
+  left: -9999,
+});
