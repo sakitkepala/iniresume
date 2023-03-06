@@ -1,9 +1,13 @@
 const { composePlugins, withNx } = require('@nrwl/webpack');
 const { withReact } = require('@nrwl/react');
+const { VanillaExtractPlugin } = require('@vanilla-extract/webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-// Nx plugins for webpack.
 module.exports = composePlugins(withNx(), withReact(), (config) => {
-  // Update the webpack config as needed here.
-  // e.g. `config.plugins.push(new MyPlugin())`
+  // Integrasi Vanilla Extract CSS di Webpack:
+  // https://vanilla-extract.style/documentation/integrations/webpack/
+  config.plugins.push(new VanillaExtractPlugin());
+  config.plugins.push(new MiniCssExtractPlugin());
+
   return config;
 });
