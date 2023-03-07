@@ -1,14 +1,29 @@
 import { style } from '@vanilla-extract/css';
 
-export const mainContainer = style({
+export const layout = style({
   overflow: 'hidden',
   height: '100%',
-  marginInline: '2rem',
-  display: 'flex',
-  justifyContent: 'center',
-  gap: '2rem',
+  width: '100%',
+  marginInline: 'auto',
+
+  '@media': {
+    'screen and (min-width: 720px)': {
+      width: 720,
+    },
+
+    'screen and (min-width: 1224px)': {
+      width: '100%',
+      display: 'grid',
+      gridTemplateColumns: 'minmax(min-content, 1fr) minmax(min-content, 1fr)',
+      gridTemplateRows: 'minmax(0, 1fr)',
+    },
+
+    'screen and (min-width: 1440px)': {
+      maxWidth: 1224,
+    },
+  },
 });
 
-export const asideContainer = style({
+export const aside = style({
   flexShrink: 0,
 });

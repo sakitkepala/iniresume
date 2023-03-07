@@ -1,4 +1,6 @@
 import { HeaderBar } from '../components/header-bar';
+import { Editor } from '../components/editor';
+import { PreviewPanel } from '../components/preview-panel';
 
 import * as styles from './editor.css';
 
@@ -6,10 +8,12 @@ export function ScreenEditor() {
   return (
     <>
       <HeaderBar rich />
-      <div className={styles.mainContainer}>
-        <main>Informasi</main>
-        <aside className={styles.asideContainer}>
-          <h2>generate</h2>
+      <div className={styles.layout}>
+        <main>
+          <Editor />
+        </main>
+        <aside className={styles.aside}>
+          <PreviewPanel />
         </aside>
       </div>
     </>
