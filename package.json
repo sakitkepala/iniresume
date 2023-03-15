@@ -12,11 +12,14 @@
     "@radix-ui/react-scroll-area": "^1.0.2",
     "@vanilla-extract/css": "^1.9.5",
     "clsx": "^1.2.1",
+    "date-fns": "^2.29.3",
     "react": "18.2.0",
     "react-content-loader": "^6.2.0",
     "react-dom": "18.2.0",
+    "react-hotkeys-hook": "^4.3.7",
     "react-router-dom": "^6.8.2",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.14.5",
@@ -37,6 +40,7 @@
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
+    "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
     "@vanilla-extract/webpack-plugin": "^2.2.0",
