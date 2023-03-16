@@ -35,7 +35,7 @@ export type Account = {
   id: string;
   account: string;
   url: string;
-  text?: string;
+  text: string;
 };
 
 export type Experience = {

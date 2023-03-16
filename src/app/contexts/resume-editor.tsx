@@ -12,8 +12,7 @@ import {
   type Education,
 } from '../data/resume';
 
-type ResumeEditorContextValue = {
-  resume: ResumeData;
+type ResumeEditorDispatchFns = {
   updateTextField: (field: keyof ResumeData, value: string) => void;
   updatePhone: (value: PhoneNumber) => void;
   updateWebsite: (value: Website) => void;
@@ -47,6 +46,10 @@ type ResumeEditorContextValue = {
     field: keyof Project,
     value: string
   ) => void;
+};
+
+type ResumeEditorContextValue = ResumeEditorDispatchFns & {
+  resume: ResumeData;
 };
 
 const [ResumeEditorContext, useResumeEditor] =
@@ -176,10 +179,12 @@ function reducer(
       const accounts = new Map(state.accounts.map((acc) => [acc.id, acc]));
       const target = accounts.get(action.payload.id);
 
+      // NO-OPS
       if (!target && (!action.payload.url || !action.payload.account)) {
         return state;
       }
 
+      // TAMBAH
       if (!target) {
         return {
           ...state,
@@ -187,6 +192,7 @@ function reducer(
         };
       }
 
+      // KOSONGKAN NILAI UNTUK GITHUB & LINKEDIN
       // Kedua akun ini template, item gak dihapus tapi dikosongkan aja nilainya
       if (
         !action.payload.url &&
@@ -201,6 +207,7 @@ function reducer(
         };
       }
 
+      // HAPUS, by account atau by url
       if (!action.payload.account || !action.payload.url) {
         accounts.delete(action.payload.id);
         return {
@@ -209,22 +216,11 @@ function reducer(
         };
       }
 
+      // UPDATE
       accounts.set(action.payload.id, action.payload);
       return {
         ...state,
         accounts: [...accounts.values()],
-      };
-    }
-
-    case 'ADD_SKILL': {
-      // skip kalau udah ada
-      if (!action.payload || new Set(state.skills).has(action.payload)) {
-        return state;
-      }
-
-      return {
-        ...state,
-        skills: [...state.skills, action.payload],
       };
     }
 
@@ -443,7 +439,7 @@ function reducer(
           description: '',
         };
 
-        // Waktu create data, harus disesiakan nama field & payloadnya
+        // Waktu create data, harus disesuaikan nama field & payloadnya
         if (!action.field || !action.payload) {
           return state;
         }
@@ -464,7 +460,7 @@ function reducer(
         return state;
       }
 
-      // Khusus field `title` kalau dikasih nilai kosong jadi menghapus data
+      // Khusus field `school` kalau dikasih nilai kosong jadi menghapus data
       if (action.field === 'school' && !action.payload) {
         education.delete(action.id);
         return { ...state, education: [...education.values()] };
@@ -540,6 +536,45 @@ function reducer(
       return { ...state, education: [...education.values()] };
     }
 
+    case 'ADD_SKILL': {
+      // skip kalau udah ada
+      if (!action.payload || new Set(state.skills).has(action.payload)) {
+        return state;
+      }
+
+      return {
+        ...state,
+        skills: [...state.skills, action.payload],
+      };
+    }
+
+    case 'EDIT_SKILL': {
+      // Nge-hapus skill
+      if (!action.payload.value && action.payload.original) {
+        return {
+          ...state,
+          skills: state.skills.filter(
+            (skill) => skill !== action.payload.original
+          ),
+        };
+      }
+
+      // skip kalau udah ada
+      if (
+        !action.payload.value ||
+        new Set(state.skills).has(action.payload.value)
+      ) {
+        return state;
+      }
+
+      return {
+        ...state,
+        skills: state.skills.map((skill) =>
+          skill === action.payload.original ? action.payload.value : skill
+        ),
+      };
+    }
+
     case 'INSERT_SKILL': {
       // skip kalau udah ada
       if (
@@ -568,33 +603,6 @@ function reducer(
 
     case 'INSERT_SKILL_TOP': {
       return { ...state, skills: [action.payload, ...state.skills] };
-    }
-
-    case 'EDIT_SKILL': {
-      // Nge-hapus skill
-      if (!action.payload.value && action.payload.original) {
-        return {
-          ...state,
-          skills: state.skills.filter(
-            (skill) => skill !== action.payload.original
-          ),
-        };
-      }
-
-      // skip kalau udah ada
-      if (
-        !action.payload.value ||
-        new Set(state.skills).has(action.payload.value)
-      ) {
-        return state;
-      }
-
-      return {
-        ...state,
-        skills: state.skills.map((skill) =>
-          skill === action.payload.original ? action.payload.value : skill
-        ),
-      };
     }
 
     case 'UPDATE_OTHER_PROJECT_ITEM': {
@@ -662,10 +670,8 @@ function useEditor() {
     }
   }, [resume]);
 
-  return React.useMemo<ResumeEditorContextValue>(
+  const dispatches = React.useMemo<ResumeEditorDispatchFns>(
     () => ({
-      resume,
-
       updateTextField: (field, value) => {
         dispatch({ type: 'UPDATE_STRING_FIELD', field, payload: value });
       },
@@ -756,8 +762,12 @@ function useEditor() {
         });
       },
     }),
+    []
+  );
 
-    [resume]
+  return React.useMemo<ResumeEditorContextValue>(
+    () => ({ resume, ...dispatches }),
+    [resume, dispatches]
   );
 }
 
