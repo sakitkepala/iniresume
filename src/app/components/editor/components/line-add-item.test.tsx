@@ -171,7 +171,7 @@ describe('LineAddEducation', () => {
           to: '',
           ongoing: true,
           description: '',
-          userange: false,
+          userange: true,
         },
       ],
     });

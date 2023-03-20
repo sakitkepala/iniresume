@@ -1,29 +1,44 @@
 import * as React from 'react';
+import { pdfjs } from 'react-pdf';
+import { useResumeEditor } from 'src/app/contexts/resume-editor';
+
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { Checkbox } from './components/checkbox';
-import { PreviewPaper } from '../preview-paper';
+import { ResumePDF } from '../resume-template';
+import { PreviewPaper } from './components/preview-paper';
 
 import IconDownload from './icons/download';
 import IconSetting from './icons/setting';
 
-import * as appStyles from '../../app.css';
+import * as appStyles from 'src/app/app.css';
 import * as styles from './preview-panel.css';
 
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+
+type PDFRenderingConfig = {
+  useEnglish: boolean;
+};
+
+const initialConfig: PDFRenderingConfig = {
+  useEnglish: false,
+};
+
 function PreviewPanel() {
-  const [config, dispatchConfig] = React.useReducer(
-    configReducer,
-    initialConfig
-  );
+  const { resume } = useResumeEditor();
+  const [config, setConfig] = React.useState<PDFRenderingConfig>(initialConfig);
   const [isPreviewOpen, setPreviewOpen] = React.useState(false);
-  const [downloadUrl] = React.useState<string | undefined>();
+  const [downloadUrl, setDownloadUrl] = React.useState('');
 
   if (!isPreviewOpen) {
     return (
       <div className={styles.previewContainer}>
-        <SetupPanel
-          configValue={config}
-          onConfigChange={dispatchConfig}
-          onClickPreview={() => setPreviewOpen(true)}
+        <ConfigPanel
+          initialConfig={config}
+          onPreview={(config) => {
+            setConfig(config);
+            setPreviewOpen(true);
+            setDownloadUrl('');
+          }}
         />
       </div>
     );
@@ -34,7 +49,12 @@ function PreviewPanel() {
       <div className={styles.fileViewer}>
         <ScrollArea.Root className={styles.viewerScrollableRoot}>
           <ScrollArea.Viewport className={styles.viewerScrollableViewport}>
-            <PreviewPaper />
+            <PreviewPaper
+              key={JSON.stringify(resume)}
+              onUrlChange={setDownloadUrl}
+            >
+              <ResumePDF config={config} data={resume} />
+            </PreviewPaper>
           </ScrollArea.Viewport>
           <ScrollArea.Scrollbar orientation="vertical">
             <ScrollArea.Thumb />
@@ -70,17 +90,16 @@ function PreviewPanel() {
   );
 }
 
-function SetupPanel({
-  configValue,
-  onConfigChange,
+function ConfigPanel({
+  initialConfig,
   previewDisabled,
-  onClickPreview,
+  onPreview,
 }: {
-  configValue: { useEnglish: boolean };
-  onConfigChange: React.Dispatch<ConfigAction>;
+  initialConfig: PDFRenderingConfig;
   previewDisabled?: boolean;
-  onClickPreview?: () => void;
+  onPreview: (config: PDFRenderingConfig) => void;
 }) {
+  const [config, setConfig] = React.useState(initialConfig);
   return (
     <div className={styles.setupPanel}>
       <div className={styles.setupPanelSection}>
@@ -95,10 +114,8 @@ function SetupPanel({
           id="language"
           name="language"
           label="Pakai template bahasa inggris"
-          checked={configValue.useEnglish}
-          onChange={(checked) => {
-            onConfigChange({ type: 'USE_ENGLISH_CHECKED', payload: checked });
-          }}
+          checked={config.useEnglish}
+          onChange={(checked) => setConfig({ useEnglish: checked })}
         />
       </div>
 
@@ -106,7 +123,7 @@ function SetupPanel({
         <button
           className={appStyles.actionButton}
           disabled={previewDisabled}
-          onClick={onClickPreview}
+          onClick={() => onPreview(config)}
         >
           <span role="img">👁</span> Lihat Preview
         </button>
@@ -115,27 +132,4 @@ function SetupPanel({
   );
 }
 
-type ConfigAction = {
-  type: 'USE_ENGLISH_CHECKED';
-  payload: boolean;
-};
-
-const initialConfig = {
-  useEnglish: false,
-};
-
-const configReducer: React.Reducer<typeof initialConfig, ConfigAction> = (
-  state,
-  action
-) => {
-  switch (action.type) {
-    case 'USE_ENGLISH_CHECKED': {
-      return { ...state, useEnglish: !state.useEnglish };
-    }
-    default: {
-      return state;
-    }
-  }
-};
-
-export { PreviewPanel };
+export { PreviewPanel, ConfigPanel };

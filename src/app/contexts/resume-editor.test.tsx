@@ -288,7 +288,7 @@ describe('useResumeEditor', () => {
       to: '2023',
       ongoing: false,
       description: '',
-      userange: false,
+      userange: true,
     };
     render(
       <ResumeEditorProvider>
