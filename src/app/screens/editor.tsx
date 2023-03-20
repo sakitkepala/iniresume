@@ -1,5 +1,5 @@
 import { ResumeEditorProvider } from '../contexts/resume-editor';
-import { HeaderBar } from '../components/header-bar';
+import { HeaderBar, Breadcrumb } from '../components/header-bar';
 import { Editor } from '../components/editor';
 import { PreviewPanel } from '../components/preview-panel';
 
@@ -8,7 +8,9 @@ import * as styles from './editor.css';
 export function ScreenEditor() {
   return (
     <ResumeEditorProvider>
-      <HeaderBar rich />
+      <HeaderBar>
+        <Breadcrumb />
+      </HeaderBar>
       <div className={styles.layout}>
         <main>
           <Editor />
