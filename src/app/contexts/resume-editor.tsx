@@ -50,6 +50,7 @@ type ResumeEditorDispatchFns = {
 
 type ResumeEditorContextValue = ResumeEditorDispatchFns & {
   resume: ResumeData;
+  filename: string;
 };
 
 const [ResumeEditorContext, useResumeEditor] =
@@ -766,7 +767,11 @@ function useEditor() {
   );
 
   return React.useMemo<ResumeEditorContextValue>(
-    () => ({ resume, ...dispatches }),
+    () => ({
+      resume,
+      filename: _getFilenameText(resume),
+      ...dispatches,
+    }),
     [resume, dispatches]
   );
 }
@@ -798,6 +803,11 @@ function _checkIsEmpty(resume: ResumeData): boolean {
   });
 
   return !isDirty;
+}
+
+function _getFilenameText(resume: ResumeData) {
+  const MARK = ', ';
+  return [resume.fullName, resume.title].filter((v) => Boolean(v)).join(MARK);
 }
 
 export * from '../data/resume';

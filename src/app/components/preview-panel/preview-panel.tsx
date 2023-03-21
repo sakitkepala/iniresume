@@ -24,7 +24,7 @@ const initialConfig: PDFRenderingConfig = {
 };
 
 function PreviewPanel() {
-  const { resume } = useResumeEditor();
+  const { resume, filename } = useResumeEditor();
   const [config, setConfig] = React.useState<PDFRenderingConfig>(initialConfig);
   const [isPreviewOpen, setPreviewOpen] = React.useState(false);
   const [downloadUrl, setDownloadUrl] = React.useState('');
@@ -52,6 +52,7 @@ function PreviewPanel() {
             <PreviewPaper
               key={JSON.stringify(resume)}
               onUrlChange={setDownloadUrl}
+              filename={filename}
             >
               <ResumePDF config={config} data={resume} />
             </PreviewPaper>

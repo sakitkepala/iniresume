@@ -22,8 +22,8 @@ function PreviewPaper({ children, filename, onUrlChange }: PreviewPaperProps) {
         isLoading
           ? undefined
           : filename
-          ? `Preview resume ${filename}`
-          : 'Preview resume'
+          ? `Pratinjau Resume ${filename}`
+          : 'Pratinjau Resume'
       }
     >
       <PreviewContent

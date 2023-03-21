@@ -25,8 +25,7 @@ function HeaderBar({ children }: React.PropsWithChildren) {
 
 // Screen yang pakai breadcrumb musti dibungkus pakai Provider Resume Editor
 function Breadcrumb() {
-  const { resume } = useResumeEditor();
-  const filename = _getFilenameText(resume);
+  const { filename } = useResumeEditor();
   if (!filename) {
     return null;
   }
@@ -36,11 +35,6 @@ function Breadcrumb() {
       <div aria-label="Resume Info">{filename}</div>
     </>
   );
-}
-
-function _getFilenameText(resume: ResumeData) {
-  const MARK = ', ';
-  return [resume.fullName, resume.title].filter((v) => Boolean(v)).join(MARK);
 }
 
 export { HeaderBar, Breadcrumb };
