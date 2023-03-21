@@ -11,6 +11,9 @@ import id from 'date-fns/locale/id';
 import * as fieldStyles from './fields.css';
 import * as styles from './field-date-range.css';
 
+const DIGITS_MONTH = 2;
+const DIGITS_YEAR = 4;
+
 function FieldExperienceDates({
   experienceId,
   from = '',
@@ -142,7 +145,7 @@ function RangeInput({
         spellCheck={false}
         id="from-year"
         {...getCycleProps('from-year', {
-          autoSwitchWhen: (value) => value.length >= 4,
+          autoSwitchWhen: (value) => value.length >= DIGITS_YEAR,
           onChange: (ev) => setFromYear(ev.target.value),
         })}
         className={clsx(fieldStyles.inputText, styles.inputYear)}
@@ -161,9 +164,9 @@ function RangeInput({
         spellCheck={false}
         id="to-year"
         {...getCycleProps('to-year', {
-          autoSwitchWhen: (value) => value.length >= 4,
+          autoSwitchWhen: (value) => value.length >= DIGITS_YEAR,
           onChange: (ev) => {
-            ev.target.value.length <= 4 && setToYear(ev.target.value);
+            ev.target.value.length <= DIGITS_YEAR && setToYear(ev.target.value);
           },
         })}
         className={clsx(fieldStyles.inputText, styles.inputYear)}
@@ -227,10 +230,9 @@ function RangeInputWithMonth({
           spellCheck={false}
           id="from-month"
           {...getCycleProps('from-month', {
-            autoSwitchWhen: (value) => value.length >= 2,
-            onChange: (ev) => {
-              ev.target.value.length <= 2 && setFromMonth(ev.target.value);
-            },
+            autoSwitchWhen: _getAutoswitch(fromMonth, DIGITS_MONTH),
+            onChange: (ev) =>
+              setFromMonth(_getValue(ev.target.value, DIGITS_MONTH)),
           })}
           className={clsx(fieldStyles.inputText, styles.inputDate)}
           placeholder="12"
@@ -246,10 +248,9 @@ function RangeInputWithMonth({
           spellCheck={false}
           id="from-year"
           {...getCycleProps('from-year', {
-            autoSwitchWhen: (value) => value.length >= 4,
-            onChange: (ev) => {
-              ev.target.value.length <= 4 && setFromYear(ev.target.value);
-            },
+            autoSwitchWhen: _getAutoswitch(fromYear, DIGITS_YEAR),
+            onChange: (ev) =>
+              setFromYear(_getValue(ev.target.value, DIGITS_YEAR)),
           })}
           className={clsx(fieldStyles.inputText, styles.inputYear)}
           placeholder="20xx"
@@ -267,10 +268,9 @@ function RangeInputWithMonth({
           spellCheck={false}
           id="to-month"
           {...getCycleProps('to-month', {
-            autoSwitchWhen: (value) => value.length >= 2,
-            onChange: (ev) => {
-              ev.target.value.length <= 2 && setToMonth(ev.target.value);
-            },
+            autoSwitchWhen: _getAutoswitch(toMonth, DIGITS_MONTH),
+            onChange: (ev) =>
+              setToMonth(_getValue(ev.target.value, DIGITS_MONTH)),
           })}
           className={clsx(fieldStyles.inputText, styles.inputDate)}
           placeholder="12"
@@ -286,10 +286,9 @@ function RangeInputWithMonth({
           spellCheck={false}
           id="to-year"
           {...getCycleProps('to-year', {
-            autoSwitchWhen: (value) => value.length >= 4,
-            onChange: (ev) => {
-              ev.target.value.length <= 4 && setToYear(ev.target.value);
-            },
+            autoSwitchWhen: _getAutoswitch(toYear, DIGITS_YEAR),
+            onChange: (ev) =>
+              setToYear(_getValue(ev.target.value, DIGITS_YEAR)),
           })}
           className={clsx(fieldStyles.inputText, styles.inputYear)}
           placeholder="20xx"
@@ -361,8 +360,38 @@ const _getDateItem = (date: string, part: 'year' | 'month') => {
 };
 
 const _getValueFromParts = (year: string, month: string) => {
-  if (!year || !month) return '';
-  return [year, month].filter((part) => Boolean(part)).join('-');
+  const validatedYear = year.length < DIGITS_YEAR ? '' : year;
+  const validatedMonth = !month
+    ? ''
+    : [...new Array(DIGITS_MONTH - month.length)].reduce<string>(
+        (value) => '0' + value,
+        month
+      );
+  if (!validatedYear || !validatedMonth) return '';
+  return [validatedYear, validatedMonth].filter((v) => Boolean(v)).join('-');
 };
+
+function _getValue(value: string, digits: number) {
+  const setStateAction: React.SetStateAction<string> = (prevState) => {
+    const validatedValue = _validateValue(prevState, value);
+    if (validatedValue.length > digits) {
+      return prevState;
+    }
+    return validatedValue;
+  };
+  return setStateAction;
+}
+
+function _getAutoswitch(prevState: string, digits: number) {
+  return (value: string): boolean => {
+    const checkedValue = _validateValue(prevState, value);
+    return checkedValue.length >= digits;
+  };
+}
+
+function _validateValue(prevState: string, value: string) {
+  const valueAsNumber = Number(value);
+  return isNaN(valueAsNumber) ? prevState : value;
+}
 
 export { FieldExperienceDates, FieldEducationDates };
