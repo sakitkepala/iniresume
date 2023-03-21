@@ -46,7 +46,7 @@ function SectionExperiences({
             <Text style={pdfStyles.textSubheading}>{experience.employer}</Text>
 
             <Text style={pdfStyles.textDaterange}>
-              {_getMonthRangeText(experience.from, experience.to, en)}
+              {_getMonthRangeText(experience, en)}
             </Text>
             <Text>{experience.description}</Text>
 
@@ -72,13 +72,20 @@ function SectionExperiences({
   );
 }
 
-function _getMonthRangeText(from: string, to: string, useEnglish?: boolean) {
-  if (!from || !to) {
-    return 'Isi periode bekerjanya dulu...';
-  }
+function _getMonthRangeText(experience: Experience, useEnglish?: boolean) {
   const _formatMonth = (dateString: string) =>
-    format(parseISO(dateString), 'MMMM yyyy', { locale: useEnglish ? en : id });
-  return `${_formatMonth(from)} - ${_formatMonth(to)}`;
+    format(parseISO(dateString), 'MMMM yyyy', {
+      locale: useEnglish ? en : id,
+    });
+  if (experience.from && experience.to) {
+    return `${_formatMonth(experience.from)} - ${_formatMonth(experience.to)}`;
+  }
+  if (experience.ongoing && experience.from && !experience.to) {
+    return `${_formatMonth(experience.from)} - ${
+      useEnglish ? 'Present' : 'Sekarang'
+    }`;
+  }
+  return 'Isi periode bekerjanya dulu...';
 }
 
 export { SectionExperiences };
