@@ -251,6 +251,28 @@ function TestUpdateEducation({ item }: { item: Education }) {
           />
         </span>
 
+        <span data-testid="update-item-date-range-from-only">
+          <Save
+            onSave={() =>
+              updateEducationDates(item.id, {
+                from: item.from,
+                to: '',
+              })
+            }
+          />
+        </span>
+
+        <span data-testid="clear-item-date-range">
+          <Save
+            onSave={() =>
+              updateEducationDates(item.id, {
+                from: '',
+                to: '',
+              })
+            }
+          />
+        </span>
+
         <span data-testid="remove-item">
           <Save onSave={() => updateEducation(item.id, 'school', '')} />
         </span>

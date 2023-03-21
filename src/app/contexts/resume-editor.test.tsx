@@ -299,6 +299,10 @@ describe('useResumeEditor', () => {
     const [$createItem] = _getTestElement('create-item');
     const [$updateItemField] = _getTestElement('update-item-field');
     const [$updateDateRange] = _getTestElement('update-item-date-range');
+    const [$updateDateRangeFromOnly] = _getTestElement(
+      'update-item-date-range-from-only'
+    );
+    const [$clearDateRange] = _getTestElement('clear-item-date-range');
     const [$removeItem] = _getTestElement('remove-item');
     const [$createItemByDateRange] = _getTestElement(
       'create-item-by-date-range'
@@ -336,6 +340,13 @@ describe('useResumeEditor', () => {
     expect(within($education[0]).getByTestId('to')).toHaveTextContent(
       education.to
     );
+
+    await userEvent.click($updateDateRangeFromOnly);
+    await userEvent.click($clearDateRange);
+    $education = screen.queryAllByTestId(/education-item/i);
+
+    expect(within($education[0]).getByTestId('from')).toBeEmptyDOMElement();
+    expect(within($education[0]).getByTestId('to')).toBeEmptyDOMElement();
 
     await userEvent.click($removeItem);
     $education = screen.queryAllByTestId(/education-item/i);

@@ -479,8 +479,8 @@ function reducer(
     case 'UPDATE_EDUCATION_DATES': {
       const educationIds = new Set(state.education.map((xp) => xp.id));
 
-      // Harus disediakan ID & payload lengkap
-      if (!action.id || (!action.payload.from && !action.payload.to)) {
+      // Harus disediakan ID
+      if (!action.id) {
         return state;
       }
 
