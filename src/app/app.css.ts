@@ -28,6 +28,7 @@ globalStyle('#root', {
 });
 
 export const actionButton = style({
+  display: 'inline-block',
   userSelect: 'none',
   minWidth: '6rem',
   padding: '0.375rem 0.875rem',
