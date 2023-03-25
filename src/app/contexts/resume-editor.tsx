@@ -788,7 +788,12 @@ function _checkIsEmpty(resume: ResumeData): boolean {
   fields.set('email', (val: string) => val.length > 0);
   fields.set('phone', (val: PhoneNumber) => val.number.length > 0);
   fields.set('website', (val: Website) => val.url.length > 0);
-  fields.set('accounts', (val: Account[]) => val.length > 0);
+  fields.set('accounts', (val: Account[]) => {
+    const accounts = val.filter(
+      (acc) => ['github', 'linkedin'].indexOf(acc.account.toLowerCase()) < 0
+    );
+    return accounts.length > 0;
+  });
   fields.set('experiences', (val: Experience[]) => val.length > 0);
   fields.set('education', (val: Education[]) => val.length > 0);
   fields.set('skills', (val: string[]) => val.length > 0);

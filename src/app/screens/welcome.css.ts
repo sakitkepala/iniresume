@@ -39,13 +39,9 @@ export const headline = style({
 
 export const resumeHoverable = style({
   position: 'relative',
-  cursor: 'default',
-  // transition: 'box-shadow 0.3s, background-color 0.3s',
   transition: 'color 0.2s ease-out',
   ':hover': {
-    color: '#f9fff6',
-    // boxShadow: '0 0 30px #ffcc4d',
-    // backgroundColor: '#ffcc4d',
+    color: '#ffffff',
   },
   selectors: {
     '&::before': {
@@ -76,7 +72,6 @@ export const resumeHoverable = style({
     },
     '&:hover::after': {
       transform: 'scaleY(100%)',
-      // backgroundColor: '#762bd9',
     },
   },
 });
@@ -101,7 +96,7 @@ export const sparklingEmoji = style({
   },
   selectors: {
     [`${resumeHoverable}:hover + &`]: {
-      transform: 'translate(8px, -4px) scale(125%) rotate(15deg)',
+      transform: 'translate(18px, -4px) scale(125%) rotate(15deg)',
       transformOrigin: 'center',
     },
     [`${resumeHoverable}:hover + &::after`]: {
@@ -143,6 +138,85 @@ export const createButton = style({
   gap: '0.75rem',
   padding: '0.5rem 1rem',
   fontSize: 14,
+  transition: 'transform 0.075s',
+  ':hover': {
+    transform: 'translate(-2px, -3px)',
+  },
+  ':active': {
+    transform: 'translate(-1px, -1px)',
+  },
+});
+
+export const existingResumeMessage = style({
+  marginTop: '1.5rem',
+  marginBottom: '0.5rem',
+});
+
+export const linkEditExisting = style({
+  position: 'relative',
+  textDecoration: 'none',
+  transition: 'box-shadow 0.15s ease',
+  boxShadow: 'inset 0 -3px rgba(97, 82, 185, 0.75)',
+  color: 'inherit',
+  ':active': {
+    color: 'inherit',
+  },
+  ':visited': {
+    color: 'inherit',
+  },
+  ':hover': {
+    boxShadow: 'inset 0 -1.5em rgba(97, 82, 185, 0.25)',
+  },
+});
+
+export const promptOverlay = style({
+  backgroundColor: 'rgba(97, 82, 185, 0.5)',
+  position: 'fixed',
+  inset: 0,
+});
+
+export const promptContent = style({
+  position: 'fixed',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.5rem',
+
+  width: '90vw',
+  maxWidth: 500,
+  maxHeight: '85vh',
+  padding: 25,
+  borderRadius: 4,
+  boxShadow: '0 2px 4px rgb(0, 0, 0, 0.25)',
+  backgroundColor: '#ffffff',
+});
+
+export const promptActions = style({
+  marginTop: '1rem',
+  display: 'flex',
+  gap: '1rem',
+  justifyContent: 'flex-end',
+});
+
+export const promptActionPressable = style({
+  position: 'relative',
+  display: 'inline-block',
+  '::after': {
+    content: ' ',
+    position: 'absolute',
+    zIndex: -10,
+    inset: 0,
+    backgroundColor: '#000000',
+    borderRadius: 4,
+  },
+});
+
+export const promptActionButton = style({
+  display: 'inline-flex',
+  gap: '0.75rem',
   transition: 'transform 0.075s',
   ':hover': {
     transform: 'translate(-2px, -3px)',
