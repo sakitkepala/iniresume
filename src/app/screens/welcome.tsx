@@ -22,8 +22,17 @@ export function ScreenWelcome() {
           <div>
             <h1 className={styles.headline}>
               <span>
-                <span className={styles.hoverable}>One-Page Resume</span>{' '}
-                <span role="img" aria-label="Ikon buat resume">
+                <span
+                  className={styles.resumeHoverable}
+                  data-hoverable="One-Page Resume"
+                >
+                  One-Page Resume
+                </span>{' '}
+                <span
+                  className={styles.sparklingEmoji}
+                  role="img"
+                  aria-label="Emoji sparkling resume"
+                >
                   ✨
                 </span>
               </span>
