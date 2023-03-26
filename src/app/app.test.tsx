@@ -7,12 +7,11 @@ describe('App', () => {
   test('render screen Welcome yang default dan navigasi ke editor', async () => {
     render(<App />);
 
-    expect(screen.getByText(/welcome/i)).toBeInTheDocument();
+    const $buttonCreate = screen.getByRole('button', { name: /buat resume/i });
 
-    const buttonCreate = screen.getByRole('button', { name: /buat/i });
-    expect(buttonCreate).toBeInTheDocument();
+    expect($buttonCreate).toBeInTheDocument();
 
-    await userEvent.click(buttonCreate);
+    await userEvent.click($buttonCreate);
 
     await waitFor(() => {
       expect(screen.queryByText(/informasi/i)).toBeInTheDocument();

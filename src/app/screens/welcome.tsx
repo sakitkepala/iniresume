@@ -66,8 +66,13 @@ export function ScreenWelcome() {
             </div>
 
             <div className={styles.content}>
-              <h2 className={styles.contentHeading}>Coba Editor Resume!</h2>
-              <p>
+              <h2
+                className={styles.contentHeading}
+                aria-label="Feature Heading"
+              >
+                Coba Editor Resume!
+              </h2>
+              <p aria-label="Feature Copywriting">
                 Tulis konten resume di editor dengan "markdown", lalu generate
                 resume yang bisa di-download dalam bentuk PDF. Gratis!
               </p>
@@ -83,75 +88,20 @@ export function ScreenWelcome() {
   );
 }
 
-const styleCreateButton = clsx(appStyles.actionButton, styles.createButton);
-
-function SparklingEmojiContent({ children = null }: React.PropsWithChildren) {
-  return (
-    <>
-      <span role="img" aria-label="Emoji sparkling">
-        ✨
-      </span>
-      <span>{children}</span>
-    </>
-  );
-}
-
-function PromptActionButton({
-  children = null,
-  emoji,
-  onClick,
-}: React.PropsWithChildren<{ emoji: string; onClick: () => void }>) {
-  return (
-    <span className={styles.promptActionPressable}>
-      <button
-        className={clsx(appStyles.actionButton, styles.promptActionButton)}
-        onClick={onClick}
-      >
-        <span role="img" aria-label="Emoji">
-          {emoji}
-        </span>
-        <span>{children}</span>
-      </button>
-    </span>
-  );
-}
-
-function ButtonCreateResume({ hasSaveData }: { hasSaveData: boolean }) {
-  const navigate = useNavigate();
-
-  if (!hasSaveData) {
-    return (
-      <span className={styles.pressable}>
-        <Link role="button" className={styleCreateButton} to="/editor">
-          <SparklingEmojiContent>Buat Resume</SparklingEmojiContent>
-        </Link>
-      </span>
-    );
-  }
-
-  return (
-    <PromptRemoveSaveData
-      onCreate={() => {
-        clearSaveData();
-        navigate('/editor');
-      }}
-      onEdit={() => navigate('/editor')}
-    />
-  );
-}
-
 function ExistingResumeMessage({ saveData }: { saveData: ResumeData | null }) {
   const hasSaveData = Boolean(saveData);
+  const filename =
+    saveData?.fullName || saveData?.title ? _getFilenameText(saveData) : '';
 
   if (!hasSaveData) {
     return null;
   }
 
-  const filename =
-    saveData?.fullName || saveData?.title ? _getFilenameText(saveData) : '';
-
   return (
-    <div className={styles.existingResumeMessage}>
+    <div
+      className={styles.existingResumeMessage}
+      aria-label="Existing resume message"
+    >
       <span role="img" aria-label="Emoji waving hand">
         👋
       </span>{' '}
@@ -171,7 +121,46 @@ function ExistingResumeMessage({ saveData }: { saveData: ResumeData | null }) {
   );
 }
 
-function PromptRemoveSaveData({
+function ButtonCreateResume({ hasSaveData }: { hasSaveData: boolean }) {
+  const navigate = useNavigate();
+
+  if (!hasSaveData) {
+    return (
+      <span className={styles.pressable}>
+        <Link
+          role="button"
+          className={clsx(appStyles.actionButton, styles.createButton)}
+          to="/editor"
+        >
+          <SparklingEmojiContent>Buat Resume</SparklingEmojiContent>
+        </Link>
+      </span>
+    );
+  }
+
+  return (
+    <AlertRemoveSaveData
+      onCreate={() => {
+        clearSaveData();
+        navigate('/editor');
+      }}
+      onEdit={() => navigate('/editor')}
+    />
+  );
+}
+
+function SparklingEmojiContent({ children = null }: React.PropsWithChildren) {
+  return (
+    <>
+      <span role="img" aria-label="Emoji sparkling">
+        ✨
+      </span>
+      <span>{children}</span>
+    </>
+  );
+}
+
+function AlertRemoveSaveData({
   onCreate,
   onEdit,
 }: {
@@ -182,7 +171,7 @@ function PromptRemoveSaveData({
     <AlertDialog.Root>
       <AlertDialog.Trigger asChild>
         <span className={styles.pressable}>
-          <button className={styleCreateButton}>
+          <button className={clsx(appStyles.actionButton, styles.createButton)}>
             <SparklingEmojiContent>Buat Resume Baru Aja</SparklingEmojiContent>
           </button>
         </span>
@@ -200,20 +189,40 @@ function PromptRemoveSaveData({
 
           <div className={styles.promptActions}>
             <AlertDialog.Cancel asChild>
-              <PromptActionButton emoji="✋" onClick={onEdit}>
+              <AlertActionButton emoji="✋" onClick={onEdit}>
                 Edit aja
-              </PromptActionButton>
+              </AlertActionButton>
             </AlertDialog.Cancel>
 
             <AlertDialog.Action asChild>
-              <PromptActionButton emoji="👌" onClick={onCreate}>
+              <AlertActionButton emoji="👌" onClick={onCreate}>
                 OK, hapus aja
-              </PromptActionButton>
+              </AlertActionButton>
             </AlertDialog.Action>
           </div>
         </AlertDialog.Content>
       </AlertDialog.Portal>
     </AlertDialog.Root>
+  );
+}
+
+function AlertActionButton({
+  children = null,
+  emoji,
+  onClick,
+}: React.PropsWithChildren<{ emoji: string; onClick: () => void }>) {
+  return (
+    <span className={styles.promptActionPressable}>
+      <button
+        className={clsx(appStyles.actionButton, styles.promptActionButton)}
+        onClick={onClick}
+      >
+        <span role="img" aria-label="Emoji">
+          {emoji}
+        </span>
+        <span>{children}</span>
+      </button>
+    </span>
   );
 }
 
