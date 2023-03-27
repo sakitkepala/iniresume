@@ -1,8 +1,11 @@
 import { render, screen } from '@testing-library/react';
 
-import { ResumeEditorProvider } from '../contexts/resume-editor';
+import {
+  saveData,
+  getInitialData,
+  ResumeEditorProvider,
+} from '../../contexts/resume-editor';
 import { HeaderBar, Breadcrumb } from './header-bar';
-import { saveData, getInitialData } from '../contexts/resume-editor';
 
 describe('HeaderBar', () => {
   const filename = {

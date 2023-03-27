@@ -1,5 +1,4 @@
-import { ResumeEditorProvider } from '../contexts/resume-editor';
-import { HeaderBar, Breadcrumb } from '../components/header-bar';
+import { motion } from 'framer-motion';
 import { Editor } from '../components/editor';
 import { PreviewPanel } from '../components/preview-panel';
 
@@ -7,19 +6,18 @@ import * as styles from './editor.css';
 
 export function ScreenEditor() {
   return (
-    <ResumeEditorProvider>
-      <HeaderBar>
-        <Breadcrumb />
-      </HeaderBar>
-      <div className={styles.layout}>
-        <main>
-          <Editor />
-        </main>
-        <aside className={styles.aside}>
-          <PreviewPanel />
-        </aside>
-      </div>
-    </ResumeEditorProvider>
+    <motion.div
+      className={styles.layout}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
+      <main>
+        <Editor />
+      </main>
+      <aside className={styles.aside}>
+        <PreviewPanel />
+      </aside>
+    </motion.div>
   );
 }
 

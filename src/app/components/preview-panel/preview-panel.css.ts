@@ -5,9 +5,13 @@ export const previewContainer = style({
   padding: '4rem 1rem 2rem',
   minWidth: 595,
   height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
 });
 
 export const setupPanel = style({
+  width: '37.5rem',
   overflow: 'hidden',
   display: 'flex',
   flexDirection: 'column',

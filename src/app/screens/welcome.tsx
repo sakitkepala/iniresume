@@ -28,63 +28,57 @@ export function ScreenWelcome() {
   }, []);
 
   return (
-    <>
-      <HeaderBar />
-      <div className={styles.layout}>
-        <div className={styles.container}>
-          <div>
-            <h1 className={styles.headline}>
-              <span>
-                <span
-                  className={styles.resumeHoverable}
-                  data-hoverable="One-Page Resume"
-                >
-                  One-Page Resume
-                </span>{' '}
-                <span
-                  className={styles.sparklingEmoji}
-                  role="img"
-                  aria-label="Emoji sparkling resume"
-                >
-                  ✨
-                </span>
+    <div className={styles.layout}>
+      <div className={styles.container}>
+        <div>
+          <h1 className={styles.headline}>
+            <span>
+              <span
+                className={styles.resumeHoverable}
+                data-hoverable="One-Page Resume"
+              >
+                One-Page Resume
+              </span>{' '}
+              <span
+                className={styles.sparklingEmoji}
+                role="img"
+                aria-label="Emoji sparkling resume"
+              >
+                ✨
               </span>
-              <br />
-              <span>untuk bantu luncurkan</span>
-              <br />
-              <span>karir dev barumu.</span>
-            </h1>
+            </span>
+            <br />
+            <span>untuk bantu luncurkan</span>
+            <br />
+            <span>karir dev barumu.</span>
+          </h1>
+        </div>
+
+        <main className={styles.main}>
+          <div>
+            <img
+              className={styles.illustrationImage}
+              src={rocket}
+              alt="Rocket launch illustration"
+            />
           </div>
 
-          <main className={styles.main}>
-            <div>
-              <img
-                className={styles.illustrationImage}
-                src={rocket}
-                alt="Rocket launch illustration"
-              />
-            </div>
+          <div className={styles.content}>
+            <h2 className={styles.contentHeading} aria-label="Feature Heading">
+              Coba Editor Resume!
+            </h2>
+            <p aria-label="Feature Copywriting">
+              Tulis konten resume di editor dengan "markdown", lalu generate
+              resume yang bisa di-download dalam bentuk PDF. Gratis!
+            </p>
 
-            <div className={styles.content}>
-              <h2
-                className={styles.contentHeading}
-                aria-label="Feature Heading"
-              >
-                Coba Editor Resume!
-              </h2>
-              <p aria-label="Feature Copywriting">
-                Tulis konten resume di editor dengan "markdown", lalu generate
-                resume yang bisa di-download dalam bentuk PDF. Gratis!
-              </p>
+            <ExistingResumeMessage saveData={saveData} />
 
-              <ExistingResumeMessage saveData={saveData} />
-
-              <ButtonCreateResume hasSaveData={hasSaveData} />
-            </div>
-          </main>
-        </div>
+            <ButtonCreateResume hasSaveData={hasSaveData} />
+          </div>
+        </main>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -206,13 +200,12 @@ function AlertRemoveSaveData({
   );
 }
 
-function AlertActionButton({
-  children = null,
-  emoji,
-  onClick,
-}: React.PropsWithChildren<{ emoji: string; onClick: () => void }>) {
+const AlertActionButton = React.forwardRef<
+  HTMLElement,
+  React.PropsWithChildren<{ emoji: string; onClick: () => void }>
+>(({ children = null, emoji, onClick }, $ref) => {
   return (
-    <span className={styles.promptActionPressable}>
+    <span ref={$ref} className={styles.promptActionPressable}>
       <button
         className={clsx(appStyles.actionButton, styles.promptActionButton)}
         onClick={onClick}
@@ -224,7 +217,7 @@ function AlertActionButton({
       </button>
     </span>
   );
-}
+});
 
 function _getFilenameText(resume: ResumeData) {
   const MARK = ', ';

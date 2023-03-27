@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { type ResumeData, useResumeEditor } from '../contexts/resume-editor';
+import { useResumeEditor } from '../../contexts/resume-editor';
 import * as styles from './header-bar.css';
 
 function HeaderBar({ children }: React.PropsWithChildren) {

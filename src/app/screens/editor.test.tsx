@@ -1,12 +1,15 @@
 import { render, screen } from '@testing-library/react';
 
+import { ResumeEditorProvider } from '../contexts/resume-editor';
 import ScreenEditor from './editor';
 
 describe('ScreenEditor', () => {
   test('render Editor screen default', () => {
-    render(<ScreenEditor />);
-
-    expect(screen.getByLabelText(/app logo/i)).toBeInTheDocument();
+    render(
+      <ResumeEditorProvider>
+        <ScreenEditor />
+      </ResumeEditorProvider>
+    );
 
     expect(
       screen.getAllByRole('listitem', { name: /line/i }).length

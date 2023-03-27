@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 
+import ScreenLayout from './screens/layout';
 import ScreenWelcome from './screens/welcome';
-import ScreenTransition from './screens/transition';
+import LoadingEditor from './screens/loading-editor';
 
 import './app.css';
 
@@ -12,15 +13,17 @@ export function App() {
   return (
     <HashRouter>
       <Routes>
-        <Route path="/" element={<ScreenWelcome />} />
-        <Route
-          path="/editor"
-          element={
-            <React.Suspense fallback={<ScreenTransition />}>
-              <ScreenEditor />
-            </React.Suspense>
-          }
-        />
+        <Route path="/" element={<ScreenLayout />}>
+          <Route index element={<ScreenWelcome />} />
+          <Route
+            path="/editor"
+            element={
+              <React.Suspense fallback={<LoadingEditor />}>
+                <ScreenEditor />
+              </React.Suspense>
+            }
+          />
+        </Route>
       </Routes>
     </HashRouter>
   );

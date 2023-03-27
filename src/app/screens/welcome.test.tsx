@@ -17,8 +17,6 @@ describe('ScreenWelcome', () => {
     const $featureCopy = screen.getByLabelText(/feature copywriting/i);
     const $buttonCreate = screen.getByRole('button', { name: /buat resume/i });
 
-    expect(screen.getByLabelText(/app logo/i)).toBeInTheDocument();
-
     expect($headline).toBeInTheDocument();
     expect($headline.textContent).toMatchInlineSnapshot(
       `"One-Page Resume ✨untuk bantu luncurkankarir dev barumu."`

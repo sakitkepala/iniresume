@@ -4,6 +4,7 @@ export const layout = style({
   overflow: 'hidden',
   height: '100%',
   width: '100%',
+  padding: '4rem',
   marginInline: 'auto',
 
   '@media': {
@@ -24,6 +25,22 @@ export const layout = style({
   },
 });
 
-export const aside = style({
-  flexShrink: 0,
+export const setupContainer = style({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+});
+
+export const setupSkeleton = style({
+  width: '37.5rem',
+  padding: 1,
+});
+
+export const floatingPeep = style({
+  position: 'fixed',
+  inset: 0,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 });
