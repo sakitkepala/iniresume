@@ -10,6 +10,7 @@ export const previewContainer = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  justifyContent: 'space-between',
   gap: '1rem',
 });
 
