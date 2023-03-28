@@ -12,9 +12,12 @@ export const scrollableViewport = style({
 });
 
 export const layout = style({
-  display: 'flex',
-  justifyContent: 'center',
   marginTop: '5rem',
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'space-between',
 });
 
 export const container = style({
@@ -23,6 +26,15 @@ export const container = style({
   alignItems: 'center',
   gap: '2rem',
   width: 900,
+});
+
+export const footer = style({
+  marginBlock: '2rem',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '0.25rem',
+  fontSize: 12,
 });
 
 export const main = style({
@@ -166,12 +178,10 @@ export const existingResumeMessage = style({
   marginBottom: '0.5rem',
 });
 
-export const linkEditExisting = style({
-  position: 'relative',
-  zIndex: 0,
+export const link = style({
   textDecoration: 'none',
-  transition: 'box-shadow 0.15s ease',
   boxShadow: 'inset 0 -3px rgba(97, 82, 185, 0.75)',
+  transition: 'box-shadow 0.15s ease',
   color: 'inherit',
   ':active': {
     color: 'inherit',

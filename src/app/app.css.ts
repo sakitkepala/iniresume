@@ -47,3 +47,19 @@ export const actionButton = style({
     cursor: 'default',
   },
 });
+
+export const linkUnderline = style({
+  textDecoration: 'none',
+  boxShadow: 'inset 0 -3px rgba(97, 82, 185, 0.75)',
+  transition: 'box-shadow 0.15s ease',
+  color: 'inherit',
+  ':active': {
+    color: 'inherit',
+  },
+  ':visited': {
+    color: 'inherit',
+  },
+  ':hover': {
+    boxShadow: 'inset 0 -1.5em rgba(97, 82, 185, 0.25)',
+  },
+});

@@ -6,6 +6,8 @@ import * as ScrollArea from '@radix-ui/react-scroll-area';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { motion } from 'framer-motion';
 import { Scrollbar } from '../components/scrollbar';
+import { ExternalLink } from '../components/external-link';
+import { IniResumeLogo } from '../components/iniresume-logo';
 
 import { clsx } from 'clsx';
 
@@ -96,6 +98,21 @@ export function ScreenWelcome() {
               </div>
             </motion.main>
           </div>
+
+          <footer className={styles.footer}>
+            <div>
+              <IniResumeLogo />
+            </div>
+            <div>
+              &copy; {new Date().getFullYear()}{' '}
+              <ExternalLink
+                href="https://sakitkepala.dev/dika"
+                className={styles.link}
+              >
+                Andika Priyotama
+              </ExternalLink>
+            </div>
+          </footer>
         </motion.div>
       </ScrollArea.Viewport>
       <Scrollbar />
@@ -124,7 +141,7 @@ function ExistingResumeMessage({ saveData }: { saveData: ResumeData | null }) {
       </span>{' '}
       Tampaknya kamu masih punya resume sebelumnya nih
       {filename ? ':' : '.'}{' '}
-      <Link role="button" to="/editor" className={styles.linkEditExisting}>
+      <Link role="button" to="/editor" className={styles.link}>
         {filename ? (
           <>
             <em>{filename}</em>.{' '}

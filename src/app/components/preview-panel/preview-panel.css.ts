@@ -4,12 +4,21 @@ export { promptActionButton as actionButton } from '../../screens/welcome.css';
 
 export const previewContainer = style({
   marginInline: 'auto',
-  padding: '4rem 1rem 2rem',
+  padding: '3rem 1rem 2rem',
   minWidth: 595,
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  gap: '1rem',
+});
+
+export const copyright = style({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '0.25rem',
+  fontSize: 12,
 });
 
 export const setupPanel = style({

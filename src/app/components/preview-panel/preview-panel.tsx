@@ -5,8 +5,10 @@ import { useResumeEditor } from 'src/app/contexts/resume-editor';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { motion } from 'framer-motion';
 import { Scrollbar } from '../scrollbar';
-import { Checkbox } from './components/checkbox';
 import { ResumePDF } from '../resume-template';
+import { ExternalLink } from '../external-link';
+import { IniResumeLogo } from '../iniresume-logo';
+import { Checkbox } from './components/checkbox';
 import { PreviewPaper } from './components/preview-paper';
 
 import IconDownload from './icons/download';
@@ -44,6 +46,7 @@ function PreviewPanel() {
             setDownloadUrl('');
           }}
         />
+        <Copyright />
       </div>
     );
   }
@@ -90,6 +93,26 @@ function PreviewPanel() {
           </div>
         </div>
       </motion.div>
+      <Copyright />
+    </div>
+  );
+}
+
+function Copyright() {
+  return (
+    <div className={styles.copyright}>
+      <div>
+        <IniResumeLogo />
+      </div>
+      <div>
+        &copy; {new Date().getFullYear()}{' '}
+        <ExternalLink
+          href="https://sakitkepala.dev/dika"
+          className={appStyles.linkUnderline}
+        >
+          Andika Priyotama
+        </ExternalLink>
+      </div>
     </div>
   );
 }
