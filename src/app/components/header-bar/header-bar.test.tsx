@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
 import {
   saveData,
@@ -17,7 +18,18 @@ describe('HeaderBar', () => {
     render(<HeaderBar />);
 
     expect(screen.getByLabelText(/app logo/i)).toBeInTheDocument();
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
     expect(screen.queryByLabelText(/resume info/i)).not.toBeInTheDocument();
+  });
+
+  test('Render dengan link ke home di path yang bukan home', () => {
+    render(
+      <MemoryRouter>
+        <HeaderBar currentPath="/any-path" />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByRole('link')).toBeInTheDocument();
   });
 
   test('Render dengan breadcrumb', () => {

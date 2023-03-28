@@ -1,5 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
+export { promptActionButton as actionButton } from '../../screens/welcome.css';
+
 export const previewContainer = style({
   marginInline: 'auto',
   padding: '4rem 1rem 2rem',
@@ -15,7 +17,7 @@ export const setupPanel = style({
   overflow: 'hidden',
   display: 'flex',
   flexDirection: 'column',
-  border: '1px solid #c3c3c3',
+  border: '1px solid rgb(224, 224, 224)',
   borderRadius: 5,
   boxShadow: '1px 1px 1px rgb(0, 0, 0, 0.25)',
   backgroundColor: '#F2F2F2',
@@ -25,7 +27,26 @@ export const setupPanelSection = style({
   display: 'flex',
   flexDirection: 'column',
   gap: '1rem',
-  padding: '1rem 1.5rem',
+  padding: '1rem',
+});
+
+export const setupHeadingText = style({
+  boxShadow: 'inset 0 -3px rgba(97, 82, 185, 0.75)',
+  transition: 'box-shadow 0.15s ease',
+  ':hover': {
+    boxShadow: 'inset 0 -1.5em rgba(97, 82, 185, 0.25)',
+  },
+});
+
+export const setupCard = style({
+  padding: '1rem',
+  border: '1px solid #BDBDBD',
+  borderRadius: '5px',
+  backgroundColor: '#ffffff',
+
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.75rem',
 });
 
 export const setupPanelFooter = style({
@@ -37,13 +58,28 @@ export const setupPanelFooter = style({
   backgroundColor: '#ffffff',
 });
 
+export const actionPressable = style({
+  position: 'relative',
+  zIndex: 0,
+  display: 'inline-block',
+  '::after': {
+    content: ' ',
+    position: 'absolute',
+    zIndex: -1,
+    pointerEvents: 'none',
+    inset: 0,
+    backgroundColor: '#000000',
+    borderRadius: 4,
+  },
+});
+
 export const fileViewer = style({
   overflow: 'hidden',
   display: 'flex',
   flexDirection: 'column',
 
   height: '100%',
-  border: '1px solid #c3c3c3',
+  border: '1px solid rgb(224, 224, 224)',
   borderRadius: 5,
   boxShadow: '1px 1px 1px rgb(0, 0, 0, 0.25)',
   backgroundColor: '#F2F2F2',
@@ -90,8 +126,29 @@ export const textButton = style({
   textDecoration: 'none',
   cursor: 'pointer',
 
+  display: 'inline-flex',
+  gap: '0.5rem',
+
   ':disabled': {
     color: '#d9d9d9',
     cursor: 'default',
+  },
+});
+
+export const textButtonIcon = style({
+  display: 'inline-flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+});
+
+export const textButtonContent = style({
+  display: 'inline-block',
+  height: '1.5em',
+  boxShadow: 'inset 0 -3px rgba(97, 82, 185, 0.75)',
+  transition: 'box-shadow 0.15s ease',
+  selectors: {
+    [`${textButton}:hover &`]: {
+      boxShadow: 'inset 0 -1.5em rgba(97, 82, 185, 0.25)',
+    },
   },
 });

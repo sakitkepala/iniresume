@@ -1,4 +1,5 @@
 import * as ScrollArea from '@radix-ui/react-scroll-area';
+import { Scrollbar } from '../scrollbar';
 import { LineList } from './line-list';
 import * as styles from './editor.css';
 
@@ -10,9 +11,7 @@ function Editor() {
           <LineList />
         </div>
       </ScrollArea.Viewport>
-      <ScrollArea.Scrollbar orientation="vertical">
-        <ScrollArea.Thumb />
-      </ScrollArea.Scrollbar>
+      <Scrollbar />
     </ScrollArea.Root>
   );
 }

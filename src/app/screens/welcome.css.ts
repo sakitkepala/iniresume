@@ -1,5 +1,16 @@
 import { style } from '@vanilla-extract/css';
 
+export const scrollableRoot = style({
+  overflow: 'hidden',
+  width: '100%',
+  height: '100%',
+});
+
+export const scrollableViewport = style({
+  width: '100%',
+  height: '100%',
+});
+
 export const layout = style({
   display: 'flex',
   justifyContent: 'center',
@@ -39,6 +50,7 @@ export const headline = style({
 
 export const resumeHoverable = style({
   position: 'relative',
+  zIndex: 0,
   transition: 'color 0.2s ease-out',
   ':hover': {
     color: '#ffffff',
@@ -78,6 +90,7 @@ export const resumeHoverable = style({
 
 export const sparklingEmoji = style({
   position: 'relative',
+  zIndex: 0,
   display: 'inline-block',
   transition: 'all 0.3s 0.05s',
   '::after': {
@@ -118,6 +131,7 @@ export const contentHeading = style({
 export const pressable = style({
   marginTop: '1.5rem',
   position: 'relative',
+  zIndex: 0,
   display: 'inline-block',
   transition: 'box-shadow 0.3s',
   ':hover': {
@@ -154,6 +168,7 @@ export const existingResumeMessage = style({
 
 export const linkEditExisting = style({
   position: 'relative',
+  zIndex: 0,
   textDecoration: 'none',
   transition: 'box-shadow 0.15s ease',
   boxShadow: 'inset 0 -3px rgba(97, 82, 185, 0.75)',
@@ -170,17 +185,20 @@ export const linkEditExisting = style({
 });
 
 export const promptOverlay = style({
-  backgroundColor: 'rgba(97, 82, 185, 0.5)',
   position: 'fixed',
+  backgroundColor: 'rgba(97, 82, 185, 0.5)',
   inset: 0,
 });
 
-export const promptContent = style({
+export const promptContentContainer = style({
   position: 'fixed',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  inset: 0,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+});
 
+export const promptContent = style({
   display: 'flex',
   flexDirection: 'column',
   gap: '0.5rem',
@@ -203,6 +221,7 @@ export const promptActions = style({
 
 export const promptActionPressable = style({
   position: 'relative',
+  zIndex: 0,
   display: 'inline-block',
   '::after': {
     content: ' ',
@@ -218,10 +237,12 @@ export const promptActionButton = style({
   display: 'inline-flex',
   gap: '0.75rem',
   transition: 'transform 0.075s',
-  ':hover': {
-    transform: 'translate(-2px, -3px)',
-  },
-  ':active': {
-    transform: 'translate(-1px, -1px)',
+  selectors: {
+    '&:not(:disabled):hover': {
+      transform: 'translate(-2px, -3px)',
+    },
+    '&:not(:disabled):active': {
+      transform: 'translate(-1px, -1px)',
+    },
   },
 });

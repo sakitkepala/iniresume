@@ -4,7 +4,7 @@ export const layout = style({
   overflow: 'hidden',
   height: '100%',
   width: '100%',
-  padding: '4rem',
+  paddingTop: '4rem',
   marginInline: 'auto',
 
   '@media': {

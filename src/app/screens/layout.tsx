@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { useMatch, Outlet } from 'react-router-dom';
+import { useMatch, useLocation, Outlet } from 'react-router-dom';
 
 import { ResumeEditorProvider } from '../contexts/resume-editor';
 import { HeaderBar, Breadcrumb } from '../components/header-bar';
 
 function ScreenLayout() {
+  const location = useLocation();
   const match = useMatch('/');
   const isHome = Boolean(match);
 
@@ -19,7 +20,7 @@ function ScreenLayout() {
 
   return (
     <ResumeEditorProvider>
-      <HeaderBar>
+      <HeaderBar currentPath={location.pathname}>
         <Breadcrumb />
       </HeaderBar>
       <Outlet />

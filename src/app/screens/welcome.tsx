@@ -2,8 +2,10 @@ import * as React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { type ResumeData, loadSaveData, clearSaveData } from '../data/resume';
 
+import * as ScrollArea from '@radix-ui/react-scroll-area';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
-import { HeaderBar } from '../components/header-bar';
+import { motion } from 'framer-motion';
+import { Scrollbar } from '../components/scrollbar';
 
 import { clsx } from 'clsx';
 
@@ -28,57 +30,76 @@ export function ScreenWelcome() {
   }, []);
 
   return (
-    <div className={styles.layout}>
-      <div className={styles.container}>
-        <div>
-          <h1 className={styles.headline}>
-            <span>
-              <span
-                className={styles.resumeHoverable}
-                data-hoverable="One-Page Resume"
-              >
-                One-Page Resume
-              </span>{' '}
-              <span
-                className={styles.sparklingEmoji}
-                role="img"
-                aria-label="Emoji sparkling resume"
-              >
-                ✨
-              </span>
-            </span>
-            <br />
-            <span>untuk bantu luncurkan</span>
-            <br />
-            <span>karir dev barumu.</span>
-          </h1>
-        </div>
+    <ScrollArea.Root className={styles.scrollableRoot}>
+      <ScrollArea.Viewport className={styles.scrollableViewport}>
+        <motion.div
+          className={styles.layout}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <div className={styles.container}>
+            <div>
+              <h1 className={styles.headline}>
+                <span>
+                  <span
+                    className={styles.resumeHoverable}
+                    data-hoverable="One-Page Resume"
+                  >
+                    One-Page Resume
+                  </span>{' '}
+                  <span
+                    className={styles.sparklingEmoji}
+                    role="img"
+                    aria-label="Emoji sparkling resume"
+                  >
+                    ✨
+                  </span>
+                </span>
+                <br />
+                <span>untuk bantu luncurkan</span>
+                <br />
+                <span>karir dev barumu.</span>
+              </h1>
+            </div>
 
-        <main className={styles.main}>
-          <div>
-            <img
-              className={styles.illustrationImage}
-              src={rocket}
-              alt="Rocket launch illustration"
-            />
+            <motion.main
+              className={styles.main}
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: 1,
+                transition: { delay: 0.1, duration: 0.1 },
+              }}
+            >
+              <div>
+                <img
+                  className={styles.illustrationImage}
+                  src={rocket}
+                  alt="Rocket launch illustration"
+                />
+              </div>
+
+              <div className={styles.content}>
+                <h2
+                  className={styles.contentHeading}
+                  aria-label="Feature Heading"
+                >
+                  Coba Editor Resume!
+                </h2>
+                <p aria-label="Feature Copywriting">
+                  Tulis konten resume di editor dengan "markdown", lalu generate
+                  resume yang bisa di-download dalam bentuk PDF. Gratis!
+                </p>
+
+                <ExistingResumeMessage saveData={saveData} />
+
+                <ButtonCreateResume hasSaveData={hasSaveData} />
+              </div>
+            </motion.main>
           </div>
-
-          <div className={styles.content}>
-            <h2 className={styles.contentHeading} aria-label="Feature Heading">
-              Coba Editor Resume!
-            </h2>
-            <p aria-label="Feature Copywriting">
-              Tulis konten resume di editor dengan "markdown", lalu generate
-              resume yang bisa di-download dalam bentuk PDF. Gratis!
-            </p>
-
-            <ExistingResumeMessage saveData={saveData} />
-
-            <ButtonCreateResume hasSaveData={hasSaveData} />
-          </div>
-        </main>
-      </div>
-    </div>
+        </motion.div>
+      </ScrollArea.Viewport>
+      <Scrollbar />
+    </ScrollArea.Root>
   );
 }
 
@@ -92,9 +113,11 @@ function ExistingResumeMessage({ saveData }: { saveData: ResumeData | null }) {
   }
 
   return (
-    <div
+    <motion.div
       className={styles.existingResumeMessage}
       aria-label="Existing resume message"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
     >
       <span role="img" aria-label="Emoji waving hand">
         👋
@@ -111,7 +134,7 @@ function ExistingResumeMessage({ saveData }: { saveData: ResumeData | null }) {
         )}
         Edit aja?
       </Link>
-    </div>
+    </motion.div>
   );
 }
 
@@ -173,27 +196,34 @@ function AlertRemoveSaveData({
 
       <AlertDialog.Portal>
         <AlertDialog.Overlay className={styles.promptOverlay} />
-        <AlertDialog.Content className={styles.promptContent}>
-          <AlertDialog.Title>Hapus resume yang sebelumnya?</AlertDialog.Title>
+        <AlertDialog.Content className={styles.promptContentContainer}>
+          <motion.div
+            className={styles.promptContent}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0, transition: { duration: 0.25 } }}
+            transition={{ opacity: { duration: 0.1 } }}
+          >
+            <AlertDialog.Title>Hapus resume yang sebelumnya?</AlertDialog.Title>
 
-          <AlertDialog.Description>
-            Bila buat resume baru, data sebelumnya akan dihapus, digantikan
-            dengan data baru.
-          </AlertDialog.Description>
+            <AlertDialog.Description>
+              Bila buat resume baru, data sebelumnya akan dihapus, digantikan
+              dengan data baru.
+            </AlertDialog.Description>
 
-          <div className={styles.promptActions}>
-            <AlertDialog.Cancel asChild>
-              <AlertActionButton emoji="✋" onClick={onEdit}>
-                Edit aja
-              </AlertActionButton>
-            </AlertDialog.Cancel>
+            <div className={styles.promptActions}>
+              <AlertDialog.Cancel asChild>
+                <AlertActionButton emoji="✋" onClick={onEdit}>
+                  Edit aja
+                </AlertActionButton>
+              </AlertDialog.Cancel>
 
-            <AlertDialog.Action asChild>
-              <AlertActionButton emoji="👌" onClick={onCreate}>
-                OK, hapus aja
-              </AlertActionButton>
-            </AlertDialog.Action>
-          </div>
+              <AlertDialog.Action asChild>
+                <AlertActionButton emoji="👌" onClick={onCreate}>
+                  OK, hapus aja
+                </AlertActionButton>
+              </AlertDialog.Action>
+            </div>
+          </motion.div>
         </AlertDialog.Content>
       </AlertDialog.Portal>
     </AlertDialog.Root>

@@ -14,13 +14,26 @@ export const breadcrumb = style({
   alignItems: 'baseline',
   gap: '1rem',
   padding: '1rem 2rem',
-  color: '#d9d9d9',
   fontWeight: 700,
+});
+
+export const breadcrumbFilenameItem = style({
+  display: 'flex',
+  alignItems: 'baseline',
+  gap: '1rem',
+  color: '#d9d9d9',
 });
 
 export const logoType = style({
   fontSize: '1.125rem',
   color: '#6152b9',
+});
+
+export const logoLink = style({
+  textDecoration: 'none',
+  color: 'inherit',
+  ':hover': { color: 'inherit' },
+  ':visited': { color: 'inherit' },
 });
 
 export const headerAction = style({

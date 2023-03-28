@@ -1,5 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
+export { scrollableRoot, scrollableViewport } from '../screens/welcome.css';
+
 export const layout = style({
   overflow: 'hidden',
   height: '100%',

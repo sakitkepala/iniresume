@@ -12,7 +12,13 @@ export const editorScrollableViewport = style({
 });
 
 export const lineListContainer = style({
-  marginBlock: '4rem 25rem',
+  marginBlock: '4rem',
   marginInline: 'auto',
   width: '100%',
+
+  '@media': {
+    'screen and (min-width: 1224px)': {
+      marginBlock: '4rem 25rem',
+    },
+  },
 });
