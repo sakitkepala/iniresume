@@ -12,20 +12,29 @@ export const scrollableViewport = style({
 });
 
 export const layout = style({
-  marginTop: '5rem',
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'space-between',
+  marginInline: '1.5rem',
 });
 
 export const container = style({
+  marginTop: '1.5rem',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   gap: '2rem',
-  width: 900,
+
+  '@media': {
+    'screen and (min-width: 768px)': {
+      marginTop: '5rem',
+    },
+    'screen and (min-width: 960px)': {
+      width: 900,
+    },
+  },
 });
 
 export const footer = style({
@@ -41,23 +50,62 @@ export const main = style({
   overflow: 'hidden',
   height: '100%',
   width: '100%',
+
   display: 'grid',
-  gridTemplateColumns: 'auto 1fr',
-  gap: '1rem',
-  fontSize: '1rem',
+  gridTemplateColumns: 'minmax(0, 1fr)',
+  justifyItems: 'center',
+  gap: '2.5rem',
+
+  fontSize: '0.875rem',
+
+  '@media': {
+    'screen and (min-width: 375px)': {
+      gridTemplateColumns: 'none',
+      gap: '0.5rem',
+    },
+    'screen and (min-width: 768px)': {
+      gridTemplateColumns: 'auto 1fr',
+      gap: '1rem',
+      fontSize: '1rem',
+    },
+  },
+});
+
+export const illustration = style({
+  '@media': {
+    'screen and (min-width: 375px)': {
+      gridColumn: 1,
+      gridRow: 1,
+    },
+  },
 });
 
 export const illustrationImage = style({
-  minWidth: 300,
+  maxWidth: '50vw',
+
+  '@media': {
+    'screen and (min-width: 375px)': {
+      maxWidth: '100%',
+    },
+    'screen and (min-width: 768px)': {
+      minWidth: 300,
+    },
+  },
 });
 
 export const headline = style({
   maxWidth: 900,
-  fontSize: '3.5rem',
   color: '#762bd9',
+  fontSize: 'clamp(1rem, 6.25vw, 3.5rem)',
   fontWeight: 400,
   fontFamily: "'Dela Gothic One', cursive",
-  lineHeight: '1.375',
+
+  '@media': {
+    'screen and (min-width: 768px)': {
+      fontSize: '3.5rem',
+      lineHeight: '1.375',
+    },
+  },
 });
 
 export const resumeHoverable = style({
@@ -132,8 +180,18 @@ export const sparklingEmoji = style({
 });
 
 export const content = style({
-  marginTop: '4rem',
   maxWidth: '35ch',
+
+  '@media': {
+    'screen and (min-width: 375px)': {
+      gridColumn: 2,
+      gridRow: 1,
+      alignSelf: 'center',
+    },
+    'screen and (min-width: 768px)': {
+      marginInline: 0,
+    },
+  },
 });
 
 export const contentHeading = style({
@@ -145,7 +203,10 @@ export const pressable = style({
   position: 'relative',
   zIndex: 0,
   display: 'inline-block',
+  width: '100%',
+
   transition: 'box-shadow 0.3s',
+
   ':hover': {
     boxShadow: '0 0 30px #ffcc4d',
   },
@@ -157,19 +218,39 @@ export const pressable = style({
     backgroundColor: '#000000',
     borderRadius: 4,
   },
+
+  '@media': {
+    'screen and (min-width: 375px)': {
+      width: 'auto',
+    },
+  },
 });
 
 export const createButton = style({
   display: 'inline-flex',
+  justifyContent: 'center',
   gap: '0.75rem',
   padding: '0.5rem 1rem',
-  fontSize: 14,
+  width: '100%',
+
+  fontSize: '0.75rem',
+
   transition: 'transform 0.075s',
+
   ':hover': {
     transform: 'translate(-2px, -3px)',
   },
   ':active': {
     transform: 'translate(-1px, -1px)',
+  },
+
+  '@media': {
+    'screen and (min-width: 375px)': {
+      width: 'auto',
+    },
+    'screen and (min-width: 425px)': {
+      fontSize: '0.875rem',
+    },
   },
 });
 

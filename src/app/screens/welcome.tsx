@@ -72,14 +72,6 @@ export function ScreenWelcome() {
                 transition: { delay: 0.1, duration: 0.1 },
               }}
             >
-              <div>
-                <img
-                  className={styles.illustrationImage}
-                  src={rocket}
-                  alt="Rocket launch illustration"
-                />
-              </div>
-
               <div className={styles.content}>
                 <h2
                   className={styles.contentHeading}
@@ -95,6 +87,14 @@ export function ScreenWelcome() {
                 <ExistingResumeMessage saveData={saveData} />
 
                 <ButtonCreateResume hasSaveData={hasSaveData} />
+              </div>
+
+              <div className={styles.illustration}>
+                <img
+                  className={styles.illustrationImage}
+                  src={rocket}
+                  alt="Rocket launch illustration"
+                />
               </div>
             </motion.main>
           </div>
