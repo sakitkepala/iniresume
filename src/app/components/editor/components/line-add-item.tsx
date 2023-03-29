@@ -78,7 +78,7 @@ function LineAddOtherProject({ nextLine }: { nextLine?: boolean }) {
         </span>
       ) : (
         <span className={fieldStyles.fieldEmptyLabel}>
-          {'//'} yang kamu banggakan
+          {'//'} yang ingin ditonjolkan
         </span>
       )}
     </div>

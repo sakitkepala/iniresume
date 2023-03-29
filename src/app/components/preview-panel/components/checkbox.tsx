@@ -17,6 +17,7 @@ function Checkbox({
 }) {
   const [checkedValue, setChecked] = React.useState<boolean>(checked || false);
   const buttonProps = {
+    'aria-hidden': true,
     onClick: () => setChecked((checked) => !checked),
   };
   return (

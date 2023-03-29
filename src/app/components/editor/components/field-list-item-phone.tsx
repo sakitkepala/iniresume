@@ -119,9 +119,13 @@ function PhoneEditor({
       <span>&nbsp;</span>
       <span className={fieldStyles.staticDisplay}>-</span>
       <span>&nbsp;</span>
+      <label htmlFor="phone-number" className={styles.phoneInputLabel}>
+        Nomor telepon
+      </label>
       <input
         ref={$input}
         className={clsx(fieldStyles.inputText, styles.phoneInput)}
+        id="phone-number"
         type="text"
         value={inputValue}
         onChange={(ev) => {

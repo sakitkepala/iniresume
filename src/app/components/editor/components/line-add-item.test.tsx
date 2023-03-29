@@ -340,7 +340,7 @@ describe('LineAddOtherProject', () => {
           <div>
             <span>
               //
-               yang kamu banggakan
+               yang ingin ditonjolkan
             </span>
           </div>
         </div>

@@ -23,7 +23,15 @@ export const checkboxChecked = style({
 });
 
 export const input = style({
-  display: 'none',
+  position: 'absolute',
+  top: 'auto',
+  margin: -1,
+  border: 0,
+  overflow: 'hidden',
+  clip: 'rect(0, 0, 0, 0)',
+  width: 1,
+  height: 1,
+  whiteSpace: 'nowrap',
 });
 
 export const label = style({

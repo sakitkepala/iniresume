@@ -8,6 +8,14 @@ export const phoneEditor = style({
   display: 'flex',
 });
 
+export const phoneInputLabel = style({
+  visibility: 'hidden',
+  opacity: 0,
+  position: 'absolute',
+  top: -9999,
+  left: -9999,
+});
+
 export const phoneInput = style({
   flex: 0,
   width: 96,
