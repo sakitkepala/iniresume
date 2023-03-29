@@ -306,14 +306,24 @@ export const promptContent = style({
 export const promptActions = style({
   marginTop: '1rem',
   display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-end',
   gap: '1rem',
-  justifyContent: 'flex-end',
+
+  '@media': {
+    'screen and (min-width: 375px)': {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      justifyContent: 'flex-end',
+    },
+  },
 });
 
 export const promptActionPressable = style({
   position: 'relative',
   zIndex: 0,
   display: 'inline-block',
+  width: '100%',
   '::after': {
     content: ' ',
     position: 'absolute',
@@ -322,11 +332,19 @@ export const promptActionPressable = style({
     backgroundColor: '#000000',
     borderRadius: 4,
   },
+
+  '@media': {
+    'screen and (min-width: 375px)': {
+      width: 'auto',
+    },
+  },
 });
 
 export const promptActionButton = style({
   display: 'inline-flex',
+  justifyContent: 'center',
   gap: '0.75rem',
+  width: '100%',
   transition: 'transform 0.075s',
   selectors: {
     '&:not(:disabled):hover': {
@@ -334,6 +352,12 @@ export const promptActionButton = style({
     },
     '&:not(:disabled):active': {
       transform: 'translate(-1px, -1px)',
+    },
+  },
+
+  '@media': {
+    'screen and (min-width: 375px)': {
+      width: 'auto',
     },
   },
 });

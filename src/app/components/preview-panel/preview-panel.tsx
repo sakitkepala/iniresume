@@ -69,6 +69,7 @@ function PreviewPanel() {
             </PreviewPaper>
           </ScrollArea.Viewport>
           <Scrollbar />
+          <Scrollbar orientation="horizontal" />
         </ScrollArea.Root>
 
         <div className={styles.viewerFooter}>

@@ -4,14 +4,25 @@ export { promptActionButton as actionButton } from '../../screens/welcome.css';
 
 export const previewContainer = style({
   marginInline: 'auto',
-  padding: '3rem 1rem 2rem',
-  minWidth: 595,
+  paddingInline: '0.5rem',
+  paddingBottom: '2rem',
+  width: '100%',
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'space-between',
   gap: '1rem',
+
+  '@media': {
+    'screen and (min-width: 720px)': {
+      minWidth: 595,
+    },
+
+    'screen and (min-width: 1224px)': {
+      padding: '3rem 1rem 2rem',
+    },
+  },
 });
 
 export const copyright = style({
@@ -23,7 +34,7 @@ export const copyright = style({
 });
 
 export const setupPanel = style({
-  width: '37.5rem',
+  maxWidth: '37.5rem',
   overflow: 'hidden',
   display: 'flex',
   flexDirection: 'column',
@@ -31,6 +42,13 @@ export const setupPanel = style({
   borderRadius: 5,
   boxShadow: '1px 1px 1px rgb(0, 0, 0, 0.25)',
   backgroundColor: '#F2F2F2',
+
+  '@media': {
+    'screen and (min-width: 720px)': {
+      width: '37.5rem',
+      maxWidth: 'none',
+    },
+  },
 });
 
 export const setupPanelSection = style({
@@ -72,6 +90,7 @@ export const actionPressable = style({
   position: 'relative',
   zIndex: 0,
   display: 'inline-block',
+  width: '100%',
   '::after': {
     content: ' ',
     position: 'absolute',
@@ -81,6 +100,12 @@ export const actionPressable = style({
     backgroundColor: '#000000',
     borderRadius: 4,
   },
+
+  '@media': {
+    'screen and (min-width: 375px)': {
+      width: 'auto',
+    },
+  },
 });
 
 export const fileViewer = style({
@@ -88,11 +113,18 @@ export const fileViewer = style({
   display: 'flex',
   flexDirection: 'column',
 
-  height: '100%',
+  width: '100%',
+  height: '75vh',
   border: '1px solid rgb(224, 224, 224)',
   borderRadius: 5,
   boxShadow: '1px 1px 1px rgb(0, 0, 0, 0.25)',
   backgroundColor: '#F2F2F2',
+
+  '@media': {
+    'screen and (min-width: 720px)': {
+      height: '100%',
+    },
+  },
 });
 
 export const viewerScrollableRoot = style({
@@ -111,11 +143,19 @@ export const viewerScrollableViewport = style({
 
 export const viewerFooter = style({
   display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
+  flexDirection: 'column',
+  alignItems: 'flex-end',
   gap: '0.5rem',
   padding: '1rem 1.5rem',
   backgroundColor: '#ffffff',
+
+  '@media': {
+    'screen and (min-width: 375px)': {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+  },
 });
 
 export const buttonGroup = style({

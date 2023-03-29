@@ -1,10 +1,14 @@
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 import * as styles from './scrollbar.css';
 
-function Scrollbar() {
+function Scrollbar({
+  orientation = 'vertical',
+}: {
+  orientation?: 'vertical' | 'horizontal';
+}) {
   return (
     <ScrollArea.Scrollbar
-      orientation="vertical"
+      orientation={orientation}
       className={styles.scrollAreaScrollbar}
     >
       <ScrollArea.Thumb className={styles.scrollAreaThumb} />

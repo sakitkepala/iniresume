@@ -21,6 +21,7 @@ export function LoadingEditor() {
 
       <div className={styles.floatingPeep}>
         <motion.img
+          className={styles.peepImg}
           src={peep}
           alt="Coffee peep"
           initial={{ y: 60, opacity: 0 }}

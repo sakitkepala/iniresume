@@ -253,10 +253,11 @@ const animateBreadcrumb: Variants = {
 // Screen yang pakai breadcrumb musti dibungkus pakai Provider Resume Editor
 function Breadcrumb() {
   const { filename } = useResumeEditor();
+  const isLargerScreen = useMediaQuery('(min-width: 720px)');
 
   return (
     <AnimatePresence>
-      {Boolean(filename) && (
+      {isLargerScreen && Boolean(filename) && (
         <motion.div
           className={styles.breadcrumbFilenameItem}
           initial="hidden"
@@ -285,6 +286,36 @@ function Breadcrumb() {
       )}
     </AnimatePresence>
   );
+}
+
+function useMediaQuery(query: string) {
+  const getMatches = (query: string) => {
+    if (typeof window !== 'undefined') {
+      return window.matchMedia(query).matches;
+    }
+    return false;
+  };
+
+  const [matches, setMatches] = React.useState(() => getMatches(query));
+
+  React.useEffect(() => {
+    function handleChange() {
+      setMatches(getMatches(query));
+    }
+
+    const matchMedia = window.matchMedia(query);
+
+    // Triggered at the first client-side load and if query changes
+    handleChange();
+
+    matchMedia.addEventListener('change', handleChange);
+
+    return () => {
+      matchMedia.removeEventListener('change', handleChange);
+    };
+  }, [query]);
+
+  return matches;
 }
 
 export { HeaderBar, Breadcrumb };

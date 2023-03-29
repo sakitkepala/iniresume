@@ -4,7 +4,7 @@ export const layout = style({
   overflow: 'hidden',
   height: '100%',
   width: '100%',
-  paddingTop: '4rem',
+  paddingTop: '1rem',
   marginInline: 'auto',
 
   '@media': {
@@ -13,6 +13,7 @@ export const layout = style({
     },
 
     'screen and (min-width: 1224px)': {
+      paddingTop: '3rem',
       width: '100%',
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
@@ -26,10 +27,16 @@ export const layout = style({
 });
 
 export const setupContainer = style({
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
+  display: 'none',
+
+  '@media': {
+    'screen and (min-width: 1224px)': {
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+  },
 });
 
 export const setupSkeleton = style({
@@ -43,4 +50,8 @@ export const floatingPeep = style({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+});
+
+export const peepImg = style({
+  maxWidth: '100%',
 });

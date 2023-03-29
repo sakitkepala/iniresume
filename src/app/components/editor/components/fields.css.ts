@@ -6,6 +6,7 @@ export const staticDisplay = style({
 
 export const linkTextLabel = style({
   textDecoration: 'underline',
+  wordBreak: 'break-all',
 });
 
 export const fieldEmptyLabel = style({
