@@ -1,5 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
+export { scrollableRoot, scrollableViewport } from '../../screens/welcome.css';
+
 export const header = style({
   display: 'flex',
   justifyContent: 'space-between',
@@ -94,17 +96,42 @@ export const dialogContent = style({
   flexDirection: 'column',
   gap: '0.5rem',
 
-  maxWidth: 720,
-  padding: 25,
+  width: 720,
+  maxWidth: '90vw',
+  height: '100%',
+  maxHeight: '85vh',
   borderRadius: 4,
   backgroundColor: '#ffffff',
   boxShadow: '0 2px 4px rgb(0, 0, 0, 0.25)',
+
+  '@media': {
+    'screen and (min-width: 720px)': {
+      height: 'auto',
+      maxHeight: '95vh',
+    },
+  },
 });
 
 export const dialogContentLayout = style({
+  padding: 25,
   display: 'flex',
+  flexDirection: 'column-reverse',
   gap: '1.5rem',
-  alignItems: 'flex-end',
+
+  '@media': {
+    'screen and (min-width: 720px)': {
+      flexDirection: 'row',
+    },
+  },
+});
+
+export const peep = style({
+  alignSelf: 'center',
+  '@media': {
+    'screen and (min-width: 720px)': {
+      alignSelf: 'flex-end',
+    },
+  },
 });
 
 export const peepIllustration = style({
@@ -122,7 +149,8 @@ export const ul = style({
 });
 
 export const dialogActions = style({
-  marginTop: '1rem',
+  padding: 25,
+  // marginTop: '1rem',
   display: 'flex',
   gap: '1rem',
   justifyContent: 'center',

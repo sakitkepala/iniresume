@@ -2,6 +2,8 @@ import * as React from 'react';
 import { useResumeEditor } from '../../contexts/resume-editor';
 
 import * as Dialog from '@radix-ui/react-dialog';
+import * as ScrollArea from '@radix-ui/react-scroll-area';
+import { Scrollbar } from '../scrollbar';
 import { Link } from 'react-router-dom';
 import { type Variants, motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink } from '../external-link';
@@ -84,137 +86,146 @@ function SiteInfo() {
             animate={{ opacity: 1, y: 0, transition: { duration: 0.25 } }}
             transition={{ opacity: { duration: 0.1 } }}
           >
-            <div className={styles.dialogContentLayout}>
-              <div>
-                <img
-                  src={peep}
-                  alt="Peep coffee"
-                  className={styles.peepIllustration}
-                />
-              </div>
+            <ScrollArea.Root className={styles.scrollableRoot}>
+              <ScrollArea.Viewport className={styles.scrollableViewport}>
+                <div className={styles.dialogContentLayout}>
+                  <div className={styles.peep}>
+                    <img
+                      src={peep}
+                      alt="Peep coffee"
+                      className={styles.peepIllustration}
+                    />
+                  </div>
 
-              <div className={styles.dialogContentCopywriting}>
-                <Dialog.Title>
-                  Hai{' '}
-                  <span role="img" aria-label="Emoji hai">
-                    👋
-                  </span>
-                </Dialog.Title>
+                  <div className={styles.dialogContentCopywriting}>
+                    <Dialog.Title>
+                      Hai{' '}
+                      <span role="img" aria-label="Emoji hai">
+                        👋
+                      </span>
+                    </Dialog.Title>
 
-                <Dialog.Description>
-                  Terima kasih, yah, sudah berkunjung.
-                </Dialog.Description>
+                    <Dialog.Description>
+                      Terima kasih, yah, sudah berkunjung.
+                    </Dialog.Description>
 
-                <Dialog.Description>
-                  Website ini adalah projek sampingan yang dengan rendah hati
-                  dipersembahkan oleh pembuatnya{' '}
-                  <ExternalLink href="https://sakitkepala.dev/dika">
-                    sakitkepala.dev
-                  </ExternalLink>
-                  .
-                </Dialog.Description>
+                    <Dialog.Description>
+                      Website ini adalah projek sampingan yang dengan rendah
+                      hati dipersembahkan oleh pembuatnya{' '}
+                      <ExternalLink href="https://sakitkepala.dev/dika">
+                        sakitkepala.dev
+                      </ExternalLink>
+                      .
+                    </Dialog.Description>
 
-                <Dialog.Description>
-                  Beberapa projek open-source dan layanan gratis ikut membantu
-                  dalam membangun website ini, di antaranya:
-                </Dialog.Description>
+                    <Dialog.Description>
+                      Beberapa projek open-source dan layanan gratis ikut
+                      membantu dalam membangun website ini, di antaranya:
+                    </Dialog.Description>
 
-                <ul className={styles.ul}>
-                  <li>
-                    <ExternalLink href="https://react.dev/">React</ExternalLink>
-                    , dengan standalone project dari{' '}
-                    <ExternalLink href="https://nx.dev/getting-started/react-standalone-tutorial">
-                      Nx Workspace
-                    </ExternalLink>
-                  </li>
-                  <li>
-                    <ExternalLink href="https://vanilla-extract.style">
-                      Vanilla Extract CSS
-                    </ExternalLink>
-                  </li>
-                  <li>
-                    <ExternalLink href="https://www.radix-ui.com">
-                      Radix UI
-                    </ExternalLink>
-                  </li>
-                  <li>
-                    <ExternalLink href="https://www.framer.com/motion/">
-                      Framer Motion
-                    </ExternalLink>
-                  </li>
-                  <li>
-                    <ExternalLink href="https://github.com/diegomura/react-pdf">
-                      React PDF renderer
-                    </ExternalLink>{' '}
-                    &amp;{' '}
-                    <ExternalLink href="https://github.com/wojtekmaj/react-pdf">
-                      React PDF (viewer)
-                    </ExternalLink>
-                  </li>
-                  <li>
-                    <ExternalLink href="https://reactrouter.com">
-                      React Router
-                    </ExternalLink>
-                  </li>
-                  <li>
-                    <ExternalLink href="https://blush.design">
-                      blush.design
-                    </ExternalLink>{' '}
-                    untuk ilustrasinya
-                  </li>
-                  <li>
-                    <ExternalLink href="https://fonts.google.com/">
-                      Google Fonts
-                    </ExternalLink>
-                  </li>
-                  <li>
-                    <ExternalLink href="https://github.com/sakitkepala">
-                      Github
-                    </ExternalLink>
-                  </li>
-                  <li>
-                    <ExternalLink href="https://www.netlify.com">
-                      Netlify
-                    </ExternalLink>
-                  </li>
-                  <li>
-                    juga{' '}
-                    <ExternalLink href="https://glitch.com">
-                      Glitch
-                    </ExternalLink>{' '}
-                    yang jadi inspirasi untuk desain tampilan visual UI-nya{' '}
-                    <span role="img" aria-label="Emoji grin">
-                      😁
-                    </span>
-                  </li>
-                </ul>
+                    <ul className={styles.ul}>
+                      <li>
+                        <ExternalLink href="https://react.dev/">
+                          React
+                        </ExternalLink>
+                        , dengan standalone project dari{' '}
+                        <ExternalLink href="https://nx.dev/getting-started/react-standalone-tutorial">
+                          Nx Workspace
+                        </ExternalLink>
+                      </li>
+                      <li>
+                        <ExternalLink href="https://vanilla-extract.style">
+                          Vanilla Extract CSS
+                        </ExternalLink>
+                      </li>
+                      <li>
+                        <ExternalLink href="https://www.radix-ui.com">
+                          Radix UI
+                        </ExternalLink>
+                      </li>
+                      <li>
+                        <ExternalLink href="https://www.framer.com/motion/">
+                          Framer Motion
+                        </ExternalLink>
+                      </li>
+                      <li>
+                        <ExternalLink href="https://github.com/diegomura/react-pdf">
+                          React PDF renderer
+                        </ExternalLink>{' '}
+                        &amp;{' '}
+                        <ExternalLink href="https://github.com/wojtekmaj/react-pdf">
+                          React PDF (viewer)
+                        </ExternalLink>
+                      </li>
+                      <li>
+                        <ExternalLink href="https://reactrouter.com">
+                          React Router
+                        </ExternalLink>
+                      </li>
+                      <li>
+                        <ExternalLink href="https://blush.design">
+                          blush.design
+                        </ExternalLink>{' '}
+                        untuk ilustrasinya
+                      </li>
+                      <li>
+                        <ExternalLink href="https://fonts.google.com/">
+                          Google Fonts
+                        </ExternalLink>
+                      </li>
+                      <li>
+                        <ExternalLink href="https://github.com/sakitkepala">
+                          Github
+                        </ExternalLink>
+                      </li>
+                      <li>
+                        <ExternalLink href="https://www.netlify.com">
+                          Netlify
+                        </ExternalLink>
+                      </li>
+                      <li>
+                        juga{' '}
+                        <ExternalLink href="https://glitch.com">
+                          Glitch
+                        </ExternalLink>{' '}
+                        yang jadi inspirasi untuk desain tampilan visual UI-nya{' '}
+                        <span role="img" aria-label="Emoji grin">
+                          😁
+                        </span>
+                      </li>
+                    </ul>
 
-                <Dialog.Description>
-                  ...terima kasih sekali sudah bermurah hati menyediakan
-                  tool-tool yang bermanfaat untuk komunitas. Warbyasah{' '}
-                  <span role="img" aria-label="Emoji clapping hands">
-                    👏
-                  </span>
-                </Dialog.Description>
+                    <Dialog.Description>
+                      ...terima kasih sekali sudah bermurah hati menyediakan
+                      tool-tool yang bermanfaat untuk komunitas. Warbyasah{' '}
+                      <span role="img" aria-label="Emoji clapping hands">
+                        👏
+                      </span>
+                    </Dialog.Description>
 
-                <Dialog.Description>
-                  Daftar package lengkap dan kode sumbernya tersedia di{' '}
-                  <ExternalLink href={SOURCE_REPO_URL}>
-                    repositori Github
-                  </ExternalLink>
-                  , tentu saja. Sangat dipersilakan kontribusinya, baik itu
-                  untuk report issue/bug, masukan fitur, atau masukan apapun
-                  yang bisa jadi menarik.
-                </Dialog.Description>
+                    <Dialog.Description>
+                      Daftar package lengkap dan kode sumbernya tersedia di{' '}
+                      <ExternalLink href={SOURCE_REPO_URL}>
+                        repositori Github
+                      </ExternalLink>
+                      , tentu saja. Sangat dipersilakan kontribusinya, baik itu
+                      untuk report issue/bug, masukan fitur, atau masukan apapun
+                      yang bisa jadi menarik.
+                    </Dialog.Description>
 
-                <Dialog.Description>
-                  Jika website ini ternyata bermanfaat buatmu, boleh juga loh
-                  kasih tahu saya.
-                </Dialog.Description>
+                    <Dialog.Description>
+                      Jika website ini ternyata bermanfaat buatmu, boleh juga
+                      loh kasih tahu saya.
+                    </Dialog.Description>
 
-                <Dialog.Description>Senang bila bermanfaat.</Dialog.Description>
-              </div>
-            </div>
+                    <Dialog.Description>
+                      Senang bila bermanfaat.
+                    </Dialog.Description>
+                  </div>
+                </div>
+              </ScrollArea.Viewport>
+              <Scrollbar />
+            </ScrollArea.Root>
 
             <div className={styles.dialogActions}>
               <Dialog.Close asChild>
