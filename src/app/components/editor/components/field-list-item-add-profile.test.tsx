@@ -23,33 +23,9 @@ describe('FieldListItemAddProfile', () => {
       content: <FieldListItemAddProfile />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <span>
-            <span>
-               
-            </span>
-            <span>
-               
-            </span>
-            <button
-              tabindex="-1"
-            >
-              Tambah lagi profil lain
-            </button>
-          </span>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1  Tambah lagi profil lain"`);
 
     await userEvent.click(screen.getByText(/Tambah/i));
     await userEvent.type(

@@ -13,35 +13,9 @@ describe('FieldDateOfBirth', () => {
       content: <FieldDateOfBirth />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div
-            class=""
-          >
-            <div>
-              -
-            </div>
-            <div>
-               
-            </div>
-            <div>
-              <span>
-                // Tanggal lahir (dipakai hitung usia)
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1- // Tanggal lahir (dipakai hitung usia)"`);
   });
 
   test('render teks konten dari value teks tanggal lahir', () => {

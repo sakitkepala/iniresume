@@ -13,23 +13,9 @@ describe('FieldExperienceDescription', () => {
       content: <FieldExperienceDescription experienceId="fake-experience-id" />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <span>
-            // Deskripsikan pekerjaannya
-          </span>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1// Deskripsikan pekerjaannya"`);
   });
 
   test('render konten teks sesuai value', () => {

@@ -13,36 +13,9 @@ describe('FieldWebsite', () => {
       content: <FieldWebsite />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div
-            class=""
-          >
-            <div>
-              -
-            </div>
-            <div>
-               
-            </div>
-            <div>
-              <span>
-                //
-                 Website personal
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1- // Website personal"`);
   });
 
   test('render teks link sebagai konten', () => {

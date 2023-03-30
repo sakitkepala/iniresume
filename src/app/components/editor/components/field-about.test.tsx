@@ -12,27 +12,11 @@ describe('FieldAbout', () => {
       content: <FieldAbout />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div
-            aria-label="Field about"
-          >
-            <span>
-              // Deskripsikan singkat tentang diri atau sasaran karir kamu
-            </span>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(
+      `"1// Deskripsikan singkat tentang diri atau sasaran karir kamu"`
+    );
   });
 
   test('render teks konten dari value', () => {

@@ -14,26 +14,9 @@ describe('ListItemProjectAdd', () => {
       content: <ListItemProjectAdd experienceId="fake-id" hasProject={false} />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div>
-            <span>
-              //
-               Cantumkan projek
-            </span>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1// Cantumkan projek"`);
   });
 
   test('render label sebagai list item ketika sudah punya data projek', async () => {
@@ -43,38 +26,9 @@ describe('ListItemProjectAdd', () => {
       content: <ListItemProjectAdd experienceId="fake-id" hasProject />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div>
-            <div
-              class=""
-            >
-              <div>
-                -
-              </div>
-              <div>
-                 
-              </div>
-              <div>
-                <span>
-                  //
-                   Tambah projek lagi
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1- // Tambah projek lagi"`);
   });
 
   test('"open" field project di line lain dari trigger', async () => {

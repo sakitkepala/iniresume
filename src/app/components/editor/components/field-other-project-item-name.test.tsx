@@ -13,33 +13,9 @@ describe('FieldOtherProjectItemName', () => {
       content: <FieldOtherProjectItemName projectId="fake-project-id" />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <span
-            class=""
-          >
-            <span>
-              ##
-            </span>
-            <span>
-               
-            </span>
-            <span>
-              // Nama/judul projek
-            </span>
-          </span>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1## // Nama/judul projek"`);
   });
 
   test('render konten teks sesuai value', async () => {

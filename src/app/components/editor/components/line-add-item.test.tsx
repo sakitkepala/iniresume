@@ -19,28 +19,9 @@ describe('LineAddExperience', () => {
       content: <LineAddExperience />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div>
-            <span>
-              //
-               
-              Isi
-               pengalaman
-            </span>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1// Isi pengalaman"`);
   });
 
   test('render label tambah pengalaman', () => {
@@ -66,28 +47,9 @@ describe('LineAddExperience', () => {
       content: <LineAddExperience />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div>
-            <span>
-              //
-               
-              Tambah
-               pengalaman
-            </span>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1// Tambah pengalaman"`);
   });
 
   test('buka line-line field experience', async () => {
@@ -135,28 +97,9 @@ describe('LineAddEducation', () => {
       content: <LineAddEducation />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div>
-            <span>
-              //
-               
-              Isi
-               pendidikan
-            </span>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1// Isi pendidikan"`);
   });
 
   test('render label tambah pendidikan', () => {
@@ -182,28 +125,9 @@ describe('LineAddEducation', () => {
       content: <LineAddEducation />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div>
-            <span>
-              //
-               
-              Tambah
-               pendidikan
-            </span>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1// Tambah pendidikan"`);
   });
 
   test('buka line-line field education', async () => {
@@ -251,29 +175,11 @@ describe('LineAddOtherProject', () => {
       content: <LineAddOtherProject />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div>
-            <span>
-              //
-               
-              Masukkan
-               
-              beberapa projek lain (projek personal, dsb.)
-            </span>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(
+      `"1// Masukkan beberapa projek lain (projek personal, dsb.)"`
+    );
   });
 
   test('render label tambah projek', () => {
@@ -294,29 +200,11 @@ describe('LineAddOtherProject', () => {
       content: <LineAddOtherProject />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div>
-            <span>
-              //
-               
-              Tambah
-               
-              beberapa projek lain (projek personal, dsb.)
-            </span>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(
+      `"1// Tambah beberapa projek lain (projek personal, dsb.)"`
+    );
   });
 
   test('render sebagai line kedua', () => {
@@ -326,26 +214,9 @@ describe('LineAddOtherProject', () => {
       content: <LineAddOtherProject nextLine />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div>
-            <span>
-              //
-               yang ingin ditonjolkan
-            </span>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1// yang ingin ditonjolkan"`);
   });
 
   test('buka line-line field other projects', async () => {

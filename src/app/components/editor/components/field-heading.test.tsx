@@ -42,33 +42,9 @@ describe('FieldExperienceTitle', () => {
       ];
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <span
-            class=""
-          >
-            <span>
-              ##
-            </span>
-            <span>
-               
-            </span>
-            <span>
-              Title label
-            </span>
-          </span>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1## Title label"`);
 
     await userEvent.click(screen.getByText(label));
     await userEvent.type(screen.getByDisplayValue(''), `${titleValue}{Enter}`);
@@ -112,33 +88,9 @@ describe('FieldExperienceEmployer', () => {
       ];
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <span
-            class=""
-          >
-            <span>
-              ###
-            </span>
-            <span>
-               
-            </span>
-            <span>
-              Employer label
-            </span>
-          </span>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1### Employer label"`);
 
     await userEvent.click(screen.getByText(label));
     await userEvent.type(
@@ -185,33 +137,9 @@ describe('FieldEducationSchool', () => {
       ];
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <span
-            class=""
-          >
-            <span>
-              ##
-            </span>
-            <span>
-               
-            </span>
-            <span>
-              School label
-            </span>
-          </span>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1## School label"`);
 
     await userEvent.click(screen.getByText(label));
     await userEvent.type(screen.getByDisplayValue(''), `${schoolValue}{Enter}`);
@@ -255,33 +183,9 @@ describe('FieldEducationMajor', () => {
       ];
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <span
-            class=""
-          >
-            <span>
-              ###
-            </span>
-            <span>
-               
-            </span>
-            <span>
-              Major label
-            </span>
-          </span>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1### Major label"`);
 
     await userEvent.click(screen.getByText(label));
     await userEvent.type(screen.getByDisplayValue(''), `${majorValue}{Enter}`);

@@ -33,7 +33,7 @@ describe('ScreenWelcome', () => {
 
     expect($featureCopy).toBeInTheDocument();
     expect($featureCopy.textContent).toMatchInlineSnapshot(
-      `"Tulis konten resume di editor dengan \\"markdown\\", lalu generate resume yang bisa di-download dalam bentuk PDF. Gratis!"`
+      `"Tulis konten resume di editor dengan \\"markdown\\", lalu generate resume yang bisa di-download dalam bentuk PDF. Simple... gratis!"`
     );
 
     expect($buttonCreate).toBeInTheDocument();

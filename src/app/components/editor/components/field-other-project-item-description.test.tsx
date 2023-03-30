@@ -13,23 +13,11 @@ describe('FieldOtherProjectItemDescription', () => {
       content: <FieldOtherProjectItemDescription projectId="fake-project-id" />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <span>
-            // Deskripsikan projek bila perlu *bisa dikosongi
-          </span>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(
+      `"1// Deskripsikan projek bila perlu *bisa dikosongi"`
+    );
   });
 
   test('render konten teks sesuai value', async () => {

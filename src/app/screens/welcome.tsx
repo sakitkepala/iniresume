@@ -81,7 +81,8 @@ export function ScreenWelcome() {
                 </h2>
                 <p aria-label="Feature Copywriting">
                   Tulis konten resume di editor dengan "markdown", lalu generate
-                  resume yang bisa di-download dalam bentuk PDF. Gratis!
+                  resume yang bisa di-download dalam bentuk PDF. Simple...
+                  gratis!
                 </p>
 
                 <ExistingResumeMessage saveData={saveData} />

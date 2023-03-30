@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import {
@@ -17,8 +17,12 @@ describe('HeaderBar', () => {
   test('Render defaultnya statik', () => {
     render(<HeaderBar />);
 
-    expect(screen.getByLabelText(/app logo/i)).toBeInTheDocument();
-    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+    const $appLogo = screen.getByLabelText(/app logo/i);
+
+    expect($appLogo).toBeInTheDocument();
+    expect(
+      within($appLogo).queryByTitle(/kembali ke halaman depan/i)
+    ).not.toBeInTheDocument();
     expect(screen.queryByLabelText(/resume info/i)).not.toBeInTheDocument();
   });
 
@@ -29,7 +33,11 @@ describe('HeaderBar', () => {
       </MemoryRouter>
     );
 
-    expect(screen.queryByRole('link')).toBeInTheDocument();
+    expect(
+      within(screen.getByLabelText(/app logo/i)).queryByTitle(
+        /kembali ke halaman depan/i
+      )
+    ).toBeInTheDocument();
   });
 
   test('Render dengan breadcrumb', () => {

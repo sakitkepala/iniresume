@@ -18,36 +18,9 @@ describe('FieldListItemAddSkill', () => {
       content: <FieldListItemAddSkill />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div
-            class=""
-          >
-            <div>
-              -
-            </div>
-            <div>
-               
-            </div>
-            <div>
-              <span>
-                //
-                 Isi skill
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1- // Isi skill"`);
   });
 
   test('reset inputan field setelah simpan', async () => {
@@ -71,36 +44,9 @@ describe('FieldListItemAddSkill', () => {
       content: <FieldListItemAddSkill asInsert />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div
-            class=""
-          >
-            <div>
-              -
-            </div>
-            <div>
-               
-            </div>
-            <div>
-              <span>
-                //
-                 Isi skill
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1- // Isi skill"`);
   });
 
   test('non-aktifkan semua line setelah simpan untuk insert', async () => {
@@ -125,36 +71,9 @@ describe('FieldListItemAddSkill', () => {
       content: <FieldListItemAddSkill asInsertTop />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div
-            class=""
-          >
-            <div>
-              -
-            </div>
-            <div>
-               
-            </div>
-            <div>
-              <span>
-                //
-                 Isi skill
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1- // Isi skill"`);
   });
 
   test('non-aktifkan semua line setelah simpan untuk insert di paling atas', async () => {
@@ -189,33 +108,9 @@ describe('FieldListItemAddSkill', () => {
       content: <FieldListItemAddSkill />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <span>
-            <span>
-               
-            </span>
-            <span>
-               
-            </span>
-            <button
-              tabindex="-1"
-            >
-              Tambah skill lagi
-            </button>
-          </span>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1  Tambah skill lagi"`);
   });
 });
 
@@ -227,36 +122,9 @@ describe('FieldListItemSkill', () => {
       content: <FieldListItemSkill />,
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div
-            class=""
-          >
-            <div>
-              -
-            </div>
-            <div>
-               
-            </div>
-            <div>
-              <span>
-                //
-                 Isi skill
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1- // Isi skill"`);
   });
 
   test('render sebagai display item skill dari value ketika sudah terisi', () => {

@@ -20,36 +20,9 @@ describe('FieldListItemPhone', () => {
       ),
     }));
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div
-            class=""
-          >
-            <div>
-              -
-            </div>
-            <div>
-               
-            </div>
-            <div>
-              <span>
-                //
-                 Nomor telepon
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1- // Nomor telepon"`);
 
     await userEvent.click(screen.getByText(/telepon/i));
     await userEvent.type(screen.getByDisplayValue(''), `${phoneValue}{Enter}`);

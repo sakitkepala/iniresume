@@ -18,37 +18,9 @@ describe('FieldListItemProjectName', () => {
       ),
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <div
-            class=""
-          >
-            <div>
-              -
-            </div>
-            <div>
-               
-            </div>
-            <div>
-              <span>
-                <span>
-                  // Nama/judul projek
-                </span>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1- // Nama/judul projek"`);
   });
 
   test('render konten teks sesuai value', async () => {

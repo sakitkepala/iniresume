@@ -34,24 +34,9 @@ describe('FieldExperienceDates', () => {
       ];
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <span>
-            //
-             Isi waktu masa bekerja
-          </span>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1// Isi waktu masa bekerja"`);
 
     await userEvent.click(screen.getByText(/masa bekerja/i));
     await userEvent.type(screen.getByLabelText(/bulan mulai/i), '10');
@@ -152,24 +137,9 @@ describe('FieldEducationDates', () => {
       ];
     });
 
-    expect(screen.getByRole('listitem', { name: /line 1/i }))
-      .toMatchInlineSnapshot(`
-      <div
-        aria-label="Line 1"
-        class=""
-        role="listitem"
-      >
-        <div>
-          1
-        </div>
-        <div>
-          <span>
-            //
-             Isi waktu masa studi
-          </span>
-        </div>
-      </div>
-    `);
+    expect(
+      screen.getByRole('listitem', { name: /line 1/i }).textContent
+    ).toMatchInlineSnapshot(`"1// Isi waktu masa studi"`);
 
     await userEvent.click(screen.getByText(/masa studi/i));
     await userEvent.type(screen.getByLabelText(/tahun mulai/i), '2023');

@@ -42,7 +42,11 @@ function HeaderBar({
           {isHome ? (
             <IniResumeLogo />
           ) : (
-            <Link to={HOME_PATH} className={styles.logoLink}>
+            <Link
+              to={HOME_PATH}
+              className={styles.logoLink}
+              title="Kembali ke halaman depan"
+            >
               <IniResumeLogo />
             </Link>
           )}
@@ -134,6 +138,15 @@ function SiteInfo() {
                         </ExternalLink>
                       </li>
                       <li>
+                        <ExternalLink href="https://github.com/diegomura/react-pdf">
+                          React PDF renderer
+                        </ExternalLink>{' '}
+                        &amp;{' '}
+                        <ExternalLink href="https://github.com/wojtekmaj/react-pdf">
+                          React PDF (viewer)
+                        </ExternalLink>
+                      </li>
+                      <li>
                         <ExternalLink href="https://vanilla-extract.style">
                           Vanilla Extract CSS
                         </ExternalLink>
@@ -149,12 +162,8 @@ function SiteInfo() {
                         </ExternalLink>
                       </li>
                       <li>
-                        <ExternalLink href="https://github.com/diegomura/react-pdf">
-                          React PDF renderer
-                        </ExternalLink>{' '}
-                        &amp;{' '}
-                        <ExternalLink href="https://github.com/wojtekmaj/react-pdf">
-                          React PDF (viewer)
+                        <ExternalLink href="https://skeletonreact.com">
+                          React Content Loader
                         </ExternalLink>
                       </li>
                       <li>
