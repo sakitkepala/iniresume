@@ -15,23 +15,10 @@ function Checkbox({
   checked?: boolean;
   onChange?: (checked: boolean) => void;
 }) {
-  const [checkedValue, setChecked] = React.useState<boolean>(checked || false);
-  const buttonProps = {
-    'aria-hidden': true,
-    onClick: () => setChecked((checked) => !checked),
-  };
+  const [checkedValue, setChecked] = React.useState(checked || false);
+
   return (
     <div className={styles.checkboxInput}>
-      {checkedValue ? (
-        <button
-          className={clsx(styles.checkbox, styles.checkboxChecked)}
-          {...buttonProps}
-        >
-          <CheckMark />
-        </button>
-      ) : (
-        <button className={styles.checkbox} {...buttonProps} />
-      )}
       <input
         type="checkbox"
         className={styles.input}
@@ -45,6 +32,17 @@ function Checkbox({
           onChange?.(ev.target.checked);
         }}
       />
+      <button
+        aria-hidden
+        className={clsx(
+          styles.checkbox,
+          checkedValue ? styles.checkboxChecked : undefined
+        )}
+        onClick={() => setChecked((checked) => !checked)}
+      >
+        {checkedValue && <CheckMark />}
+      </button>
+
       {Boolean(label) && (
         <label htmlFor={id} className={styles.label}>
           {label}

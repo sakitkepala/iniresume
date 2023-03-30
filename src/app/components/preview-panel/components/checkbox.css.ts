@@ -1,6 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
 export const checkboxInput = style({
+  position: 'relative',
   display: 'flex',
   gap: '0.5rem',
   alignItems: 'center',
@@ -35,6 +36,8 @@ export const input = style({
 });
 
 export const label = style({
+  margin: 0,
+  padding: 0,
   cursor: 'pointer',
   fontWeight: 700,
 });
