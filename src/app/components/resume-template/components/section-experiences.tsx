@@ -57,9 +57,12 @@ function SectionExperiences({
                     <Text style={styles.projectName}>{project.name}</Text>
                     <Text>{project.description}</Text>
                     {!project.url ? null : (
-                      <Link style={styles.projectLink} src={project.url}>
-                        {en ? 'Project link' : 'Link projek'} &#187;
-                      </Link>
+                      <Text>
+                        {en ? 'Project link' : 'Link projek'}:{' '}
+                        <Link style={styles.projectLink} src={project.url}>
+                          {project.url} &#187;
+                        </Link>
+                      </Text>
                     )}
                   </View>
                 ))}

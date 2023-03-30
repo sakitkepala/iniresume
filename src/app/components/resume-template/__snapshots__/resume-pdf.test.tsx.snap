@@ -293,16 +293,36 @@ Object {
                                           },
                                           Object {
                                             "type": "TEXT_INSTANCE",
-                                            "value": " »",
+                                            "value": ":",
+                                          },
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": " ",
+                                          },
+                                          Object {
+                                            "box": Object {},
+                                            "children": Array [
+                                              Object {
+                                                "type": "TEXT_INSTANCE",
+                                                "value": "https://example.com",
+                                              },
+                                              Object {
+                                                "type": "TEXT_INSTANCE",
+                                                "value": " »",
+                                              },
+                                            ],
+                                            "props": Object {
+                                              "src": "https://example.com",
+                                            },
+                                            "style": Object {
+                                              "fontSize": 8,
+                                            },
+                                            "type": "LINK",
                                           },
                                         ],
-                                        "props": Object {
-                                          "src": "https://example.com",
-                                        },
-                                        "style": Object {
-                                          "fontSize": 8,
-                                        },
-                                        "type": "LINK",
+                                        "props": Object {},
+                                        "style": Object {},
+                                        "type": "TEXT",
                                       },
                                     ],
                                     "props": Object {},
@@ -399,16 +419,36 @@ Object {
                                   },
                                   Object {
                                     "type": "TEXT_INSTANCE",
-                                    "value": " »",
+                                    "value": ":",
+                                  },
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": " ",
+                                  },
+                                  Object {
+                                    "box": Object {},
+                                    "children": Array [
+                                      Object {
+                                        "type": "TEXT_INSTANCE",
+                                        "value": "https://example.com",
+                                      },
+                                      Object {
+                                        "type": "TEXT_INSTANCE",
+                                        "value": " »",
+                                      },
+                                    ],
+                                    "props": Object {
+                                      "src": "https://example.com",
+                                    },
+                                    "style": Object {
+                                      "fontSize": 8,
+                                    },
+                                    "type": "LINK",
                                   },
                                 ],
-                                "props": Object {
-                                  "src": "https://example.com",
-                                },
-                                "style": Object {
-                                  "fontSize": 8,
-                                },
-                                "type": "LINK",
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
                               },
                             ],
                             "props": Object {},
@@ -1144,16 +1184,36 @@ Object {
                                           },
                                           Object {
                                             "type": "TEXT_INSTANCE",
-                                            "value": " »",
+                                            "value": ":",
+                                          },
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": " ",
+                                          },
+                                          Object {
+                                            "box": Object {},
+                                            "children": Array [
+                                              Object {
+                                                "type": "TEXT_INSTANCE",
+                                                "value": "https://example.com",
+                                              },
+                                              Object {
+                                                "type": "TEXT_INSTANCE",
+                                                "value": " »",
+                                              },
+                                            ],
+                                            "props": Object {
+                                              "src": "https://example.com",
+                                            },
+                                            "style": Object {
+                                              "fontSize": 8,
+                                            },
+                                            "type": "LINK",
                                           },
                                         ],
-                                        "props": Object {
-                                          "src": "https://example.com",
-                                        },
-                                        "style": Object {
-                                          "fontSize": 8,
-                                        },
-                                        "type": "LINK",
+                                        "props": Object {},
+                                        "style": Object {},
+                                        "type": "TEXT",
                                       },
                                     ],
                                     "props": Object {},
@@ -1250,16 +1310,36 @@ Object {
                                   },
                                   Object {
                                     "type": "TEXT_INSTANCE",
-                                    "value": " »",
+                                    "value": ":",
+                                  },
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": " ",
+                                  },
+                                  Object {
+                                    "box": Object {},
+                                    "children": Array [
+                                      Object {
+                                        "type": "TEXT_INSTANCE",
+                                        "value": "https://example.com",
+                                      },
+                                      Object {
+                                        "type": "TEXT_INSTANCE",
+                                        "value": " »",
+                                      },
+                                    ],
+                                    "props": Object {
+                                      "src": "https://example.com",
+                                    },
+                                    "style": Object {
+                                      "fontSize": 8,
+                                    },
+                                    "type": "LINK",
                                   },
                                 ],
-                                "props": Object {
-                                  "src": "https://example.com",
-                                },
-                                "style": Object {
-                                  "fontSize": 8,
-                                },
-                                "type": "LINK",
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
                               },
                             ],
                             "props": Object {},
