@@ -39,12 +39,41 @@ describe('LineList', () => {
     expect($listItems[0]).toHaveTextContent(valueName);
     expect($listItems[1]).toHaveTextContent(createId);
 
+    expect(
+      screen.queryByRole('listitem', { current: true })
+    ).not.toBeInTheDocument();
+
     await userEvent.click(screen.getByText('activate'));
 
     expect(screen.getByRole('listitem', { current: true })).toBeInTheDocument();
     expect(
       screen.getByRole('listitem', { current: true })
     ).toHaveAccessibleName('Line 3');
+  });
+
+  test('otomatis aktifkan line pertama yang activateable sesuai prop', async () => {
+    render(
+      <ResumeEditorProvider>
+        <LineList
+          autofocus
+          buildContents={() => [
+            { id: 'line1' },
+            { id: 'line2', activateable: true },
+            { id: 'line3' },
+            { id: 'line4', activateable: true },
+            { id: 'line5' },
+            { id: 'line6', activateable: true },
+            { id: 'line7' },
+          ]}
+        />
+      </ResumeEditorProvider>
+    );
+
+    const $defaultActiveLine = await screen.findByRole('listitem', {
+      current: true,
+    });
+    expect($defaultActiveLine).toBeInTheDocument();
+    expect($defaultActiveLine).toHaveAccessibleName(/line 2/i);
   });
 
   test('hotkey pindah-pindah line', async () => {

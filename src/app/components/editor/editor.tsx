@@ -8,7 +8,7 @@ function Editor() {
     <ScrollArea.Root className={styles.editorScrollableRoot}>
       <ScrollArea.Viewport className={styles.editorScrollableViewport}>
         <div className={styles.lineListContainer}>
-          <LineList />
+          <LineList autofocus />
         </div>
       </ScrollArea.Viewport>
       <Scrollbar />

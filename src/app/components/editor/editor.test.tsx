@@ -14,7 +14,9 @@ describe('Editor', () => {
     expect(screen.getByLabelText('Line 1')).toHaveTextContent(/informasi/i);
 
     expect(screen.getByLabelText('Line 3')).toHaveTextContent(/umum/i);
-    expect(screen.getByLabelText('Line 5')).toHaveTextContent(/nama lengkap/i);
+
+    expect(screen.getByLabelText('Line 5')).toHaveTextContent(/5/i);
+
     expect(screen.getByLabelText('Line 6')).toHaveTextContent(/titel profesi/i);
     expect(screen.getByLabelText('Line 7')).toHaveTextContent(/gender/i);
     expect(screen.getByLabelText('Line 8')).toHaveTextContent(/tanggal lahir/i);
@@ -45,5 +47,9 @@ describe('Editor', () => {
 
     expect(screen.getByLabelText('Line 48')).toHaveTextContent(/projek lain/i);
     expect(screen.getByLabelText('Line 50')).toHaveTextContent(/masukkan/i);
+
+    const $defaultActiveLine = screen.getByRole('listitem', { current: true });
+    expect($defaultActiveLine).toBeInTheDocument();
+    expect($defaultActiveLine).toHaveAccessibleName(/line 5/i);
   });
 });

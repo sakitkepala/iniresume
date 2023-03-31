@@ -17,7 +17,13 @@ import { clsx } from 'clsx';
 
 import * as styles from './line-list.css';
 
-function LineList({ buildContents }: { buildContents?: BuildContentsFn }) {
+function LineList({
+  autofocus,
+  buildContents,
+}: {
+  autofocus?: boolean;
+  buildContents?: BuildContentsFn;
+}) {
   const $containerDiv = React.useRef<HTMLDivElement>(null);
   const { resume } = useResumeEditor();
   const data = JSON.stringify(resume);
@@ -64,7 +70,7 @@ function LineList({ buildContents }: { buildContents?: BuildContentsFn }) {
 
   // Aktifkan line pertama ketika pertama mounted
   React.useEffect(() => {
-    activateNext();
+    autofocus && activateNext();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

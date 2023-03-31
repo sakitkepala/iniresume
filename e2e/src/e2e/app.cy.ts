@@ -10,7 +10,6 @@ describe('iniresume', () => {
     cy.findByRole('button', { name: /buat resume/i }).click();
 
     cy.findByRole('heading', { name: /generate/i }).should('exist');
-    cy.get('body').type('{downArrow}');
 
     cy.findByPlaceholderText(/nama lengkap/i).type(`${data.fullName}{Enter}`);
     cy.findByPlaceholderText(/titel profesi/i).type('Profession Title{Enter}');
@@ -115,7 +114,6 @@ describe('iniresume', () => {
       });
 
     cy.findByRole('heading', { name: /generate/i });
-    cy.get('body').type('{downArrow}');
 
     cy.findByPlaceholderText(/nama lengkap/i)
       .should('contain.value', data.fullName)
@@ -128,10 +126,28 @@ describe('iniresume', () => {
     cy.findByRole('button', { name: /hapus/i }).click();
 
     cy.findByRole('heading', { name: /generate/i });
-    cy.get('body').type('{downArrow}');
 
     cy.findByPlaceholderText(/nama lengkap/i)
       .should('not.contain.value', `${data.fullName} Edited`)
       .and('have.value', '');
+
+    cy.findByPlaceholderText(/nama lengkap/i).type(
+      'Edit then klik another line'
+    );
+    cy.findByRole('list').within(() => {
+      cy.findByText(/titel profesi/i).click();
+    });
+    cy.findByText(/belum disimpan/i).should('exist');
+
+    cy.findByPlaceholderText(/nama lengkap/i)
+      .clear()
+      .type('Edit then move line by hotkey{downArrow}');
+    cy.findByText(/belum disimpan/i).should('exist');
+
+    cy.get('body').type('{Esc}');
+    cy.findByPlaceholderText(/nama lengkap/i).should('not.exist');
+    cy.findByRole('list').within(() => {
+      cy.findByText(/nama lengkap/i).should('exist');
+    });
   });
 });
