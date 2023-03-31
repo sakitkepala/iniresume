@@ -1,0 +1,1783 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ResumePDF Tree generate pdf 1`] = `
+Object {
+  "document": Object {
+    "box": Object {},
+    "children": Array [
+      Object {
+        "box": Object {},
+        "children": Array [
+          Object {
+            "box": Object {},
+            "children": Array [
+              Object {
+                "box": Object {},
+                "children": Array [
+                  Object {
+                    "type": "TEXT_INSTANCE",
+                    "value": "Full Name",
+                  },
+                ],
+                "props": Object {},
+                "style": Object {
+                  "fontSize": 22,
+                  "fontWeight": "bold",
+                },
+                "type": "TEXT",
+              },
+              Object {
+                "box": Object {},
+                "children": Array [
+                  Object {
+                    "type": "TEXT_INSTANCE",
+                    "value": "Job Title",
+                  },
+                ],
+                "props": Object {},
+                "style": Object {
+                  "fontSize": 14,
+                },
+                "type": "TEXT",
+              },
+              Object {
+                "box": Object {},
+                "children": Array [
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "type": "TEXT_INSTANCE",
+                        "value": "Website name",
+                      },
+                    ],
+                    "props": Object {
+                      "src": "http://example.com",
+                    },
+                    "style": Object {},
+                    "type": "LINK",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "type": "TEXT_INSTANCE",
+                        "value": "/",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {},
+                    "type": "TEXT",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "type": "TEXT_INSTANCE",
+                        "value": "+62085777777777",
+                      },
+                    ],
+                    "props": Object {
+                      "src": "https://wa.me/62085777777777",
+                    },
+                    "style": Object {},
+                    "type": "LINK",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "type": "TEXT_INSTANCE",
+                        "value": "/",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {},
+                    "type": "TEXT",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "type": "TEXT_INSTANCE",
+                        "value": "email@example.com",
+                      },
+                    ],
+                    "props": Object {
+                      "src": "mailto:email@example.com",
+                    },
+                    "style": Object {},
+                    "type": "LINK",
+                  },
+                ],
+                "props": Object {},
+                "style": Object {
+                  "alignItems": "baseline",
+                  "borderTop": "1px solid #e2e8f0",
+                  "display": "flex",
+                  "flexDirection": "row",
+                  "gap": 8,
+                  "marginTop": 10,
+                  "paddingTop": 2,
+                },
+                "type": "VIEW",
+              },
+            ],
+            "props": Object {},
+            "style": Object {
+              "marginBottom": "0.875cm",
+            },
+            "type": "VIEW",
+          },
+          Object {
+            "box": Object {},
+            "children": Array [
+              Object {
+                "box": Object {},
+                "children": Array [
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "box": Object {},
+                        "children": Array [
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "type": "TEXT_INSTANCE",
+                                "value": "Pengalaman",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {
+                              "fontSize": 14,
+                              "fontWeight": "bold",
+                            },
+                            "type": "TEXT",
+                          },
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Job Title",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "fontSize": 11,
+                                  "fontWeight": "bold",
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Employer",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "fontSize": 10,
+                                  "fontWeight": "bold",
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Maret 2000 - Maret 2000",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "fontSize": 8,
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Description",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "box": Object {},
+                                    "children": Array [
+                                      Object {
+                                        "box": Object {},
+                                        "children": Array [
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": "Project Name",
+                                          },
+                                        ],
+                                        "props": Object {},
+                                        "style": Object {
+                                          "fontWeight": "bold",
+                                        },
+                                        "type": "TEXT",
+                                      },
+                                      Object {
+                                        "box": Object {},
+                                        "children": Array [
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": "Project description",
+                                          },
+                                        ],
+                                        "props": Object {},
+                                        "style": Object {},
+                                        "type": "TEXT",
+                                      },
+                                    ],
+                                    "props": Object {},
+                                    "style": Object {
+                                      "marginLeft": 8,
+                                      "marginTop": 4,
+                                    },
+                                    "type": "VIEW",
+                                  },
+                                  Object {
+                                    "box": Object {},
+                                    "children": Array [
+                                      Object {
+                                        "box": Object {},
+                                        "children": Array [
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": "Project Name",
+                                          },
+                                        ],
+                                        "props": Object {},
+                                        "style": Object {
+                                          "fontWeight": "bold",
+                                        },
+                                        "type": "TEXT",
+                                      },
+                                      Object {
+                                        "box": Object {},
+                                        "children": Array [
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": "",
+                                          },
+                                        ],
+                                        "props": Object {},
+                                        "style": Object {},
+                                        "type": "TEXT",
+                                      },
+                                      Object {
+                                        "box": Object {},
+                                        "children": Array [
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": "Link projek",
+                                          },
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": ":",
+                                          },
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": " ",
+                                          },
+                                          Object {
+                                            "box": Object {},
+                                            "children": Array [
+                                              Object {
+                                                "type": "TEXT_INSTANCE",
+                                                "value": "https://example.com",
+                                              },
+                                              Object {
+                                                "type": "TEXT_INSTANCE",
+                                                "value": " »",
+                                              },
+                                            ],
+                                            "props": Object {
+                                              "src": "https://example.com",
+                                            },
+                                            "style": Object {
+                                              "fontSize": 8,
+                                            },
+                                            "type": "LINK",
+                                          },
+                                        ],
+                                        "props": Object {},
+                                        "style": Object {},
+                                        "type": "TEXT",
+                                      },
+                                    ],
+                                    "props": Object {},
+                                    "style": Object {
+                                      "marginLeft": 8,
+                                      "marginTop": 4,
+                                    },
+                                    "type": "VIEW",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "VIEW",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {
+                              "marginBottom": 4,
+                            },
+                            "type": "VIEW",
+                          },
+                        ],
+                        "props": Object {},
+                        "style": Object {
+                          "display": "flex",
+                          "flexDirection": "column",
+                          "gap": 6,
+                        },
+                        "type": "VIEW",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {
+                      "marginBottom": 8,
+                    },
+                    "type": "VIEW",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "box": Object {},
+                        "children": Array [
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "type": "TEXT_INSTANCE",
+                                "value": "Projek Lain",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {
+                              "fontSize": 14,
+                              "fontWeight": "bold",
+                            },
+                            "type": "TEXT",
+                          },
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Other Project Name",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "fontWeight": "bold",
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Other Project Description",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Link projek",
+                                  },
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": ":",
+                                  },
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": " ",
+                                  },
+                                  Object {
+                                    "box": Object {},
+                                    "children": Array [
+                                      Object {
+                                        "type": "TEXT_INSTANCE",
+                                        "value": "https://example.com",
+                                      },
+                                      Object {
+                                        "type": "TEXT_INSTANCE",
+                                        "value": " »",
+                                      },
+                                    ],
+                                    "props": Object {
+                                      "src": "https://example.com",
+                                    },
+                                    "style": Object {
+                                      "fontSize": 8,
+                                    },
+                                    "type": "LINK",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {},
+                            "type": "VIEW",
+                          },
+                        ],
+                        "props": Object {},
+                        "style": Object {
+                          "display": "flex",
+                          "flexDirection": "column",
+                          "gap": 6,
+                        },
+                        "type": "VIEW",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {
+                      "marginBottom": 8,
+                    },
+                    "type": "VIEW",
+                  },
+                ],
+                "props": Object {},
+                "style": Object {
+                  "flex": 1,
+                },
+                "type": "VIEW",
+              },
+              Object {
+                "box": Object {},
+                "children": Array [
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "box": Object {},
+                        "children": Array [
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "type": "TEXT_INSTANCE",
+                                "value": "About description",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {},
+                            "type": "TEXT",
+                          },
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Laki-laki, 23 tahun",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Domisili City, Province",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {},
+                            "type": "VIEW",
+                          },
+                        ],
+                        "props": Object {},
+                        "style": Object {
+                          "display": "flex",
+                          "flexDirection": "column",
+                          "gap": 6,
+                        },
+                        "type": "VIEW",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {
+                      "marginBottom": 8,
+                    },
+                    "type": "VIEW",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "box": Object {},
+                        "children": Array [
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "type": "TEXT_INSTANCE",
+                                "value": "Pendidikan",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {
+                              "fontSize": 14,
+                              "fontWeight": "bold",
+                            },
+                            "type": "TEXT",
+                          },
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "School",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "fontSize": 11,
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Major",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "fontSize": 11,
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "2000",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "fontSize": 8,
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {},
+                            "type": "VIEW",
+                          },
+                        ],
+                        "props": Object {},
+                        "style": Object {
+                          "display": "flex",
+                          "flexDirection": "column",
+                          "gap": 6,
+                        },
+                        "type": "VIEW",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {
+                      "marginBottom": 8,
+                    },
+                    "type": "VIEW",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "box": Object {},
+                        "children": Array [
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "type": "TEXT_INSTANCE",
+                                "value": "Skill Kunci",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {
+                              "fontSize": 14,
+                              "fontWeight": "bold",
+                            },
+                            "type": "TEXT",
+                          },
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "skill-1",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "backgroundColor": "#eef3f8",
+                                  "borderRadius": 2,
+                                  "padding": "1px 5px",
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "skill-2",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "backgroundColor": "#eef3f8",
+                                  "borderRadius": 2,
+                                  "padding": "1px 5px",
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "skill-3",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "backgroundColor": "#eef3f8",
+                                  "borderRadius": 2,
+                                  "padding": "1px 5px",
+                                },
+                                "type": "TEXT",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {
+                              "display": "flex",
+                              "flexDirection": "row",
+                              "flexWrap": "wrap",
+                              "gap": 3,
+                            },
+                            "type": "VIEW",
+                          },
+                        ],
+                        "props": Object {},
+                        "style": Object {
+                          "display": "flex",
+                          "flexDirection": "column",
+                          "gap": 6,
+                        },
+                        "type": "VIEW",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {
+                      "marginBottom": 8,
+                    },
+                    "type": "VIEW",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "box": Object {},
+                        "children": Array [
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "type": "TEXT_INSTANCE",
+                                "value": "Profil",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {
+                              "fontSize": 14,
+                              "fontWeight": "bold",
+                            },
+                            "type": "TEXT",
+                          },
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Github",
+                                  },
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": ": ",
+                                  },
+                                  Object {
+                                    "box": Object {},
+                                    "children": Array [
+                                      Object {
+                                        "type": "TEXT_INSTANCE",
+                                        "value": "@myprofile",
+                                      },
+                                    ],
+                                    "props": Object {
+                                      "src": "https://github.com/myprofile",
+                                    },
+                                    "style": Object {},
+                                    "type": "LINK",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "LinkedIn",
+                                  },
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": ": ",
+                                  },
+                                  Object {
+                                    "box": Object {},
+                                    "children": Array [
+                                      Object {
+                                        "type": "TEXT_INSTANCE",
+                                        "value": "My Profile Page",
+                                      },
+                                    ],
+                                    "props": Object {
+                                      "src": "https://linkedin.com/in/myprofile",
+                                    },
+                                    "style": Object {},
+                                    "type": "LINK",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {},
+                            "type": "VIEW",
+                          },
+                        ],
+                        "props": Object {},
+                        "style": Object {
+                          "display": "flex",
+                          "flexDirection": "column",
+                          "gap": 6,
+                        },
+                        "type": "VIEW",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {
+                      "marginBottom": 8,
+                    },
+                    "type": "VIEW",
+                  },
+                ],
+                "props": Object {},
+                "style": Object {
+                  "width": "37.5%",
+                },
+                "type": "VIEW",
+              },
+            ],
+            "props": Object {},
+            "style": Object {
+              "display": "flex",
+              "flexDirection": "row",
+              "gap": "0.5cm",
+            },
+            "type": "VIEW",
+          },
+        ],
+        "props": Object {
+          "size": "A4",
+        },
+        "style": Object {
+          "fontFamily": "DM Sans",
+          "fontSize": 9,
+          "paddingHorizontal": "1.125cm",
+          "paddingVertical": "1.25cm",
+        },
+        "type": "PAGE",
+      },
+    ],
+    "props": Object {
+      "author": "Full Name",
+      "keywords": "CV, resume, Full Name, Job Title",
+      "subject": "Resume Full Name, Job Title",
+      "title": "Resume Full Name, Job Title",
+    },
+    "style": Object {},
+    "type": "DOCUMENT",
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`ResumePDF Tree generate pdf dengan template bahasa inggris 1`] = `
+Object {
+  "document": Object {
+    "box": Object {},
+    "children": Array [
+      Object {
+        "box": Object {},
+        "children": Array [
+          Object {
+            "box": Object {},
+            "children": Array [
+              Object {
+                "box": Object {},
+                "children": Array [
+                  Object {
+                    "type": "TEXT_INSTANCE",
+                    "value": "Full Name",
+                  },
+                ],
+                "props": Object {},
+                "style": Object {
+                  "fontSize": 22,
+                  "fontWeight": "bold",
+                },
+                "type": "TEXT",
+              },
+              Object {
+                "box": Object {},
+                "children": Array [
+                  Object {
+                    "type": "TEXT_INSTANCE",
+                    "value": "Job Title",
+                  },
+                ],
+                "props": Object {},
+                "style": Object {
+                  "fontSize": 14,
+                },
+                "type": "TEXT",
+              },
+              Object {
+                "box": Object {},
+                "children": Array [
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "type": "TEXT_INSTANCE",
+                        "value": "Website name",
+                      },
+                    ],
+                    "props": Object {
+                      "src": "http://example.com",
+                    },
+                    "style": Object {},
+                    "type": "LINK",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "type": "TEXT_INSTANCE",
+                        "value": "/",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {},
+                    "type": "TEXT",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "type": "TEXT_INSTANCE",
+                        "value": "+62085777777777",
+                      },
+                    ],
+                    "props": Object {
+                      "src": "https://wa.me/62085777777777",
+                    },
+                    "style": Object {},
+                    "type": "LINK",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "type": "TEXT_INSTANCE",
+                        "value": "/",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {},
+                    "type": "TEXT",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "type": "TEXT_INSTANCE",
+                        "value": "email@example.com",
+                      },
+                    ],
+                    "props": Object {
+                      "src": "mailto:email@example.com",
+                    },
+                    "style": Object {},
+                    "type": "LINK",
+                  },
+                ],
+                "props": Object {},
+                "style": Object {
+                  "alignItems": "baseline",
+                  "borderTop": "1px solid #e2e8f0",
+                  "display": "flex",
+                  "flexDirection": "row",
+                  "gap": 8,
+                  "marginTop": 10,
+                  "paddingTop": 2,
+                },
+                "type": "VIEW",
+              },
+            ],
+            "props": Object {},
+            "style": Object {
+              "marginBottom": "0.875cm",
+            },
+            "type": "VIEW",
+          },
+          Object {
+            "box": Object {},
+            "children": Array [
+              Object {
+                "box": Object {},
+                "children": Array [
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "box": Object {},
+                        "children": Array [
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "type": "TEXT_INSTANCE",
+                                "value": "Experiences",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {
+                              "fontSize": 14,
+                              "fontWeight": "bold",
+                            },
+                            "type": "TEXT",
+                          },
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Job Title",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "fontSize": 11,
+                                  "fontWeight": "bold",
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Employer",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "fontSize": 10,
+                                  "fontWeight": "bold",
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "March 2000 - March 2000",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "fontSize": 8,
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Description",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "box": Object {},
+                                    "children": Array [
+                                      Object {
+                                        "box": Object {},
+                                        "children": Array [
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": "Project Name",
+                                          },
+                                        ],
+                                        "props": Object {},
+                                        "style": Object {
+                                          "fontWeight": "bold",
+                                        },
+                                        "type": "TEXT",
+                                      },
+                                      Object {
+                                        "box": Object {},
+                                        "children": Array [
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": "Project description",
+                                          },
+                                        ],
+                                        "props": Object {},
+                                        "style": Object {},
+                                        "type": "TEXT",
+                                      },
+                                    ],
+                                    "props": Object {},
+                                    "style": Object {
+                                      "marginLeft": 8,
+                                      "marginTop": 4,
+                                    },
+                                    "type": "VIEW",
+                                  },
+                                  Object {
+                                    "box": Object {},
+                                    "children": Array [
+                                      Object {
+                                        "box": Object {},
+                                        "children": Array [
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": "Project Name",
+                                          },
+                                        ],
+                                        "props": Object {},
+                                        "style": Object {
+                                          "fontWeight": "bold",
+                                        },
+                                        "type": "TEXT",
+                                      },
+                                      Object {
+                                        "box": Object {},
+                                        "children": Array [
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": "",
+                                          },
+                                        ],
+                                        "props": Object {},
+                                        "style": Object {},
+                                        "type": "TEXT",
+                                      },
+                                      Object {
+                                        "box": Object {},
+                                        "children": Array [
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": "Project link",
+                                          },
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": ":",
+                                          },
+                                          Object {
+                                            "type": "TEXT_INSTANCE",
+                                            "value": " ",
+                                          },
+                                          Object {
+                                            "box": Object {},
+                                            "children": Array [
+                                              Object {
+                                                "type": "TEXT_INSTANCE",
+                                                "value": "https://example.com",
+                                              },
+                                              Object {
+                                                "type": "TEXT_INSTANCE",
+                                                "value": " »",
+                                              },
+                                            ],
+                                            "props": Object {
+                                              "src": "https://example.com",
+                                            },
+                                            "style": Object {
+                                              "fontSize": 8,
+                                            },
+                                            "type": "LINK",
+                                          },
+                                        ],
+                                        "props": Object {},
+                                        "style": Object {},
+                                        "type": "TEXT",
+                                      },
+                                    ],
+                                    "props": Object {},
+                                    "style": Object {
+                                      "marginLeft": 8,
+                                      "marginTop": 4,
+                                    },
+                                    "type": "VIEW",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "VIEW",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {
+                              "marginBottom": 4,
+                            },
+                            "type": "VIEW",
+                          },
+                        ],
+                        "props": Object {},
+                        "style": Object {
+                          "display": "flex",
+                          "flexDirection": "column",
+                          "gap": 6,
+                        },
+                        "type": "VIEW",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {
+                      "marginBottom": 8,
+                    },
+                    "type": "VIEW",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "box": Object {},
+                        "children": Array [
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "type": "TEXT_INSTANCE",
+                                "value": "Other Projects",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {
+                              "fontSize": 14,
+                              "fontWeight": "bold",
+                            },
+                            "type": "TEXT",
+                          },
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Other Project Name",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "fontWeight": "bold",
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Other Project Description",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Project link",
+                                  },
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": ":",
+                                  },
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": " ",
+                                  },
+                                  Object {
+                                    "box": Object {},
+                                    "children": Array [
+                                      Object {
+                                        "type": "TEXT_INSTANCE",
+                                        "value": "https://example.com",
+                                      },
+                                      Object {
+                                        "type": "TEXT_INSTANCE",
+                                        "value": " »",
+                                      },
+                                    ],
+                                    "props": Object {
+                                      "src": "https://example.com",
+                                    },
+                                    "style": Object {
+                                      "fontSize": 8,
+                                    },
+                                    "type": "LINK",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {},
+                            "type": "VIEW",
+                          },
+                        ],
+                        "props": Object {},
+                        "style": Object {
+                          "display": "flex",
+                          "flexDirection": "column",
+                          "gap": 6,
+                        },
+                        "type": "VIEW",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {
+                      "marginBottom": 8,
+                    },
+                    "type": "VIEW",
+                  },
+                ],
+                "props": Object {},
+                "style": Object {
+                  "flex": 1,
+                },
+                "type": "VIEW",
+              },
+              Object {
+                "box": Object {},
+                "children": Array [
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "box": Object {},
+                        "children": Array [
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "type": "TEXT_INSTANCE",
+                                "value": "About description",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {},
+                            "type": "TEXT",
+                          },
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Male, 23 year old",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Living in City, Province",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {},
+                            "type": "VIEW",
+                          },
+                        ],
+                        "props": Object {},
+                        "style": Object {
+                          "display": "flex",
+                          "flexDirection": "column",
+                          "gap": 6,
+                        },
+                        "type": "VIEW",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {
+                      "marginBottom": 8,
+                    },
+                    "type": "VIEW",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "box": Object {},
+                        "children": Array [
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "type": "TEXT_INSTANCE",
+                                "value": "Education",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {
+                              "fontSize": 14,
+                              "fontWeight": "bold",
+                            },
+                            "type": "TEXT",
+                          },
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "School",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "fontSize": 11,
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Major",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "fontSize": 11,
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "2000",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "fontSize": 8,
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {},
+                            "type": "VIEW",
+                          },
+                        ],
+                        "props": Object {},
+                        "style": Object {
+                          "display": "flex",
+                          "flexDirection": "column",
+                          "gap": 6,
+                        },
+                        "type": "VIEW",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {
+                      "marginBottom": 8,
+                    },
+                    "type": "VIEW",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "box": Object {},
+                        "children": Array [
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "type": "TEXT_INSTANCE",
+                                "value": "Key Skills",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {
+                              "fontSize": 14,
+                              "fontWeight": "bold",
+                            },
+                            "type": "TEXT",
+                          },
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "skill-1",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "backgroundColor": "#eef3f8",
+                                  "borderRadius": 2,
+                                  "padding": "1px 5px",
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "skill-2",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "backgroundColor": "#eef3f8",
+                                  "borderRadius": 2,
+                                  "padding": "1px 5px",
+                                },
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "skill-3",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {
+                                  "backgroundColor": "#eef3f8",
+                                  "borderRadius": 2,
+                                  "padding": "1px 5px",
+                                },
+                                "type": "TEXT",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {
+                              "display": "flex",
+                              "flexDirection": "row",
+                              "flexWrap": "wrap",
+                              "gap": 3,
+                            },
+                            "type": "VIEW",
+                          },
+                        ],
+                        "props": Object {},
+                        "style": Object {
+                          "display": "flex",
+                          "flexDirection": "column",
+                          "gap": 6,
+                        },
+                        "type": "VIEW",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {
+                      "marginBottom": 8,
+                    },
+                    "type": "VIEW",
+                  },
+                  Object {
+                    "box": Object {},
+                    "children": Array [
+                      Object {
+                        "box": Object {},
+                        "children": Array [
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "type": "TEXT_INSTANCE",
+                                "value": "Profiles",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {
+                              "fontSize": 14,
+                              "fontWeight": "bold",
+                            },
+                            "type": "TEXT",
+                          },
+                          Object {
+                            "box": Object {},
+                            "children": Array [
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "Github",
+                                  },
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": ": ",
+                                  },
+                                  Object {
+                                    "box": Object {},
+                                    "children": Array [
+                                      Object {
+                                        "type": "TEXT_INSTANCE",
+                                        "value": "@myprofile",
+                                      },
+                                    ],
+                                    "props": Object {
+                                      "src": "https://github.com/myprofile",
+                                    },
+                                    "style": Object {},
+                                    "type": "LINK",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                              Object {
+                                "box": Object {},
+                                "children": Array [
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": "LinkedIn",
+                                  },
+                                  Object {
+                                    "type": "TEXT_INSTANCE",
+                                    "value": ": ",
+                                  },
+                                  Object {
+                                    "box": Object {},
+                                    "children": Array [
+                                      Object {
+                                        "type": "TEXT_INSTANCE",
+                                        "value": "My Profile Page",
+                                      },
+                                    ],
+                                    "props": Object {
+                                      "src": "https://linkedin.com/in/myprofile",
+                                    },
+                                    "style": Object {},
+                                    "type": "LINK",
+                                  },
+                                ],
+                                "props": Object {},
+                                "style": Object {},
+                                "type": "TEXT",
+                              },
+                            ],
+                            "props": Object {},
+                            "style": Object {},
+                            "type": "VIEW",
+                          },
+                        ],
+                        "props": Object {},
+                        "style": Object {
+                          "display": "flex",
+                          "flexDirection": "column",
+                          "gap": 6,
+                        },
+                        "type": "VIEW",
+                      },
+                    ],
+                    "props": Object {},
+                    "style": Object {
+                      "marginBottom": 8,
+                    },
+                    "type": "VIEW",
+                  },
+                ],
+                "props": Object {},
+                "style": Object {
+                  "width": "37.5%",
+                },
+                "type": "VIEW",
+              },
+            ],
+            "props": Object {},
+            "style": Object {
+              "display": "flex",
+              "flexDirection": "row",
+              "gap": "0.5cm",
+            },
+            "type": "VIEW",
+          },
+        ],
+        "props": Object {
+          "size": "A4",
+        },
+        "style": Object {
+          "fontFamily": "DM Sans",
+          "fontSize": 9,
+          "paddingHorizontal": "1.125cm",
+          "paddingVertical": "1.25cm",
+        },
+        "type": "PAGE",
+      },
+    ],
+    "props": Object {
+      "author": "Full Name",
+      "keywords": "CV, resume, Full Name, Job Title",
+      "subject": "Resume Full Name, Job Title",
+      "title": "Resume Full Name, Job Title",
+    },
+    "style": Object {},
+    "type": "DOCUMENT",
+  },
+  "type": "ROOT",
+}
+`;

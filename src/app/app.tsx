@@ -1,13 +1,31 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import styles from './app.module.css';
-import NxWelcome from './nx-welcome';
+import * as React from 'react';
+import { HashRouter, Routes, Route } from 'react-router-dom';
+
+import ScreenLayout from './screens/layout';
+import ScreenWelcome from './screens/welcome';
+import LoadingEditor from './screens/loading-editor';
+
+import './app.css';
+
+const ScreenEditor = React.lazy(() => import('./screens/editor'));
 
 export function App() {
   return (
-    <>
-      <NxWelcome title="iniresume" />
-      <div />
-    </>
+    <HashRouter>
+      <Routes>
+        <Route path="/" element={<ScreenLayout />}>
+          <Route index element={<ScreenWelcome />} />
+          <Route
+            path="/editor"
+            element={
+              <React.Suspense fallback={<LoadingEditor />}>
+                <ScreenEditor />
+              </React.Suspense>
+            }
+          />
+        </Route>
+      </Routes>
+    </HashRouter>
   );
 }
 
