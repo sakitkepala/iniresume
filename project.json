@@ -16,7 +16,7 @@
         "main": "src/main.tsx",
         "tsConfig": "tsconfig.app.json",
         "assets": ["src/favicon.ico", "src/assets"],
-        "styles": ["src/styles.css"],
+        "styles": [],
         "scripts": [],
         "webpackConfig": "webpack.config.js"
       },
@@ -52,7 +52,8 @@
       },
       "configurations": {
         "development": {
-          "buildTarget": "iniresume:build:development"
+          "buildTarget": "iniresume:build:development",
+          "port": 2211
         },
         "production": {
           "buildTarget": "iniresume:build:production",
