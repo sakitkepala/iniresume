@@ -9,13 +9,15 @@ export type TextFieldInputHandle = {
 export type TextFieldInputProps = {
   initialValue?: string;
   placeholder?: string;
+  onDirty?: () => void;
+  onClean?: () => void;
   onSave: (inputValue: string) => void;
 };
 
 const TextFieldInput = React.forwardRef<
   TextFieldInputHandle,
   TextFieldInputProps
->(({ initialValue = '', placeholder, onSave }, $ref) => {
+>(({ initialValue = '', placeholder, onDirty, onClean, onSave }, $ref) => {
   const [inputValue, setInputValue] = React.useState<string>(initialValue);
   const $input = React.useRef<HTMLInputElement>(null);
 
@@ -37,7 +39,12 @@ const TextFieldInput = React.forwardRef<
       ref={$input}
       placeholder={placeholder}
       value={inputValue}
-      onChange={setInputValue}
+      onChange={(value) => {
+        const isDirty = value !== initialValue;
+        isDirty && onDirty?.();
+        !isDirty && onClean?.();
+        setInputValue(value);
+      }}
     />
   );
 });

@@ -18,12 +18,14 @@ function FieldOtherProjectItemDescription({
   value?: string;
 }) {
   const { updateOtherProjects } = useResumeEditor();
-  const { isActive, activateAfterReset } = useActiveLine();
+  const { isActive, activateAfterReset, shouldPromptDirty } = useActiveLine();
 
   if (isActive) {
     return (
       <FieldDescription
         initialValue={value}
+        onDirty={() => shouldPromptDirty()}
+        onClean={() => shouldPromptDirty(false)}
         onSave={(desc) => {
           updateOtherProjects(projectId, 'description', desc);
           activateAfterReset(`${projectId}-other-projects-item-url`);
@@ -43,14 +45,17 @@ function FieldOtherProjectItemDescription({
 
 function FieldDescription({
   initialValue = '',
+  onDirty,
+  onClean,
   onSave,
 }: {
   initialValue?: string;
+  onDirty?: () => void;
+  onClean?: () => void;
   onSave: (description: string) => void;
 }) {
   const { preventHotkey } = useLineContents();
   const [inputValue, setInputValue] = React.useState<string>(initialValue);
-  const isClean = initialValue === inputValue;
 
   useHotkeys('enter', () => onSave(inputValue.trim()), {
     enableOnFormTags: true,
@@ -63,8 +68,11 @@ function FieldDescription({
       placeholder={PLACEHOLDER_LABEL}
       value={inputValue}
       onChange={(value) => {
+        const isDirty = value !== initialValue;
         // begitu dirty langsung dibuat gak bisa pindah-pindah line pakai hotkeynya
-        !isClean && preventHotkey();
+        isDirty && preventHotkey();
+        isDirty && onDirty?.();
+        !isDirty && onClean?.();
         setInputValue(value);
       }}
     />

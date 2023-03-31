@@ -21,7 +21,7 @@ function FieldListItemPhone({
   hasWA: boolean;
 }) {
   const { updatePhone } = useResumeEditor();
-  const { isActive, next } = useActiveLine();
+  const { isActive, next, shouldPromptDirty } = useActiveLine();
 
   if (isActive) {
     return (
@@ -29,6 +29,8 @@ function FieldListItemPhone({
         <PhoneEditor
           initialValue={value}
           hasWA={hasWA}
+          onDirty={() => shouldPromptDirty()}
+          onClean={() => shouldPromptDirty(false)}
           onSave={(phone) => {
             updatePhone(phone);
             next();
@@ -69,10 +71,14 @@ function FieldListItemPhone({
 function PhoneEditor({
   initialValue = '',
   hasWA,
+  onDirty,
+  onClean,
   onSave,
 }: {
   initialValue?: string;
   hasWA: boolean;
+  onDirty?: () => void;
+  onClean?: () => void;
   onSave: (phone: PhoneNumber) => void;
 }) {
   const [inputValue, setInputValue] = React.useState<string>(initialValue);
@@ -137,6 +143,9 @@ function PhoneEditor({
           }
           const value = first === '0' ? numbers.join('') : fullPhoneValue;
           setInputValue(value);
+          const isDirty = value !== initialValue;
+          isDirty && onDirty?.();
+          !isDirty && onClean?.();
         }}
       />
 

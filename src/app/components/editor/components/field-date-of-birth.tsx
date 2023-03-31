@@ -13,13 +13,15 @@ import * as styles from './field-date-of-birth.css';
 
 function FieldDateOfBirth({ value: initialData = '' }: { value?: string }) {
   const { updateTextField } = useResumeEditor();
-  const { isActive, next } = useActiveLine();
+  const { isActive, next, shouldPromptDirty } = useActiveLine();
 
   if (isActive) {
     return (
       <ListItemLine muted>
         <DateInput
           defaultValue={initialData}
+          onDirty={() => shouldPromptDirty()}
+          onClean={() => shouldPromptDirty(false)}
           onSave={(value) => {
             updateTextField('birthdate', value);
             next();
@@ -46,9 +48,13 @@ function FieldDateOfBirth({ value: initialData = '' }: { value?: string }) {
 
 function DateInput({
   defaultValue = '',
+  onDirty,
+  onClean,
   onSave,
 }: {
   defaultValue?: string;
+  onDirty?: () => void;
+  onClean?: () => void;
   onSave: (data: string) => void;
 }) {
   const [input, setInput] = React.useState(() =>
@@ -74,10 +80,19 @@ function DateInput({
     // supaya sesuai dengan jumlah digit angkanya
     const digits = name === 'year' ? 4 : 2;
     const trimmedValue = value.length > digits ? value.substring(1) : value;
-    setInput((input) => ({
-      ...input,
-      [name]: trimmedValue,
-    }));
+
+    setInput((input) => {
+      const stateValue = { ...input, [name]: trimmedValue };
+      const stringValue = [stateValue.year, stateValue.month, stateValue.day]
+        .filter((v) => Boolean(v))
+        .join('-');
+
+      const isDirty = stringValue !== defaultValue;
+      isDirty && onDirty?.();
+      !isDirty && onClean?.();
+
+      return stateValue;
+    });
   };
 
   return (

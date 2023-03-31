@@ -11,6 +11,7 @@
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.3",
+    "@radix-ui/react-hover-card": "^1.0.5",
     "@radix-ui/react-scroll-area": "^1.0.2",
     "@react-pdf/renderer": "^3.1.8",
     "@vanilla-extract/css": "^1.9.5",

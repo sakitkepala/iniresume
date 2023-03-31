@@ -20,7 +20,7 @@ function FieldListItemText({
   field: keyof ResumeData;
 }) {
   const { updateTextField } = useResumeEditor();
-  const { isActive, next } = useActiveLine();
+  const { isActive, next, shouldPromptDirty } = useActiveLine();
 
   if (isActive) {
     return (
@@ -28,6 +28,8 @@ function FieldListItemText({
         <TextFieldInput
           initialValue={value}
           placeholder={placeholder || `// ${label}`}
+          onDirty={() => shouldPromptDirty()}
+          onClean={() => shouldPromptDirty(false)}
           onSave={(textValue) => {
             updateTextField(field, textValue);
             next();

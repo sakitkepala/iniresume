@@ -10,6 +10,7 @@ const [ActiveLineContext, useActiveLine] = makeContext<{
   activateAfterReset: (lineId: LineId) => void;
   next: () => void;
   previous: () => void;
+  shouldPromptDirty: (should?: boolean) => void;
 }>({
   hookName: 'useActiveLine',
   hookUsageErrorMessage:

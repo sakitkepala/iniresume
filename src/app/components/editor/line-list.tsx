@@ -7,6 +7,9 @@ import {
 } from './hooks/build-line-contents';
 import { LineContentsContext } from './contexts/line-contents';
 import { ActiveLineContext } from './contexts/active-line';
+import { useResumeEditor } from 'src/app/contexts/resume-editor';
+
+import * as HoverCard from '@radix-ui/react-hover-card';
 
 import { type LineId } from './types';
 
@@ -15,8 +18,31 @@ import { clsx } from 'clsx';
 import * as styles from './line-list.css';
 
 function LineList({ buildContents }: { buildContents?: BuildContentsFn }) {
-  const lineContents = useBuildLineContents(buildContents);
   const $containerDiv = React.useRef<HTMLDivElement>(null);
+  const { resume } = useResumeEditor();
+  const data = JSON.stringify(resume);
+  const lineContents = useBuildLineContents(buildContents);
+  const [shouldPrompt, setShouldPrompt] = React.useState(false);
+  const [showPrompt, setShowPrompt] = React.useState(false);
+
+  const handleActivationWithPrompt = (activateFn: () => void) => {
+    return () => {
+      if (shouldPrompt) {
+        setShowPrompt(true);
+        // prompt sekali aja, yang selanjutnya bisa skip untuk reset
+        setShouldPrompt(false);
+      } else {
+        setShowPrompt(false);
+        setShouldPrompt(false);
+        activateFn();
+      }
+    };
+  };
+
+  React.useEffect(() => {
+    setShouldPrompt((should) => (should ? false : should));
+    setShowPrompt((show) => (show ? false : show));
+  }, [data, lineContents.activeLine]);
 
   const {
     contents,
@@ -40,18 +66,18 @@ function LineList({ buildContents }: { buildContents?: BuildContentsFn }) {
     activeLine && resetLineContents();
   });
 
-  useHotkeys('esc', resetLineContents, {
+  useHotkeys('esc', handleActivationWithPrompt(resetLineContents), {
     enabled: Boolean(activeLine),
     enableOnFormTags: true,
   });
 
-  useHotkeys('up', activatePrevious, {
+  useHotkeys('up', handleActivationWithPrompt(activatePrevious), {
     enabled: !hotkeyPrevented,
     enableOnFormTags: true,
     preventDefault: true,
   });
 
-  useHotkeys('down', activateNext, {
+  useHotkeys('down', handleActivationWithPrompt(activateNext), {
     enabled: !hotkeyPrevented,
     enableOnFormTags: true,
     preventDefault: true,
@@ -81,6 +107,12 @@ function LineList({ buildContents }: { buildContents?: BuildContentsFn }) {
             element={content.content}
             activateable={content.activateable}
             lineContents={lineContents}
+            shouldPromptDirty={(should = true) => {
+              setShouldPrompt(should);
+              setShowPrompt(false);
+            }}
+            showPrompt={showPrompt}
+            handleActivationWithPrompt={handleActivationWithPrompt}
           />
         ))}
       </LineContentsContext.Provider>
@@ -94,12 +126,18 @@ function LineItem({
   element,
   activateable = false,
   lineContents,
+  shouldPromptDirty,
+  showPrompt,
+  handleActivationWithPrompt,
 }: {
   number: number;
   id: string;
   element: React.ReactNode;
   activateable?: boolean;
   lineContents: BuildLineContents;
+  shouldPromptDirty: (should?: boolean) => void;
+  showPrompt: boolean;
+  handleActivationWithPrompt: (activateFn: () => void) => () => void;
 }) {
   const {
     activeLine,
@@ -132,7 +170,9 @@ function LineItem({
             ? undefined
             : (ev) => {
                 ev.stopPropagation();
-                handleActivate();
+                const activateWithPrompt =
+                  handleActivationWithPrompt(handleActivate);
+                activateWithPrompt();
               }
         }
       >
@@ -149,13 +189,39 @@ function LineItem({
               activateAfterReset,
               next: activateNext,
               previous: activatePrevious,
+              shouldPromptDirty,
             }}
           >
             {element}
           </ActiveLineContext.Provider>
         )}
       </div>
+
+      {isActive && <DirtyLinePrompt isOpen={showPrompt} />}
     </div>
+  );
+}
+
+function DirtyLinePrompt({ isOpen }: { isOpen: boolean }) {
+  if (!isOpen) {
+    return null;
+  }
+  return (
+    <HoverCard.Root defaultOpen>
+      <HoverCard.Trigger asChild>
+        <div className={styles.promptFocus} />
+      </HoverCard.Trigger>
+      <HoverCard.Portal>
+        <HoverCard.Content sideOffset={6} className={styles.promptMessage}>
+          <HoverCard.Arrow className={styles.promptMessageArrow} />
+          <div>
+            Ups, yang ditulis belum disimpan. Tekan{' '}
+            <span className={styles.promptMessageKb}>Enter</span> dulu untuk
+            menyimpan, atau abaikan saja supaya kembali ke data awal.
+          </div>
+        </HoverCard.Content>
+      </HoverCard.Portal>
+    </HoverCard.Root>
   );
 }
 

@@ -13,13 +13,15 @@ const PLACEHOLDER_LABEL =
 
 function FieldAbout({ value = '' }: { value?: string }) {
   const { updateTextField } = useResumeEditor();
-  const { isActive, next } = useActiveLine();
+  const { isActive, next, shouldPromptDirty } = useActiveLine();
 
   if (isActive) {
     return (
       <AboutTextInput
         initialValue={value}
         placeholder={PLACEHOLDER_LABEL}
+        onDirty={() => shouldPromptDirty()}
+        onClean={() => shouldPromptDirty(false)}
         onSave={(desc) => {
           updateTextField('about', desc);
           next();
@@ -42,15 +44,18 @@ function FieldAbout({ value = '' }: { value?: string }) {
 function AboutTextInput({
   initialValue = '',
   placeholder,
+  onDirty,
+  onClean,
   onSave,
 }: {
   initialValue?: string;
   placeholder?: string;
+  onDirty?: () => void;
+  onClean?: () => void;
   onSave: (description: string) => void;
 }) {
   const { preventHotkey } = useLineContents();
   const [inputValue, setInputValue] = React.useState<string>(initialValue);
-  const isClean = initialValue === inputValue;
 
   useHotkeys('enter', () => onSave(inputValue.trim()), {
     enableOnFormTags: true,
@@ -63,8 +68,11 @@ function AboutTextInput({
       initialValue={initialValue}
       placeholder={placeholder}
       onChange={(value) => {
+        const isDirty = value !== initialValue;
         // begitu dirty langsung dibuat gak bisa pindah-pindah line pakai hotkeynya
-        !isClean && preventHotkey();
+        isDirty && preventHotkey();
+        isDirty && onDirty?.();
+        !isDirty && onClean?.();
         setInputValue(value);
       }}
     />

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useResumeEditor } from 'src/app/contexts/resume-editor';
+import { useLineContents } from '../contexts/line-contents';
 import { useActiveLine } from '../contexts/active-line';
 
 import { AutogrowingTextarea } from './autogrowing-textarea';
@@ -60,13 +61,15 @@ function FieldParagraph({
   label: string;
   onSave: (inputValue: string) => void;
 }) {
-  const { isActive } = useActiveLine();
+  const { isActive, shouldPromptDirty } = useActiveLine();
 
   if (isActive) {
     return (
       <ParagraphTextInput
         initialValue={value}
         placeholder={label}
+        onDirty={() => shouldPromptDirty()}
+        onClean={() => shouldPromptDirty(false)}
         onSave={onSave}
       />
     );
@@ -82,12 +85,17 @@ function FieldParagraph({
 function ParagraphTextInput({
   initialValue = '',
   placeholder,
+  onDirty,
+  onClean,
   onSave,
 }: {
   initialValue?: string;
   placeholder?: string;
+  onDirty?: () => void;
+  onClean?: () => void;
   onSave: (value: string) => void;
 }) {
+  const { preventHotkey } = useLineContents();
   const $textarea = React.useRef<HTMLTextAreaElement>(null);
   const [inputValue, setInputValue] = React.useState<string>(initialValue);
 
@@ -105,7 +113,13 @@ function ParagraphTextInput({
       ref={$textarea}
       placeholder={placeholder}
       value={inputValue}
-      onChange={setInputValue}
+      onChange={(value) => {
+        const isDirty = value !== initialValue;
+        isDirty && preventHotkey();
+        isDirty && onDirty?.();
+        !isDirty && onClean?.();
+        setInputValue(value);
+      }}
     />
   );
 }

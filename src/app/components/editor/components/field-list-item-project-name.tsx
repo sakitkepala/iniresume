@@ -20,7 +20,7 @@ function FieldListItemProjectName({
   value?: string;
 }) {
   const { updateProject } = useResumeEditor();
-  const { isActive, activateAfterReset } = useActiveLine();
+  const { isActive, activateAfterReset, shouldPromptDirty } = useActiveLine();
   const $input = React.useRef<{ focus: () => void } | null>(null);
 
   if (isActive) {
@@ -37,6 +37,8 @@ function FieldListItemProjectName({
             ref={$input}
             placeholder={PLACEHOLDER_LABEL}
             initialValue={value}
+            onDirty={() => shouldPromptDirty()}
+            onClean={() => shouldPromptDirty(false)}
             onSave={(projectName) => {
               updateProject(experienceId, projectId, 'name', projectName);
               activateAfterReset(`${projectId}-project-item-description`);

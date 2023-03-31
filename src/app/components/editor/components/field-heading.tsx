@@ -117,7 +117,7 @@ function FieldHeading({
   label: string;
   onSave: (inputValue: string) => void;
 }) {
-  const { isActive } = useActiveLine();
+  const { isActive, shouldPromptDirty } = useActiveLine();
 
   if (isActive) {
     return (
@@ -125,6 +125,8 @@ function FieldHeading({
         <HeadingTextInput
           initialValue={initialValue}
           placeholder={label}
+          onDirty={() => shouldPromptDirty()}
+          onClean={() => shouldPromptDirty(false)}
           onSave={onSave}
         />
       </HeadingMarker>
@@ -143,10 +145,14 @@ function FieldHeading({
 function HeadingTextInput({
   initialValue = '',
   placeholder,
+  onDirty,
+  onClean,
   onSave,
 }: {
   initialValue?: string;
   placeholder?: string;
+  onDirty?: () => void;
+  onClean?: () => void;
   onSave: (value: string) => void;
 }) {
   const $input = React.useRef<HTMLInputElement>(null);
@@ -168,7 +174,12 @@ function HeadingTextInput({
       className={clsx(fieldStyles.inputText, styles.text)}
       placeholder={placeholder}
       value={inputValue}
-      onChange={(ev) => setInputValue(ev.target.value)}
+      onChange={(ev) => {
+        setInputValue(ev.target.value);
+        const isDirty = ev.target.value !== initialValue;
+        isDirty && onDirty?.();
+        !isDirty && onClean?.();
+      }}
     />
   );
 }

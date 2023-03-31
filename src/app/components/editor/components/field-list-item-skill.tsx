@@ -25,7 +25,7 @@ function FieldListItemAddSkill({
   insertBelow?: string;
 }) {
   const { resume, addSkill, insertSkill, insertSkillTop } = useResumeEditor();
-  const { isActive, activate, reset } = useActiveLine();
+  const { isActive, activate, reset, shouldPromptDirty } = useActiveLine();
   const [resetId, setResetId] = React.useState(() => v1());
   const $input = React.useRef<null | { focus: () => void }>(null);
 
@@ -37,6 +37,8 @@ function FieldListItemAddSkill({
             ref={$input}
             key={resetId}
             placeholder={INPUT_PLACEHOLDER_TEXT}
+            onDirty={() => shouldPromptDirty()}
+            onClean={() => shouldPromptDirty(false)}
             onSave={(skill) => {
               if (asInsert) {
                 insertBelow && insertSkill(insertBelow, skill);
@@ -84,7 +86,7 @@ function FieldListItemSkill({
   last?: boolean;
 }) {
   const { resume, editSkill } = useResumeEditor();
-  const { isActive, reset } = useActiveLine();
+  const { isActive, reset, shouldPromptDirty } = useActiveLine();
   const $input = React.useRef<null | { focus: () => void }>(null);
 
   if (isActive) {
@@ -95,6 +97,8 @@ function FieldListItemSkill({
             ref={$input}
             initialValue={value}
             placeholder={INPUT_PLACEHOLDER_TEXT}
+            onDirty={() => shouldPromptDirty()}
+            onClean={() => shouldPromptDirty(false)}
             onSave={(skill) => {
               editSkill(skill, value);
               reset();
@@ -127,9 +131,11 @@ const SkillTextInput = React.forwardRef<
   {
     initialValue?: string;
     placeholder?: string;
+    onDirty?: () => void;
+    onClean?: () => void;
     onSave: (value: string) => void;
   }
->(({ initialValue = '', placeholder, onSave }, $ref) => {
+>(({ initialValue = '', placeholder, onDirty, onClean, onSave }, $ref) => {
   const [inputValue, setInputValue] = React.useState<string>(initialValue);
   const $input = React.useRef<HTMLInputElement>(null);
 
@@ -152,7 +158,12 @@ const SkillTextInput = React.forwardRef<
       placeholder={placeholder}
       initialSize={!inputValue ? placeholder?.length : undefined}
       value={inputValue}
-      onChange={setInputValue}
+      onChange={(value) => {
+        setInputValue(value);
+        const isDirty = value !== initialValue;
+        isDirty && onDirty?.();
+        !isDirty && onClean?.();
+      }}
     />
   );
 });

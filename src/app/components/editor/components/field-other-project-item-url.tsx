@@ -19,7 +19,7 @@ function FieldOtherProjectItemURL({
   value?: string;
 }) {
   const { updateOtherProjects } = useResumeEditor();
-  const { isActive, next } = useActiveLine();
+  const { isActive, next, shouldPromptDirty } = useActiveLine();
 
   if (isActive) {
     return (
@@ -28,6 +28,8 @@ function FieldOtherProjectItemURL({
         <URLInput
           placeholder={PLACEHOLDER_LABEL}
           initialValue={value || 'https://'}
+          onDirty={() => shouldPromptDirty()}
+          onClean={() => shouldPromptDirty(false)}
           onSave={(url) => {
             // Ngecek URL terisi atau enggak tanpa prefiks protokol http-nya
             // Biar gak tersimpan cuma string protokolnya doang wkwk
@@ -63,10 +65,14 @@ function FieldOtherProjectItemURL({
 function URLInput({
   initialValue = '',
   placeholder,
+  onDirty,
+  onClean,
   onSave,
 }: {
   initialValue?: string;
   placeholder?: string;
+  onDirty?: () => void;
+  onClean?: () => void;
   onSave: (value: string) => void;
 }) {
   const [inputValue, setInputValue] = React.useState<string>(initialValue);
@@ -86,7 +92,12 @@ function URLInput({
       ref={$input}
       placeholder={placeholder}
       value={inputValue}
-      onChange={setInputValue}
+      onChange={(value) => {
+        setInputValue(value);
+        const isDirty = value !== initialValue;
+        isDirty && onDirty?.();
+        !isDirty && onClean?.();
+      }}
     />
   );
 }

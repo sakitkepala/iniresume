@@ -14,7 +14,7 @@ import { staticDisplay } from './fields.css';
 
 function FieldListItemAddProfile() {
   const { updateAccount } = useResumeEditor();
-  const { isActive, activate } = useActiveLine();
+  const { isActive, activate, shouldPromptDirty } = useActiveLine();
   const [resetId, setResetId] = React.useState(() => v1());
 
   if (isActive) {
@@ -22,6 +22,8 @@ function FieldListItemAddProfile() {
       <ListItemLine muted>
         <ProfileLinkEditorWithCustomAccount
           key={resetId}
+          onDirty={() => shouldPromptDirty()}
+          onClean={() => shouldPromptDirty(false)}
           onSave={(account) => {
             updateAccount(account);
             setResetId(v1());
@@ -91,9 +93,13 @@ function ProfileLinkEditorWithCustomAccount({
     url: '',
     account: '',
   },
+  onDirty,
+  onClean,
   onSave,
 }: {
   initialValue?: Account;
+  onDirty?: () => void;
+  onClean?: () => void;
   onSave: (account: Account) => void;
 }) {
   const [accountPlatform, setAccountPlatform] = React.useState(
@@ -135,7 +141,23 @@ function ProfileLinkEditorWithCustomAccount({
             !accountPlatform ? PLACEHOLDER_PLATFORM.length : undefined
           }
           value={accountPlatform}
-          onChange={setAccountPlatform}
+          onChange={(value) => {
+            setAccountPlatform(value);
+
+            const isDirty =
+              JSON.stringify({
+                account: initialValue.account,
+                text: initialValue.text,
+                url: initialValue.url,
+              }) !==
+              JSON.stringify({
+                account: value,
+                text: linkText,
+                url: url,
+              });
+            isDirty && onDirty?.();
+            !isDirty && onClean?.();
+          }}
         />
       </span>
 
@@ -150,7 +172,23 @@ function ProfileLinkEditorWithCustomAccount({
           placeholder={PLACEHOLDER_LINK_TEXT}
           initialSize={!linkText ? PLACEHOLDER_LINK_TEXT.length : undefined}
           value={linkText}
-          onChange={setLinkText}
+          onChange={(value) => {
+            setLinkText(value);
+
+            const isDirty =
+              JSON.stringify({
+                account: initialValue.account,
+                text: initialValue.text,
+                url: initialValue.url,
+              }) !==
+              JSON.stringify({
+                account: accountPlatform,
+                text: value,
+                url: url,
+              });
+            isDirty && onDirty?.();
+            !isDirty && onClean?.();
+          }}
         />
       </span>
 
@@ -168,7 +206,23 @@ function ProfileLinkEditorWithCustomAccount({
           placeholder={PLACEHOLDER_URL}
           initialSize={!url ? PLACEHOLDER_URL.length : undefined}
           value={url}
-          onChange={setUrl}
+          onChange={(value) => {
+            setUrl(value);
+
+            const isDirty =
+              JSON.stringify({
+                account: initialValue.account,
+                text: initialValue.text,
+                url: initialValue.url,
+              }) !==
+              JSON.stringify({
+                account: accountPlatform,
+                text: linkText,
+                url: value,
+              });
+            isDirty && onDirty?.();
+            !isDirty && onClean?.();
+          }}
         />
       </span>
 

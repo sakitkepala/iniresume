@@ -19,7 +19,7 @@ function FieldListItemProjectURL({
   value?: string;
 }) {
   const { updateProject } = useResumeEditor();
-  const { isActive, next } = useActiveLine();
+  const { isActive, next, shouldPromptDirty } = useActiveLine();
 
   if (isActive) {
     return (
@@ -27,6 +27,8 @@ function FieldListItemProjectURL({
         <TextFieldInput
           placeholder={PLACEHOLDER_LABEL}
           initialValue={value || 'https://'}
+          onDirty={() => shouldPromptDirty()}
+          onClean={() => shouldPromptDirty(false)}
           onSave={(urlValue) => {
             // Ngecek URL terisi atau enggak tanpa prefiks protokol http-nya
             // Biar gak tersimpan cuma string protokolnya doang wkwk

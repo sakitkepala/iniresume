@@ -26,7 +26,7 @@ function FieldExperienceDates({
   ongoing?: boolean;
 }) {
   const { updateExperienceDates } = useResumeEditor();
-  const { isActive, activateAfterReset } = useActiveLine();
+  const { isActive, activateAfterReset, shouldPromptDirty } = useActiveLine();
 
   if (isActive) {
     return (
@@ -34,6 +34,8 @@ function FieldExperienceDates({
         from={from}
         to={to}
         ongoing={ongoing}
+        onDirty={() => shouldPromptDirty()}
+        onClean={() => shouldPromptDirty(false)}
         onSave={(range) => {
           updateExperienceDates(experienceId, range);
           activateAfterReset(`${experienceId}-experience-description`);
@@ -63,13 +65,15 @@ function FieldEducationDates({
   to?: string;
 }) {
   const { updateEducationDates } = useResumeEditor();
-  const { isActive, activateAfterReset } = useActiveLine();
+  const { isActive, activateAfterReset, shouldPromptDirty } = useActiveLine();
 
   if (isActive) {
     return (
       <RangeInput
         from={from}
         to={to}
+        onDirty={() => shouldPromptDirty()}
+        onClean={() => shouldPromptDirty(false)}
         onSave={(range) => {
           updateEducationDates(educationId, range);
           activateAfterReset(`${educationId}-education-description`);
@@ -115,10 +119,14 @@ function StaticDisplay({ children = null }: React.PropsWithChildren) {
 function RangeInput({
   from = '',
   to = '',
+  onDirty,
+  onClean,
   onSave,
 }: {
   from?: string;
   to?: string;
+  onDirty?: () => void;
+  onClean?: () => void;
   onSave: (range: { from: string; to: string }) => void;
 }) {
   const [fromYear, setFromYear] = React.useState(() =>
@@ -146,7 +154,15 @@ function RangeInput({
         id="from-year"
         {...getCycleProps('from-year', {
           autoSwitchWhen: (value) => value.length >= DIGITS_YEAR,
-          onChange: (ev) => setFromYear(ev.target.value),
+          onChange: (ev) => {
+            setFromYear(ev.target.value);
+
+            const isDirty =
+              JSON.stringify({ from: ev.target.value, to: toYear }) !==
+              JSON.stringify({ from, to });
+            isDirty && onDirty?.();
+            !isDirty && onClean?.();
+          },
         })}
         className={clsx(fieldStyles.inputText, styles.inputYear)}
         placeholder="20xx"
@@ -167,6 +183,12 @@ function RangeInput({
           autoSwitchWhen: (value) => value.length >= DIGITS_YEAR,
           onChange: (ev) => {
             ev.target.value.length <= DIGITS_YEAR && setToYear(ev.target.value);
+
+            const isDirty =
+              JSON.stringify({ from: fromYear, to: ev.target.value }) !==
+              JSON.stringify({ from, to });
+            isDirty && onDirty?.();
+            !isDirty && onClean?.();
           },
         })}
         className={clsx(fieldStyles.inputText, styles.inputYear)}
@@ -181,11 +203,15 @@ function RangeInputWithMonth({
   from = '',
   to = '',
   ongoing = false,
+  onDirty,
+  onClean,
   onSave,
 }: {
   from?: string;
   to?: string;
   ongoing?: boolean;
+  onDirty?: () => void;
+  onClean?: () => void;
   onSave: (range: { from: string; to: string; ongoing: boolean }) => void;
 }) {
   const [fromYear, setFromYear] = React.useState(() =>
@@ -231,8 +257,21 @@ function RangeInputWithMonth({
           id="from-month"
           {...getCycleProps('from-month', {
             autoSwitchWhen: _getAutoswitch(fromMonth, DIGITS_MONTH),
-            onChange: (ev) =>
-              setFromMonth(_getValue(ev.target.value, DIGITS_MONTH)),
+            onChange: (ev) => {
+              const value = _getValue(fromMonth, ev.target.value, DIGITS_MONTH);
+              setFromMonth(value);
+              const isDirty =
+                JSON.stringify({
+                  from: value + fromYear,
+                  to: toMonth + toYear,
+                }) !==
+                JSON.stringify({
+                  from: from.split('-').join(''),
+                  to: to.split('-').join(''),
+                });
+              isDirty && onDirty?.();
+              !isDirty && onClean?.();
+            },
           })}
           className={clsx(fieldStyles.inputText, styles.inputDate)}
           placeholder="12"
@@ -249,8 +288,21 @@ function RangeInputWithMonth({
           id="from-year"
           {...getCycleProps('from-year', {
             autoSwitchWhen: _getAutoswitch(fromYear, DIGITS_YEAR),
-            onChange: (ev) =>
-              setFromYear(_getValue(ev.target.value, DIGITS_YEAR)),
+            onChange: (ev) => {
+              const value = _getValue(fromYear, ev.target.value, DIGITS_YEAR);
+              setFromYear(value);
+              const isDirty =
+                JSON.stringify({
+                  from: fromMonth + value,
+                  to: toMonth + toYear,
+                }) !==
+                JSON.stringify({
+                  from: from.split('-').join(''),
+                  to: to.split('-').join(''),
+                });
+              isDirty && onDirty?.();
+              !isDirty && onClean?.();
+            },
           })}
           className={clsx(fieldStyles.inputText, styles.inputYear)}
           placeholder="20xx"
@@ -269,8 +321,21 @@ function RangeInputWithMonth({
           id="to-month"
           {...getCycleProps('to-month', {
             autoSwitchWhen: _getAutoswitch(toMonth, DIGITS_MONTH),
-            onChange: (ev) =>
-              setToMonth(_getValue(ev.target.value, DIGITS_MONTH)),
+            onChange: (ev) => {
+              const value = _getValue(toMonth, ev.target.value, DIGITS_MONTH);
+              setToMonth(value);
+              const isDirty =
+                JSON.stringify({
+                  from: fromMonth + fromYear,
+                  to: value + toYear,
+                }) !==
+                JSON.stringify({
+                  from: from.split('-').join(''),
+                  to: to.split('-').join(''),
+                });
+              isDirty && onDirty?.();
+              !isDirty && onClean?.();
+            },
           })}
           className={clsx(fieldStyles.inputText, styles.inputDate)}
           placeholder="12"
@@ -287,8 +352,21 @@ function RangeInputWithMonth({
           id="to-year"
           {...getCycleProps('to-year', {
             autoSwitchWhen: _getAutoswitch(toYear, DIGITS_YEAR),
-            onChange: (ev) =>
-              setToYear(_getValue(ev.target.value, DIGITS_YEAR)),
+            onChange: (ev) => {
+              const value = _getValue(toYear, ev.target.value, DIGITS_YEAR);
+              setToYear(value);
+              const isDirty =
+                JSON.stringify({
+                  from: fromMonth + fromYear,
+                  to: toMonth + value,
+                }) !==
+                JSON.stringify({
+                  from: from.split('-').join(''),
+                  to: to.split('-').join(''),
+                });
+              isDirty && onDirty?.();
+              !isDirty && onClean?.();
+            },
           })}
           className={clsx(fieldStyles.inputText, styles.inputYear)}
           placeholder="20xx"
@@ -371,15 +449,10 @@ const _getValueFromParts = (year: string, month: string) => {
   return [validatedYear, validatedMonth].filter((v) => Boolean(v)).join('-');
 };
 
-function _getValue(value: string, digits: number) {
-  const setStateAction: React.SetStateAction<string> = (prevState) => {
-    const validatedValue = _validateValue(prevState, value);
-    if (validatedValue.length > digits) {
-      return prevState;
-    }
-    return validatedValue;
-  };
-  return setStateAction;
+function _getValue(prevState: string, value: string, digits: number) {
+  const validatedValue = _validateValue(prevState, value);
+  const endValue = validatedValue.length > digits ? prevState : validatedValue;
+  return endValue;
 }
 
 function _getAutoswitch(prevState: string, digits: number) {

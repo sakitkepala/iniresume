@@ -68,7 +68,7 @@ function FieldProfileAccount({
   account: Account;
 }) {
   const { updateAccount } = useResumeEditor();
-  const { isActive, next } = useActiveLine();
+  const { isActive, next, shouldPromptDirty } = useActiveLine();
   const value = account?.text || account?.url;
   const accountLabel = _getAccountLabel(account.account);
   const withCustomAccount = !new Set(['github', 'linkedin']).has(
@@ -81,6 +81,8 @@ function FieldProfileAccount({
         {withCustomAccount ? (
           <ProfileLinkEditorWithCustomAccount
             initialValue={account}
+            onDirty={() => shouldPromptDirty()}
+            onClean={() => shouldPromptDirty(false)}
             onSave={(account) => {
               updateAccount(account);
               next();
@@ -89,6 +91,8 @@ function FieldProfileAccount({
         ) : (
           <ProfileLinkEditor
             initialValue={account}
+            onDirty={() => shouldPromptDirty()}
+            onClean={() => shouldPromptDirty(false)}
             onSave={(account) => {
               updateAccount(account);
               next();
@@ -119,9 +123,13 @@ function ProfileLinkEditor({
     url: '',
     account: '',
   },
+  onDirty,
+  onClean,
   onSave,
 }: {
   initialValue?: Account;
+  onDirty?: () => void;
+  onClean?: () => void;
   onSave: (account: Account) => void;
 }) {
   const [linkText, setLinkText] = React.useState(initialValue.text);
@@ -161,7 +169,21 @@ function ProfileLinkEditor({
           placeholder={PLACEHOLDER_LINK_TEXT}
           initialSize={!linkText ? PLACEHOLDER_LINK_TEXT.length : undefined}
           value={linkText}
-          onChange={setLinkText}
+          onChange={(value) => {
+            setLinkText(value);
+
+            const isDirty =
+              JSON.stringify({
+                text: initialValue.text,
+                url: initialValue.url,
+              }) !==
+              JSON.stringify({
+                text: value,
+                url: url,
+              });
+            isDirty && onDirty?.();
+            !isDirty && onClean?.();
+          }}
         />
       </span>
       <StaticDisplay>{']'}</StaticDisplay>
@@ -176,7 +198,21 @@ function ProfileLinkEditor({
           placeholder={PLACEHOLDER_URL}
           initialSize={!url ? PLACEHOLDER_URL.length : undefined}
           value={url}
-          onChange={setUrl}
+          onChange={(value) => {
+            setUrl(value);
+
+            const isDirty =
+              JSON.stringify({
+                text: initialValue.text,
+                url: initialValue.url,
+              }) !==
+              JSON.stringify({
+                text: linkText,
+                url: value,
+              });
+            isDirty && onDirty?.();
+            !isDirty && onClean?.();
+          }}
         />
       </span>
       <StaticDisplay>{')'}</StaticDisplay>
