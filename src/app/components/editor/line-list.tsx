@@ -62,6 +62,12 @@ function LineList({ buildContents }: { buildContents?: BuildContentsFn }) {
     preventHotkey,
   } = lineContents;
 
+  // Aktifkan line pertama ketika pertama mounted
+  React.useEffect(() => {
+    activateNext();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useOnClickOutside($containerDiv, () => {
     activeLine && resetLineContents();
   });
